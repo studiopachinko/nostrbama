@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  subheadline: string;
+  className?: string;
+}
+
+const { title, subheadline, className = "" } = Astro.props;
+---
+
+<section class={className ? className : ""}>
+  <header class="p-2">
+    <h2 class="text-(--nb-white) font-headline text-4xl mb-6">{title}</h2>
+    <p class="text-stone-400 text-lg">{subheadline}</p>
+  </header>
+  <slot />
+</section>

@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("/fonts/SuisseIntl-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("/fonts/SuisseIntl-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntlCond";
+  src: url("/fonts/SuisseIntlCond-Semibold-WebS.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntlMono";
+  src: url("/fonts/SuisseIntlMono-Regular-WebS.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "SuisseIntl", "sans-serif";
+  --font-headline: "SuisseIntlCond", "sans-serif";
+  --font-mono: "SuisseIntlMono", "monospace";
+  /* colors */
+  --nb-white: #EDE8DE;
+}

@@ -1,11 +1,24 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import HomeHeader from "@/components/home/HomeHeader.astro";
+import Layout from "../layouts/Layout.astro";
+import Section from "@/components/common/Section.astro";
+import { SPEAKER_DATA } from "@/data/index";
+import SpeakerCard from "@/components/home/SpeakerCard.astro";
 ---
 
 <Layout>
-	<Welcome />
+  <HomeHeader />
+  <Section
+    title="Nostr Talks!"
+    subheadline="It’d be hard to sell this as a conference if there weren’t any speakers and asking for time off work to go on a piss up with your internet pals probably isn’t going to earn you that next promotion, so we’ve got a few people who are going to talk (quickly) about Nostr."
+		className="mb-20"
+  >
+    <div class="p-2 grid gap-12">
+      {SPEAKER_DATA.map((speaker) => <SpeakerCard {...speaker} />)}
+    </div>
+  </Section>
+  <Section
+    title="Are you not entertained?"
+    subheadline="When the cursory talky-talks are out of the way it’s time to have fun. And there’s a lot of fun to be had. Because Nostriches like it. Fun that is, because Nostriches are like girls. They just want to have fun."
+  />
 </Layout>
