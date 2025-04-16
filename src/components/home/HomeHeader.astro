@@ -5,9 +5,9 @@ import nbLogo from "@/assets/images/nb_logo--3d.png";
 import homeCollage from "@/assets/images/home-collage.png";
 ---
 
-<header class="p-2">
+<header class="outer-padding mt-2 lg:mt-8 xl:mt-12">
   <div
-    class="relative border w-full min-h-[400px] h-[50vh] md:min-h-[550px] md:h-[70vh] lg:min-h-[660px] lg:h-[80vh] xl:min-h-[800px] xl:h-[70vh] rounded overflow-hidden mb-3"
+    class="relative border w-full min-h-[400px] h-[50vh] md:min-h-[550px] md:h-[70vh] lg:min-h-[660px] lg:h-[80vh] xl:min-h-[800px] xl:h-[70vh] rounded md:rounded-lg lg:rounded-xl xl:rounded-2xl overflow-hidden mb-3 xl:mb-12"
   >
     <div class="absolute inset-0">
       <Picture
@@ -24,15 +24,15 @@ import homeCollage from "@/assets/images/home-collage.png";
       class="z-10 absolute max-w-2/3 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-4/5"
     />
   </div>
-  <div class="grid xl:grid-cols-2 xl:gap-12">
-    <div class="md:max-w-[1024px]">
+  <div class="grid xl:grid-cols-[1.5fr_1fr] items-center xl:gap-12">
+    <div >
       <h1
-        class="text-(--nb-white) md:text-7xl font-headline text-5xl sm:text-6xl mb-5 text-balance"
+        class="text-(--nb-white) md:text-7xl font-headline text-5xl sm:text-6xl lg:text-7xl xl:text-9xl mb-5 text-balance"
       >
         Welcome to Nostrbama 2025, the BEST Nostr Conference in the Gulf States!
       </h1>
       <p
-        class="font-headline text-3xl md:text-5xl sm:text-4xl text-stone-400 leading-tight md:leading-[1.1] mb-5 text-balance"
+        class="text-3xl md:text-5xl sm:text-4xl lg:text-6xl xl:text-7xl text-stone-300 leading-tight md:leading-[1.1] mb-5 text-balance"
       >
         Join us for 3 days and nights of fun events, from Live Music to
         Skydiving.
@@ -47,7 +47,7 @@ import homeCollage from "@/assets/images/home-collage.png";
       src={homeCollage}
       formats={["avif", "webp"]}
       alt="Four-image collage: 1) An oversized ostrich walks past the USS Alabama battleship. 2) A wide-eyed ostrich with its beak open faces the camera against a vivid sky. 3) An ostrich bends over, peering into the window of a yellow taxi. 4) A confused ostrich stands on a street in front of a historic red-brick building with balconies."
-      class="rounded-md"
+      class="rounded-md lg:rounded-2xl"
     />
   </div>
 </header>

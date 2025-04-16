@@ -13,3 +13,7 @@ export type Entertainment = {
   date: string;
   description: string;
 }
+
+export type FAQ = {
+  question: string;
+}

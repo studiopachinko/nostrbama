@@ -1,0 +1,31 @@
+---
+import type { Location } from "@/components/location-table/types";
+
+interface Props extends Location {}
+
+const { venueName, mapLink, address, venueWebsite } = Astro.props;
+---
+
+<tr class="border-b border-stone-700">
+  <td class="py-4 text-stone-300 align-top">{venueName}</td>
+  <td class="py-4 flex flex-col gap-3"
+    ><p class="text-sm">{address}</p><a
+      href={mapLink}
+      target="_blank"
+      rel="noreferrer noopener"
+      class="text-sm underline">Map link</a
+    >
+    {
+      venueWebsite && (
+        <a
+          href={venueWebsite}
+          target="_blank"
+          rel="noreferrer noopener"
+          class="text-sm underline"
+        >
+          {venueWebsite}
+        </a>
+      )
+    }
+  </td>
+</tr>

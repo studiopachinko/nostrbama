@@ -1,0 +1,17 @@
+---
+interface Props {
+  className: string;
+  slot?: string;
+}
+
+const { className, slot } = Astro.props;
+---
+
+<p
+  class={className
+    ? `text-stone-300 text-xl ${className}`
+    : "text-stone-300 text-xl"}
+  slot={slot}
+>
+  <slot />
+</p>

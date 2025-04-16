@@ -1,0 +1,164 @@
+---
+import { Image } from "astro:assets";
+
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+import Layout from "../layouts/Layout.astro";
+import ScheduleItem from "@/components/schedule/ScheduleItem.astro";
+
+// Images
+import talksImage from "@/assets/images/entertainment/talk.png";
+import vrImage from "@/assets/images/entertainment/vr.jpg";
+import skyDiveImage from "@/assets/images/entertainment/skydive-ostrich.png";
+import BodyText from "@/components/typography/BodyText.astro";
+---
+
+<Layout>
+  <header class="outer-padding grid">
+    <Heading level={1}>Schedule</Heading>
+    <Subheading headingLevel={1}>
+      It’d be hard to sell this as a conference if there weren’t any speakers
+      and asking for time off work to go on a piss up with your internet pals
+      probably isn’t going to earn you that next promotion, so we’ve got a few
+      people who are going to talk (quickly) about Nostr.
+    </Subheading>
+  </header>
+  <section class="outer-padding">
+    <!-- DAY ONE START -->
+    <ScheduleItem
+      image={talksImage}
+      imageAlt="An ostrich in a suit gives a business presentation with a chart showing upward growth, while three other ostriches sit in the audience, one of them asleep. The background features vibrant, psychedelic orange and purple waves."
+      subheading="Kickoff party, Speakers, Music and Drinks"
+      location="The Hatch at The Haberdasher, 113 Dauphin St."
+    >
+      <!-- HEADING STARTS -->
+      <Heading level={2} slot="heading">
+        Tuesday, July 15<span class="sup">th</span>
+      </Heading>
+      <!-- HEADING ENDS -->
+
+      <div slot="time">
+        <div class="flex text-base justify-between">
+          <p class="text-(--nb-white)">Speakers:</p>
+          <p>7:00PM CST</p>
+        </div>
+        <div class="flex text-base justify-between">
+          <p class="text-(--nb-white)">Music starts:</p>
+          <p>9:00PM CST</p>
+        </div>
+      </div>
+
+      <BodyText className="" slot="bodyText">
+        Join us for the official kickoff party! We will start the night by
+        listening to a few fantastic Nostr leaders and devs, including Derek
+        Ross. Afterwards we'll get loud and rowdy with music by Brooks and
+        drinks served by Nostr's favorite bartender Sergio on his home turf!
+      </BodyText>
+    </ScheduleItem>
+    <!-- DAY ONE END -->
+
+    <!-- DAY TWO START -->
+    <ScheduleItem
+      image={vrImage}
+      imageAlt="Four ostriches wearing virtual reality headsets stand against a bright teal sky with small clouds, looking upward in different directions."
+      subheading="Downtown Mobile, VR Arcade, Dinner & Barhopping"
+      location="1104 Dauphin St."
+    >
+      <!-- HEADING STARTS -->
+      <Heading level={2} slot="heading"
+        >Wednesday, July 14<span class="sup">th</span></Heading
+      >
+      <!-- HEADING ENDS -->
+      <div slot="time">
+        <div class="flex text-base justify-between">
+          <p class="text-(--nb-white)">VR Arcade:</p>
+          <p>7:00PM CST</p>
+        </div>
+        <div class="flex text-base justify-between">
+          <p class="text-(--nb-white)">Dinner starts:</p>
+          <p>9:00PM CST</p>
+        </div>
+      </div>
+
+      <BodyText className="" slot="bodyText">
+        After we've all recovered from the party, meet at the VR Arcade next to
+        Red or White Wine, a well-known wine bar and restaurant where we will
+        eat dinner at 6pm, before bar hopping Downtown Mobile.
+      </BodyText>
+    </ScheduleItem>
+    <!-- DAY TWO END -->
+
+    <!-- DAY THREE START -->
+    <ScheduleItem
+      image={skyDiveImage}
+      imageAlt="A surreal scene of ostriches parachuting from a vintage propeller airplane, with one ostrich prominently in the foreground looking toward the viewer against a bright blue sky."
+      subheading="Beach Day and Skydiving"
+      location="Orange Beach, AL."
+    >
+      <!-- HEADING STARTS -->
+      <Heading level={2} slot="heading"
+        >Thursday, July 15<span class="sup">th</span></Heading
+      >
+      <!-- HEADING ENDS -->
+
+      <!-- TIME STARTS -->
+      <p class="text-(--nb-white) text-base" slot="time">
+        Morning and afternoon
+      </p>
+      <!-- TIME ENDS -->
+
+      <!-- BODY TEXT STARTS -->
+      <BodyText className="" slot="bodyText">
+        <span class="block mb-2"
+          ><span class="text-white">Morning:</span> Relax on the beach, swim and
+          soak up the sun.</span
+        >
+        <span class="block"
+          ><span class="text-white">Evening:</span> Daredevil Nostriches will have
+          the option of a tandem skydive with a professional instructor through Sky
+          Dive the Gulf (<a
+            href=""
+            class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+            >DankSwoops</a
+          > is coordinating; Message him if you'd like to jump!).</span
+        >
+      </BodyText>
+      <!-- BODY TEXT ENDS -->
+    </ScheduleItem>
+    <!-- DAY THREE END -->
+
+    <!-- DAY FOUR START -->
+    <ScheduleItem
+      image={skyDiveImage}
+      imageAlt="A surreal scene of ostriches parachuting from a vintage propeller airplane, with one ostrich prominently in the foreground looking toward the viewer against a bright blue sky."
+      subheading="Farewell Brunch and Departure"
+      location="Riddler's House"
+    >
+      <!-- HEADING STARTS -->
+      <Heading level={2} slot="heading"
+        >Friday, July 18<span class="sup">th</span></Heading
+      >
+      <!-- HEADING ENDS -->
+
+      <!-- TIME STARTS -->
+      <p class="text-(--nb-white) text-base" slot="time">Late Morning</p>
+      <!-- TIME ENDS -->
+
+      <BodyText className="" slot="bodyText">
+        Enjoy a farewell breakfast before heading out. Cooked by our gracious
+        host Riddler!
+      </BodyText>
+    </ScheduleItem>
+    <!-- DAY FOUR END -->
+  </section>
+</Layout>
+
+<style>
+  .sup {
+    vertical-align: super;
+    font-size: 0.6em;
+    top: -0.15em;
+    line-height: 0;
+    position: relative;
+  }
+</style>

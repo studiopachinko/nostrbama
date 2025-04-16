@@ -1,0 +1,32 @@
+---
+interface Props {
+  question: string;
+  open?: boolean;
+}
+
+const { question, open } = Astro.props;
+---
+
+<div class="border-b border-stone-700 last:border-b-0">
+  <button
+    class="accordion-header w-full px-6 py-4 xl:text-3xl text-left font-medium text-stone-300 flex justify-between items-center hover:bg-stone-700 transition-colors"
+  >
+    <span class="w-[90%]">{question}</span>
+    <svg
+      class="accordion-icon w-5 h-5 transform transition-transform duration-200"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </button>
+  <div class={`accordion-content px-6 py-4 ${open ? "" : "hidden"}`}>
+    <slot />
+  </div>
+</div>

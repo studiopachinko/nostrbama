@@ -1,0 +1,88 @@
+---
+import Accordion from "@/components/accordion/Accordion.astro";
+import AccordionItem from "@/components/accordion/AccordionItem.astro";
+import { venueLocations } from "@/components/location-table/data";
+import LocationTable from "@/components/location-table/LocationTable.astro";
+import LocationTableItem from "@/components/location-table/LocationTableItem.astro";
+---
+
+<Accordion>
+  <AccordionItem question="How much does it cost?">
+    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+      Attending the events on the 15th is <span class="font-medium text-white"
+        >completely free</span
+      >. The rest of the stuff sounds expensive, kinda. NGL. Sky-diving costs
+      $279 per person.
+    </p>
+  </AccordionItem>
+  <AccordionItem question="What's the nearest airport?">
+    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+      I don't know, I'm not from there. JFK? That's a big one isn't it?
+    </p>
+  </AccordionItem>
+  <AccordionItem question="How do I register for sky-diving?">
+    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+      Registration ends June 9th so contact <a
+        href=""
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >DankSwoops</a
+      > ASAP on Nostr.
+    </p>
+  </AccordionItem>
+  <AccordionItem question="What about accommodation?">
+    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+      Yes, you'll probably need something like that.
+    </p>
+  </AccordionItem>
+  <AccordionItem
+    question="I'm a dev/musician/stripper and I want to talk/perform/strip at this event. Who do I contact?"
+  >
+    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+      You should contact the event organisers: <a
+        href=""
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Sergio</a
+      >, <a
+        href=""
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Mallory</a
+      > or <a
+        href=""
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Riddler</a
+      > on Nostr.
+    </p>
+  </AccordionItem>
+  <AccordionItem question="Where am I doing again?">
+    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+      We're going here. Please confirm exact locations (Orange Beach, Riddler's
+      house) with the event organisers <a
+        href=""
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Sergio</a
+      >, <a
+        href=""
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Mallory</a
+      > or <a
+        href=""
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Riddler</a
+      > on Nostr.
+    </p>
+    <div class="w-full">
+      <LocationTable>
+        {
+          venueLocations.map((loc) => (
+            <LocationTableItem
+              venueName={loc.venueName}
+              address={loc.address}
+              mapLink={loc.mapLink}
+              venueWebsite={loc.venueWebsite}
+            />
+          ))
+        }
+      </LocationTable>
+    </div>
+  </AccordionItem></Accordion
+>

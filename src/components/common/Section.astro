@@ -3,15 +3,28 @@ interface Props {
   title: string;
   subheadline?: string;
   className?: string;
+  headerClassName?: string;
 }
 
-const { title, subheadline, className = "" } = Astro.props;
+const { title, subheadline, className = "", headerClassName } = Astro.props;
 ---
 
-<section class={className ? className : ""}>
-  <header class="p-2">
-    <h2 class="text-(--nb-white) font-headline text-4xl md:text-5xl mb-6">{title}</h2>
-    {subheadline && <p class="text-stone-400 md:text-xl text-lg max-w-[65ch]">{subheadline}</p>}
+<section
+  class={className ? `${className} outer-padding my-96` : "outer-padding"}
+>
+  <header class={headerClassName ? headerClassName : ""}>
+    <h2
+      class="text-(--nb-white) font-headline text-4xl md:text-5xl xl:text-9xl mb-6 xl:mb-12"
+    >
+      {title}
+    </h2>
+    {
+      subheadline && (
+        <p class="text-stone-300 md:text-xl lg:text-2xl xl:text-5xl text-lg max-w-[60ch] leading-[1.25]">
+          {subheadline}
+        </p>
+      )
+    }
   </header>
   <slot />
 </section>

@@ -14,6 +14,9 @@ export default defineConfig({
         "@": new URL("./src", import.meta.url).pathname,
       },
     },
+    server: {
+      allowedHosts: ['6588-146-70-126-221.ngrok-free.app']
+    }
   },
 
   integrations: [react()],

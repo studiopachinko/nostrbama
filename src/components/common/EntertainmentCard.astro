@@ -7,19 +7,25 @@ interface Props extends Entertainment {}
 const { image, title, url, date, description } = Astro.props;
 ---
 
-<div>
+<article>
   <Picture
     alt=""
     formats={["avif", "webp"]}
     src={image}
     class="mb-4 rounded-xl"
   />
+  <div class="flex flex-col gap-3 mb-4">
+    <h3
+      class="text-(--nb-white) text-3xl md:text-4xl xl:text-5xl font-headline"
+    >
+      {title}
+    </h3>
+    <p class="text-(--nb-white) text-sm md:text-base font-mono">{date}</p>
+  </div>
   <div class="flex flex-col mb-4">
-    <div class="flex flex-col gap-3 mb-4">
-      <h3 class="text-(--nb-white) text-3xl md:text-4xl font-headline">{title}</h3>
-      <p class="text-(--nb-white) text-sm md:text-base font-mono">{date}</p>
-    </div>
-    <p class="text-stone-400 mb-8 text-base md:text-lg">{description}</p>
+    <p class="text-stone-400 mb-8 text-base md:text-lg lg:text-xl xl:text-2xl">
+      {description}
+    </p>
     {
       url && (
         <a
@@ -46,4 +52,6 @@ const { image, title, url, date, description } = Astro.props;
       )
     }
   </div>
-</div>
+</article>
+
+

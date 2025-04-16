@@ -1,4 +1,4 @@
-import type { Entertainment, Speaker } from "@/types";
+import type { Entertainment, FAQ, Speaker } from "@/types";
 // Speaker Images
 import derekRossProfilePic from "@/assets/images/speaker-profile-pics/derekRoss.png";
 import manimeProfilePic from "@/assets/images/speaker-profile-pics/manime.png";
@@ -11,6 +11,7 @@ import partyImage from "@/assets/images/entertainment/party.png";
 import bandImage from "@/assets/images/entertainment/band.png";
 import beachImage from "@/assets/images/entertainment/beach.png";
 import talkImage from "@/assets/images/entertainment/talk.png";
+import vrImage from "@/assets/images/entertainment/vr.jpg";
 
 export const SPEAKER_DATA: Speaker[] = [
   {
@@ -47,6 +48,7 @@ export const SPEAKER_DATA: Speaker[] = [
   },
 ];
 
+// duplicate items for Swiper JS Loop option to work properly
 export const ENTERTAINMENT_DATA: Entertainment[] = [
   {
     title: "Nostr Talks",
@@ -83,5 +85,63 @@ export const ENTERTAINMENT_DATA: Entertainment[] = [
     description:
       "Come to Orange Beach, AL in the morning to soak up the sun with fellow Nostr-users. Listen: sand, sea, sun, being out doors in general. All of that shit sucks but the pros are seeing your Nostr pals in their swim suits/budgie smugglers and filling the annual Vit D quota before we retreat back to our respective computer dungeons for the rest of the year. ",
     image: beachImage,
+  },
+  {
+    title: "Virtual Reality!",
+    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    description:
+      "Because God knows this one isn't up to much lately. Let's escape this oppressive 'reality' and find liberation, adventure and the true desires of our hearts in the VR Cafe. (Don't worry, it's right next door to a wine bar for true escape in the event the VR world doesn't work out).",
+    image: vrImage,
+  },
+  // Duplicates from here on
+
+  {
+    title: "Nostr Talks",
+    date: "The Haberdasher. Tuesday 14th July.",
+    description:
+      "It might be a tall order to justify four days of fun in Alabama to your workplace/significant other without some veneer of education or technical discussion so we've had to include some talks. We've ordered them to keep it short and sweet.",
+    image: talkImage,
+  },
+  {
+    title: "Live Music With Brooks Hubber",
+    date: "The Haberdasher. Tuesday 14th July.",
+    description:
+      "Brooks Hubbert III is a musician, singer and songwriter from Pensacola, Florida. At a time when so many acts insist their sound cannot be categorized, Hubbert manages to effortlessly span genres including psychedelic rock, reggae, blues, country, and bluegrass in the creation of music that is both technically impressive and easily accessible",
+    url: "https://soundslikebrooks.bandcamp.com/",
+    image: bandImage,
+  },
+  {
+    title: "Skydive The Gulf With DankSwoops",
+    date: "Orange Beach, AL. Afternoon Thursday 17th in the sky.",
+    description:
+      "Do people actually believe Dank can do sky-diving? You Americans are more trusting than us Europoors. I’d sooner strap myself to a fridge and fuck myse lf out of a plane than to whatever creature calling itself DankSwoops any day. But you do you, whatever.",
+    image: skydiveImage,
+  },
+  {
+    title: "Dining and bar-hopping",
+    date: "1104 Dauphin St. Wednesday July 16th.",
+    description:
+      "Let loose on the streets of Mobile, Alabama. Get taken to all the best spots by bonafide locals. Leave shame, diggity and cares at the door and drink alcohol. Maybe something more. Sounds like it could get nasty very quickly. Good luck to all.",
+    image: partyImage,
+  },
+  {
+    title: "Beach Day!",
+    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    description:
+      "Come to Orange Beach, AL in the morning to soak up the sun with fellow Nostr-users. Listen: sand, sea, sun, being out doors in general. All of that shit sucks but the pros are seeing your Nostr pals in their swim suits/budgie smugglers and filling the annual Vit D quota before we retreat back to our respective computer dungeons for the rest of the year. ",
+    image: beachImage,
+  },
+  {
+    title: "Virtual Reality!",
+    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    description:
+      "Because God knows this one isn't up to much lately. Let's escape this oppressive 'reality' and find liberation, adventure and the true desires of our hearts in the VR Cafe. (Don't worry, it's right next door to a wine bar for true escape in the event the VR world doesn't work out).",
+    image: vrImage,
+  },
+];
+
+export const FAQS: FAQ[] = [
+  {
+    question: "How do I book a ticket?",
   },
 ];

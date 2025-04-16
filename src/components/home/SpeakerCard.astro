@@ -17,7 +17,7 @@ const { speakerName, title, njumpUrl, bio, profilePic } = Astro.props;
   />
   <!-- row-2 -->
   <div class="flex justify-between items-center gap-2">
-    <h3 class="text-(--nb-white) text-3xl md:text-4xl font-headline">{speakerName}</h3>
+    <h3 class="text-(--nb-white) text-3xl md:text-4xl xl:text-5xl font-headline">{speakerName}</h3>
     <a
       href={njumpUrl}
       target="_blank"
@@ -41,9 +41,9 @@ const { speakerName, title, njumpUrl, bio, profilePic } = Astro.props;
     </a>
   </div>
   <!-- row-3 -->
-  <p class="text-(--nb-white) text-sm font-mono">{title}</p>
+  <p class="text-(--nb-white) text-sm lg:text-lg font-mono">{title}</p>
   <!-- row-4 -->
-  <p class="text-stone-400 md:text-lg">
+  <p class="text-stone-400 md:text-lg lg:text-xl xl:text-2xl">
     {bio}
   </p>
 </article>

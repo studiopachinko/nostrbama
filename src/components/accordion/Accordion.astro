@@ -1,0 +1,49 @@
+<div class="w-full max-w-7xl">
+  <div class="bg-stone-800 shadow-md rounded-lg overflow-hidden">
+    <slot />
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", (): void => {
+    // Get all accordion headers
+    const accordionHeaders: NodeListOf<HTMLElement> =
+      document.querySelectorAll(".accordion-header");
+
+    // Add click event listener to each header
+    accordionHeaders.forEach((header: HTMLElement): void => {
+      header.addEventListener("click", (): void => {
+        // Toggle the active class on the header
+        header.classList.toggle("active");
+
+        // Get the icon within this header
+        const icon: HTMLElement | null =
+          header.querySelector(".accordion-icon");
+
+        // Toggle the rotation of the icon
+        if (icon) {
+          if (header.classList.contains("active")) {
+            icon.classList.add("rotate-180");
+          } else {
+            icon.classList.remove("rotate-180");
+          }
+        }
+
+        // Get the content panel that follows this header
+        const content: HTMLElement | null =
+          header.nextElementSibling as HTMLElement | null;
+
+        // Toggle the visibility of the content
+        if (content) {
+          if (content.style.maxHeight) {
+            content.style.maxHeight = "";
+            content.classList.add("hidden");
+          } else {
+            content.classList.remove("hidden");
+            content.style.maxHeight = `${content.scrollHeight}px`;
+          }
+        }
+      });
+    });
+  });
+</script>
