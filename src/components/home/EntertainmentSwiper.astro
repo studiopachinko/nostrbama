@@ -1,5 +1,160 @@
 ---
-import Swiper from 'swiper'
-import 'swiper/css'
-
+import EntertainmentCard from "@/components/common/EntertainmentCard.astro";
+import { ENTERTAINMENT_DATA } from "@/data";
 ---
+
+<div class="swiper entertainment-swiper w-full mt-8">
+  <div class="flex justify-start p-2 gap-2 mb-4">
+    <button
+      class="bg-(--nb-white) cursor-pointer hover:bg-white transition-all active:[&_svg]:-translate-x-1 hover:[&_svg]:-translate-x-0.5 swiper-left h-10 px-4 rounded-full inline-flex items-center justify-center"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 40 40"
+        class="size-8 transition-transform"
+      >
+        <!-- SVG path content unchanged -->
+        <g fill="#000001" clip-path="url(#a)">
+          <path
+            d="M22.862 29.525h1.9v3.813h5.712v1.9H17.137v-1.9h5.725v-3.813ZM34.29 31.425V12.388h-1.9v-1.913h1.9v-1.9h5.712v26.663h-5.713v-1.9h-3.812v-1.913h3.812Zm3.812 0v-3.8h-1.913v3.8h1.913Z"
+          ></path>
+          <path
+            d="M15.238 33.338v-1.913h1.9v1.913h-1.9ZM22.86 27.625v1.9h-7.624v1.9h-1.9v-3.8h9.525ZM22.863 27.625v-3.813h1.9v3.813h-1.9ZM24.762 20v-5.712h1.9V20h-1.9Z"
+          ></path>
+          <path
+            d="M17.136 16.188v-1.9h1.912V18.1h-5.712v3.813h5.712V18.1h1.9V20h3.813v1.913h-1.9v1.9h-9.525v3.812h-1.913V18.1H1.898v-1.912h15.238Z"
+          ></path>
+          <path d="M0 16.188v-3.8h1.9v3.8H0ZM22.863 14.288v-1.9h1.9v1.9h-1.9Z"
+          ></path>
+          <path
+            d="M17.136 14.288h-1.9v-1.9H1.898v-1.913h13.338v-1.9h1.9v5.713ZM30.477 10.475v-1.9h1.912v1.9h-1.912ZM26.664 8.575v-1.9h3.813v1.9h-3.813ZM17.137 8.575v-1.9h1.912v1.9h-1.912ZM19.05 6.675V4.763h7.613v1.912h-7.612Z"
+          ></path>
+        </g>
+        <defs>
+          <clipPath id="a">
+            <path fill="#fff" d="M0 0v40h40V0z"></path>
+          </clipPath>
+        </defs>
+      </svg>
+    </button>
+    <button
+      class="bg-(--nb-white) cursor-pointer hover:bg-white transition-all active:[&_svg]:translate-x-1 hover:[&_svg]:translate-x-0.5 swiper-right h-10 px-4 rounded-full inline-flex items-center justify-center"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 40 40"
+        class="size-8 transition-transform"
+      >
+        <!-- SVG path content unchanged -->
+        <g fill="#000001" clip-path="url(#a)">
+          <path
+            d="M17.138 29.525h-1.9v3.813H9.526v1.9h13.337v-1.9h-5.725v-3.813ZM5.71 31.425V12.388h1.9v-1.913h-1.9v-1.9H-.001v26.663h5.713v-1.9h3.812v-1.913H5.711Zm-3.812 0v-3.8h1.913v3.8H1.898Z"
+          ></path>
+          <path
+            d="M24.762 33.338v-1.913h-1.9v1.913h1.9ZM17.14 27.625v1.9h7.624v1.9h1.9v-3.8H17.14ZM17.137 27.625v-3.813h-1.9v3.813h1.9ZM15.238 20v-5.712h-1.9V20h1.9Z"
+          ></path>
+          <path
+            d="M22.864 16.188v-1.9h-1.912V18.1h5.712v3.813h-5.712V18.1h-1.9V20h-3.813v1.913h1.9v1.9h9.525v3.812h1.913V18.1h9.525v-1.912H22.864Z"
+          ></path>
+          <path
+            d="M40 16.188v-3.8h-1.9v3.8H40ZM17.137 14.288v-1.9h-1.9v1.9h1.9Z"
+          ></path>
+          <path
+            d="M22.864 14.288h1.9v-1.9h13.338v-1.913H24.764v-1.9h-1.9v5.713ZM9.523 10.475v-1.9H7.611v1.9h1.912ZM13.336 8.575v-1.9H9.523v1.9h3.813ZM22.863 8.575v-1.9h-1.912v1.9h1.912ZM20.95 6.675V4.763h-7.613v1.912h7.612Z"
+          ></path>
+        </g>
+        <defs>
+          <clipPath id="a">
+            <path fill="#fff" d="M40 0v40H0V0z"></path>
+          </clipPath>
+        </defs>
+      </svg>
+    </button>
+  </div>
+
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    {
+      ENTERTAINMENT_DATA.map((data) => (
+        <div class="swiper-slide p-2">
+          <EntertainmentCard {...data} />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="swiper-scrollbar"></div>
+</div>
+
+<script>
+  // Import Swiper and modules
+  import Swiper from "swiper";
+  import { Navigation, Pagination } from "swiper/modules";
+
+  // Import Swiper styles
+  import "swiper/css";
+  import "swiper/css/navigation";
+  import "swiper/css/pagination";
+
+  // Initialize Swiper on client-side only
+  document.addEventListener("DOMContentLoaded", function () {
+    let viewportWidth = window.innerWidth;
+
+    // Function to compute slides in view based on viewport width
+    const computeSlidesInView = (vw: number): number => {
+      switch (true) {
+        case vw >= 1536: // 2xl
+          return 4.5;
+        case vw >= 1280: // xl
+          return 3.5;
+        case vw >= 1024: // lg
+          return 2.5;
+        case vw >= 768: // md
+          return 1.5;
+        case vw >= 640: // sm
+          return 1.25;
+        default: // xs
+          return 1.1 ;
+      }
+    };
+
+    const swiper = new Swiper(".entertainment-swiper", {
+      modules: [Navigation, Pagination],
+      // Optional parameters
+      spaceBetween: 12,
+      loop: true,
+      centeredSlides: false,
+
+      // Width settings for slides - this is the key for the peek effect
+      width: null, // Auto width
+
+      // This ensures slides take up appropriate width based on viewport
+      slidesPerView: computeSlidesInView(viewportWidth),
+
+      // If we need pagination
+      pagination: {
+        el: ".swiper-pagination",
+      },
+
+      // Navigation arrows
+      navigation: {
+        nextEl: ".swiper-left",
+        prevEl: ".swiper-right",
+      },
+
+      // And if we need scrollbar
+      scrollbar: {
+        el: ".swiper-scrollbar",
+      },
+    });
+
+    // Update slides per view on resize
+    window.addEventListener("resize", () => {
+      viewportWidth = window.innerWidth;
+      swiper.params.slidesPerView = computeSlidesInView(viewportWidth);
+      swiper.update();
+    });
+  });
+</script>

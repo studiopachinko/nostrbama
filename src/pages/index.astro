@@ -4,21 +4,27 @@ import Layout from "../layouts/Layout.astro";
 import Section from "@/components/common/Section.astro";
 import { SPEAKER_DATA } from "@/data/index";
 import SpeakerCard from "@/components/home/SpeakerCard.astro";
+import EntertainmentSwiper from "@/components/home/EntertainmentSwiper.astro";
+import CtaSection from "@/components/common/CtaSection.astro";
 ---
 
 <Layout>
   <HomeHeader />
   <Section
-    title="Nostr Talks!"
-    subheadline="It’d be hard to sell this as a conference if there weren’t any speakers and asking for time off work to go on a piss up with your internet pals probably isn’t going to earn you that next promotion, so we’ve got a few people who are going to talk (quickly) about Nostr."
-		className="mb-20"
+    title="The Line Up"
+    subheadline="Nostbama 2025 is going to be jam-packed with opportunities to meet and have fun with all those disembodied avatars. Not just plebs but devs too. And when we say bonding we mean 'Literally strap yourself to a fellow Nostriche and jump out of a plane with him' bonding."
+    className="my-32"
   >
-    <div class="p-2 grid gap-12">
+    <EntertainmentSwiper />
+  </Section>
+  <Section title="Meet the Speakers!" className="mb-20 @container">
+    <div class="p-2 speakers sm:p-4 grid grid-rows-[repeat(4,_auto)] gap-4 @min-[530px]:grid-cols-2 @min-[1120px]:grid-cols-4 @min-[530px]:gap-6">
       {SPEAKER_DATA.map((speaker) => <SpeakerCard {...speaker} />)}
     </div>
   </Section>
-  <Section
-    title="Are you not entertained?"
-    subheadline="When the cursory talky-talks are out of the way it’s time to have fun. And there’s a lot of fun to be had. Because Nostriches like it. Fun that is, because Nostriches are like girls. They just want to have fun."
-  />
+  <CtaSection />
 </Layout>
+
+<!-- grid-rows-[repeat(4,_auto)] 
+@min-[530px]:gap-6 
+-->

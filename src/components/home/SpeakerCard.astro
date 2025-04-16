@@ -1,30 +1,28 @@
 ---
-import type { ImageMetadata } from "astro";
+import type { Speaker } from "@/types";
 import { Picture } from "astro:assets";
 
-interface Props {
-  speakerName: string;
-  title: string;
-  njumpUrl: string;
-  bio: string;
-  profilePic: ImageMetadata;
-}
+interface Props extends Speaker {}
 
 const { speakerName, title, njumpUrl, bio, profilePic } = Astro.props;
 ---
 
-<article>
-  <Picture alt="" formats={["avif", "webp"]} src={profilePic} class="mb-4 rounded-xl" />
-  <div class="flex justify-between items-center mb-4">
-    <div class="flex flex-col gap-3">
-      <h3 class="text-(--nb-white) text-xl font-headline">{speakerName}</h3>
-      <p class="text-(--nb-white) text-sm font-mono">{title}</p>
-    </div>
+<article class="mb-10">
+  <!-- row 1 -->
+  <Picture
+    alt=""
+    formats={["avif", "webp"]}
+    src={profilePic}
+    class="rounded-xl"
+  />
+  <!-- row-2 -->
+  <div class="flex justify-between items-center gap-2">
+    <h3 class="text-(--nb-white) text-3xl md:text-4xl font-headline">{speakerName}</h3>
     <a
       href={njumpUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="size-10 rounded-lg bg-stone-700 flex items-center justify-center"
+      class="size-10 min-w-10 min-h-10 max-w-10 max-h-10 rounded-lg bg-stone-700 flex items-center justify-center"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +40,18 @@ const { speakerName, title, njumpUrl, bio, profilePic } = Astro.props;
       </svg>
     </a>
   </div>
-  <p class="text-stone-400">
+  <!-- row-3 -->
+  <p class="text-(--nb-white) text-sm font-mono">{title}</p>
+  <!-- row-4 -->
+  <p class="text-stone-400 md:text-lg">
     {bio}
   </p>
 </article>
+
+<style>
+  article {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 4;
+  }
+</style>
