@@ -1,0 +1,15 @@
+---
+import { Picture } from "astro:assets";
+import type { Sponsor } from "@/components/sponsors/types";
+import Heading from "@/components/typography/Heading.astro";
+import LinkIconButton from "@/components/common/LinkIconButton.astro";
+interface Props extends Sponsor {}
+
+const { image, name, url } = Astro.props;
+---
+
+<article class="grid gap-2">
+  <Picture src={image} class="rounded-lg" alt="" formats={["avif", "webp"]} />
+  <Heading level={3} className="font-sans font-medium text-xl">{name}</Heading>
+  <LinkIconButton url={url} />
+</article>

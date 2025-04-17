@@ -1,0 +1,120 @@
+---
+import { Picture } from "astro:assets";
+
+import Layout from "@/layouts/Layout.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+import SponsorItem from "@/components/sponsors/SponsorItem.astro";
+
+import { nostrbamaTeam, skydiving, venues, website } from "@/components/sponsors/data";
+import { musicalGuests } from "@/components/sponsors/data";
+import { speakers } from "@/components/sponsors/data";
+import SponsorSection from "@/components/sponsors/SponsorSection.astro";
+---
+
+<Layout>
+  <header class="outer-padding grid">
+    <Heading level={1}>Sponsors</Heading>
+    <Subheading headingLevel={1}>
+      These awesome people and organizations made Nostrbama 2025 possible.
+    </Subheading>
+  </header>
+  <div class="outer-padding">
+    <!-- NOSTRBAMA TEAM -->
+    <SponsorSection sponsorData={nostrbamaTeam}>
+      <header>
+        <Heading level={2}>The Nostrbama Team </Heading>
+        <Subheading headingLevel={2}>
+          Nostrbama was created by our dedicated team of Nostr enthusiasts
+        </Subheading>
+      </header>
+    </SponsorSection>
+    <!-- MUSICAL GUESTS -->
+    <SponsorSection sponsorData={musicalGuests}>
+      <header>
+        <Heading level={2}>Musical Guests</Heading>
+      </header>
+    </SponsorSection>
+    <!-- SPEAKERS -->
+    <SponsorSection sponsorData={speakers}>
+      <header>
+        <Heading level={2}>Speakers</Heading>
+      </header>
+    </SponsorSection>
+    <!-- EVENT VENUES -->
+    <SponsorSection sponsorData={venues}>
+      <header>
+        <Heading level={2}>Venues</Heading>
+      </header>
+    </SponsorSection>
+    <!-- SKYDIVING -->
+    <SponsorSection sponsorData={skydiving}>
+      <header>
+        <Heading level={2}>Skydiving</Heading>
+        <div class="mb-12">
+          <p class="font-medium text-lg text-(--nb-white) mb-4">
+            Sky Dive The Gulf
+          </p>
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <p class="text-(--nb-white)">Date:</p>
+              <p>Thursday July 17<span class="sup">th</span></p>
+            </div>
+            <div class="flex items-center justify-between">
+              <p class="text-(--nb-white)">Cost:</p>
+              <p>$279 per person</p>
+            </div>
+            <div class="flex items-center justify-between">
+              <p class="text-(--nb-white)">Registration Deadline:</p>
+              <p>Monday June 9<span class="sup">th</span></p>
+            </div>
+          </div>
+        </div>
+      </header>
+    </SponsorSection>
+    <!-- WEBSITE -->
+    <SponsorSection sponsorData={website}>
+      <header>
+        <Heading level={2}>Website</Heading>
+      </header>
+    </SponsorSection>
+  </div>
+</Layout>
+
+<!-- 
+<article class="grid gap-2">
+          <Picture
+            src={sergioImage}
+            class="rounded-lg"
+            alt=""
+            formats={["avif", "webp"]}
+          />
+          <Heading level={3} className="font-sans font-medium text-xl"
+            >Sergio</Heading
+          >
+          <LinkIconButton url="" />
+        </article>
+        <article class="grid gap-2">
+          <Picture
+            src={sergioImage}
+            class="rounded-lg"
+            alt=""
+            formats={["avif", "webp"]}
+          />
+          <Heading level={3} className="font-sans font-medium text-xl"
+            >Sergio</Heading
+          >
+          <LinkIconButton url="" />
+        </article>
+        <article class="grid gap-2">
+          <Picture
+            src={sergioImage}
+            class="rounded-lg"
+            alt=""
+            formats={["avif", "webp"]}
+          />
+          <Heading level={3} className="font-sans font-medium text-xl"
+            >Sergio</Heading
+          >
+          <LinkIconButton url="" />
+        </article> -->

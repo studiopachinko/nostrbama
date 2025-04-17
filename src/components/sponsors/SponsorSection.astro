@@ -1,0 +1,25 @@
+---
+import SponsorItem from "@/components/sponsors/SponsorItem.astro";
+import type { Sponsor } from "@/components/sponsors/types";
+
+interface Props {
+  sponsorData: Sponsor[];
+}
+
+const { sponsorData } = Astro.props;
+---
+
+<section class="grid border-b border-stone-700 last:border-b-0 gap-12 py-12">
+  <slot />
+  <div class="grid grid-cols-2 gap-4">
+    {
+      sponsorData.map((sponsor) => (
+        <SponsorItem
+          image={sponsor.image}
+          name={sponsor.name}
+          url={sponsor.url}
+        />
+      ))
+    }
+  </div>
+</section>
