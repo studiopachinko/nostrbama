@@ -3,6 +3,11 @@ import EntertainmentCard from "@/components/common/EntertainmentCard.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Subheading from "@/components/typography/Subheading.astro";
 import { ENTERTAINMENT_DATA } from "@/data";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 ---
 
 <div class="swiper entertainment-swiper w-full section-y-padding">
@@ -10,9 +15,7 @@ import { ENTERTAINMENT_DATA } from "@/data";
     class="outer-padding flex flex-col sm:flex-row gap-4 sm:gap-8 md:gap-12 items-end justify-between mb-4 md:mb-8 lg:mb-12 xl:mb-16"
   >
     <div>
-      <Heading level={2}>
-        The Line Up
-      </Heading>
+      <Heading level={2}> The Line Up </Heading>
       <Subheading headingLevel={2}>
         Nostbama 2025 is going to be jam-packed with opportunities to meet and
         have fun with all those disembodied avatars. Not just plebs but devs
@@ -108,80 +111,129 @@ import { ENTERTAINMENT_DATA } from "@/data";
 <script>
   // Import Swiper and modules
   import Swiper from "swiper";
-  import { Navigation, Pagination } from "swiper/modules";
+  import { Navigation, Pagination, Scrollbar } from "swiper/modules"; // Added Scrollbar here
 
-  // Import Swiper styles
-  import "swiper/css";
-  import "swiper/css/navigation";
-  import "swiper/css/pagination";
+  // --- 1. Variable to hold the Swiper instance ---
+  // Needs to be outside the function scope to persist reference
+  let entertainmentSwiperInstance: Swiper | null = null;
 
-  // Initialize Swiper on client-side only
-  document.addEventListener("DOMContentLoaded", function () {
-    const remValue = parseFloat(
-      getComputedStyle(document.documentElement).fontSize
+  // --- 2. Function to setup (or re-setup) Swiper ---
+  function setupEntertainmentSwiper() {
+    // Find the container element for this specific Swiper
+    const swiperContainer: HTMLDivElement | null = document.querySelector(
+      ".entertainment-swiper"
     );
 
-    const swiper = new Swiper(".entertainment-swiper", {
-      modules: [Navigation, Pagination],
-      // Optional parameters
-      spaceBetween: 0,
-      loop: true,
-      centeredSlides: false,
-      breakpoints: {
-        320: {
-          slidesPerView: 1.15,
-          spaceBetween: remValue * 1.5,
-          slidesOffsetBefore: remValue,
-        },
-        640: {
-          slidesPerView: 1.25,
-          spaceBetween: remValue,
-          slidesOffsetBefore: remValue,
-        },
-        768: {
-          slidesPerView: 1.5,
-          spaceBetween: remValue * 1.5,
-          slidesOffsetBefore: remValue * 1.5,
-        },
-        1024: {
-          slidesPerView: 2.2,
-          spaceBetween: remValue * 2,
-          slidesOffsetBefore: remValue * 2,
-        },
-        1280: {
-          slidesPerView: 2.2,
-          spaceBetween: remValue * 2.5,
-          slidesOffsetBefore: remValue * 2.5,
-        },
-        1536: {
-          slidesPerView: 2.4,
-          spaceBetween: remValue * 3,
-          slidesOffsetBefore: remValue * 3,
-        },
-      },
+    // Only proceed if the container element exists on the current page
+    if (swiperContainer) {
+      // --- 3. Destroy previous instance if it exists ---
+      // This prevents conflicts and memory leaks when navigating
+      if (entertainmentSwiperInstance) {
+        console.log("Destroying previous Entertainment Swiper instance.");
+        entertainmentSwiperInstance.destroy(true, true); // destroy(deleteInstance, cleanupStyles)
+        entertainmentSwiperInstance = null;
+      }
 
-      // Width settings for slides - this is the key for the peek effect
-      width: null, // Auto width
+      // --- 4. Initialize the new Swiper instance ---
+      console.log("Initializing Entertainment Swiper.");
+      const remValue = parseFloat(
+        getComputedStyle(document.documentElement).fontSize
+      );
 
-      // This ensures slides take up appropriate width based on viewport
+      entertainmentSwiperInstance = new Swiper(swiperContainer, {
+        modules: [Navigation, Pagination, Scrollbar], // Ensure Scrollbar module is included if using el
+        // Optional parameters
+        spaceBetween: 0,
+        loop: true,
+        centeredSlides: false, // loop=true often works best with centeredSlides=false or specific slide counts
+        slidesPerView: "auto", // More flexible than fixed numbers across breakpoints if using CSS width/max-width
+        // Using 'auto' slidesPerView might simplify breakpoints if slides have max-width via CSS
+        // width: null, // Usually not needed when using slidesPerView:'auto' or breakpoints
 
-      // If we need pagination
-      pagination: {
-        el: ".swiper-pagination",
-      },
+        breakpoints: {
+          // It might be simpler to control slide width via CSS and use slidesPerView: 'auto'
+          // But keeping your original breakpoints for now:
+          320: {
+            slidesPerView: 1.15,
+            spaceBetween: remValue * 1.5,
+            slidesOffsetBefore: remValue,
+          },
+          640: {
+            slidesPerView: 1.25,
+            spaceBetween: remValue,
+            slidesOffsetBefore: remValue,
+          },
+          768: {
+            slidesPerView: 1.5,
+            spaceBetween: remValue * 1.5,
+            slidesOffsetBefore: remValue * 1.5,
+          },
+          1024: {
+            slidesPerView: 2.2,
+            spaceBetween: remValue * 2,
+            slidesOffsetBefore: remValue * 2,
+          },
+          1280: {
+            slidesPerView: 2.2,
+            spaceBetween: remValue * 2.5,
+            slidesOffsetBefore: remValue * 2.5,
+          },
+          1536: {
+            slidesPerView: 2.4,
+            spaceBetween: remValue * 3,
+            slidesOffsetBefore: remValue * 3,
+          },
+        },
 
-      // Navigation arrows
-      navigation: {
-        nextEl: ".swiper-left",
-        prevEl: ".swiper-right",
-      },
+        // If we need pagination (ensure the element exists in your HTML)
+        pagination: {
+          el: ".swiper-pagination", // Make sure <div class="swiper-pagination"></div> exists
+          clickable: true, // Often desired for pagination
+        },
 
-      // And if we need scrollbar
-      scrollbar: {
-        el: ".swiper-scrollbar",
-      },
-    });
-  });
+        // Navigation arrows (ensure the elements exist in your HTML)
+        navigation: {
+          // NOTE: Your classes seem reversed (left button assigned to nextEl), check if intentional
+          nextEl: ".swiper-right",
+          prevEl: ".swiper-left",
+        },
+
+        // And if we need scrollbar (ensure the element exists in your HTML)
+        scrollbar: {
+          el: ".swiper-scrollbar", // Make sure <div class="swiper-scrollbar"></div> exists
+          hide: false, // Or true, depending on preference
+          draggable: true,
+        },
+      });
+    } else {
+      // If the container isn't on the page, make sure any old instance is destroyed
+      // (e.g., navigating from a page with this swiper to one without)
+
+      // WHY IS THIS CHECK HERE?
+      // Because 'entertainmentSwiperInstance' still holds the Swiper object
+      // created when the *previous* page (Page A) was loaded,
+      // even though we are now on Page B where the container doesn't exist.
+      if (entertainmentSwiperInstance) {
+        console.log(
+          "Entertainment Swiper container not found, destroying instance."
+        );
+        entertainmentSwiperInstance.destroy(true, true);
+        entertainmentSwiperInstance = null;
+      }
+    }
+  }
+
+  // --- 5. Listen for Astro's page load event ---
+  // This runs on initial load AND after every client-side navigation
+  document.addEventListener("astro:page-load", setupEntertainmentSwiper);
+
+  // Optional: Cleanup before swapping if needed (usually destroy on load is enough)
+  // document.addEventListener('astro:before-swap', () => {
+  //   if (entertainmentSwiperInstance) {
+  //     entertainmentSwiperInstance.destroy(true, true);
+  //     entertainmentSwiperInstance = null;
+  //   }
+  // });
 </script>
 
 <style>

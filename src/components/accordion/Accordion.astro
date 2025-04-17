@@ -5,7 +5,7 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", (): void => {
+  document.addEventListener("astro:page-load", (): void => {
     // Get all accordion headers
     const accordionHeaders: NodeListOf<HTMLElement> =
       document.querySelectorAll(".accordion-header");

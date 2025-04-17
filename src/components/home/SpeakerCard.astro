@@ -4,19 +4,30 @@ import BodyText from "@/components/typography/BodyText.astro";
 import Heading from "@/components/typography/Heading.astro";
 import type { Speaker } from "@/types";
 import { Picture } from "astro:assets";
+import { lazy } from "astro:schema";
 
 interface Props extends Speaker {}
 
 const { speakerName, title, njumpUrl, bio, profilePic } = Astro.props;
+
+// Widths targeting sharp images up to 2x density across layouts
+const imageWidths = [320, 560, 640, 820, 960, 1120, 1640];
+
+// Sizes describing the image's layout width at different viewports
+const imageSizes = "(max-width: 640px) 90vw, (max-width: 1790px) 820px, 560px";
 ---
 
 <article class="mb-10">
   <!-- row 1 -->
   <Picture
-    alt=""
+    alt={`Profile picture of ${speakerName}`}
     formats={["avif", "webp"]}
     src={profilePic}
-    class="rounded-xl"
+    class="rounded-xl w-full aspect-square object-cover mb-4"
+    widths={imageWidths}
+    sizes={imageSizes}
+    loading="lazy"
+    decoding="async"
   />
   <!-- row-2 -->
   <div class="flex justify-between items-center gap-2">

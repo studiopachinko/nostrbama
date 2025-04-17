@@ -14,15 +14,23 @@ import Subheading from "@/components/typography/Subheading.astro";
     <div class="absolute inset-0">
       <Picture
         src={homeHero}
-        formats={["avif", "webp"]}
         alt="Collage of psychedelic imagery of ostriches and shapes"
+        formats={["avif", "webp"]}
+        widths={[640, 768, 1024, 1280, 1536, 1920, 2560]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
         class="object-cover w-full h-full"
       />
     </div>
     <Picture
       src={nbLogo}
-      formats={["avif", "webp"]}
       alt="Nostrbama Logo"
+      formats={["avif", "webp"]}
+      widths={[200, 400, 600, 800, 1200, 1600]}
+      sizes="(max-width: 768px) 80vw, 67vw"
+      loading="lazy"
+      decoding="async"
       class="z-10 absolute max-w-2/3 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-4/5"
     />
   </div>
