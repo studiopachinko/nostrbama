@@ -1,17 +1,12 @@
 ---
 interface Props {
-  className: string;
-  slot?: string;
+  className?: string;
+  slot?: string; // TODO: What does this do?
 }
 
 const { className, slot } = Astro.props;
 ---
 
-<p
-  class={className
-    ? `text-stone-300 text-xl ${className}`
-    : "text-stone-300 text-xl"}
-  slot={slot}
->
+<p class={`text-stone-400 text-lg xl:text-2xl ${className}`} slot={slot}>
   <slot />
 </p>

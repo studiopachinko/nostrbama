@@ -1,26 +1,24 @@
 ---
 import EntertainmentCard from "@/components/common/EntertainmentCard.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
 import { ENTERTAINMENT_DATA } from "@/data";
 ---
 
-<div class="swiper entertainment-swiper w-full my-96">
+<div class="swiper entertainment-swiper w-full section-y-padding">
   <div
     class="outer-padding flex flex-col sm:flex-row gap-4 sm:gap-8 md:gap-12 items-end justify-between mb-4 md:mb-8 lg:mb-12 xl:mb-16"
   >
     <div>
-      <h2
-        class="text-(--nb-white) font-headline text-4xl md:text-5xl xl:text-9xl mb-6 xl:mb-12"
-      >
+      <Heading level={2}>
         The Line Up
-      </h2>
-      <p
-        class="text-stone-300 md:text-xl lg:text-2xl xl:text-5xl leading-[1.25] text-lg max-w-[60ch] text-balance"
-      >
+      </Heading>
+      <Subheading headingLevel={2}>
         Nostbama 2025 is going to be jam-packed with opportunities to meet and
         have fun with all those disembodied avatars. Not just plebs but devs
         too. And when we say bonding we mean 'Literally strap yourself to a
         fellow Nostriche and jump out of a plane with him' bonding.
-      </p>
+      </Subheading>
     </div>
     <div class="hidden sm:flex justify-start lg:justify-end gap-2">
       <button
@@ -132,8 +130,8 @@ import { ENTERTAINMENT_DATA } from "@/data";
       breakpoints: {
         320: {
           slidesPerView: 1.15,
-          spaceBetween: remValue * 0.5,
-          slidesOffsetBefore: remValue * 0.5,
+          spaceBetween: remValue * 1.5,
+          slidesOffsetBefore: remValue,
         },
         640: {
           slidesPerView: 1.25,

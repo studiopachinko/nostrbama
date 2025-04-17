@@ -1,4 +1,6 @@
 ---
+import ClientRouter from "astro/components/ClientRouter.astro";
+import SiteNav from "@/components/site-nav/SiteNav.astro";
 import "./src/styles/global.css";
 ---
 
@@ -10,8 +12,10 @@ import "./src/styles/global.css";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>Nostrbama 2025</title>
+    <ClientRouter />
   </head>
   <body class="dark:bg-stone-900 text-stone-400 antialiased">
+    <SiteNav />
     <slot />
   </body>
 </html>

@@ -1,0 +1,244 @@
+---
+// No props needed for this basic version, but you could pass initialTab etc.
+// Define TABS data here or import it. For simplicity, defining here:
+const TABS = [
+  {
+    name: "Home",
+    // Simplified icon placeholder for brevity - use your actual SVG strings or Astro components
+    href: "/", // Add href for actual navigation
+  },
+  {
+    name: "Schedule",
+    href: "/schedule",
+  },
+  {
+    name: "Sponsors",
+    href: "/sponsors",
+  },
+];
+
+// Determine the active tab based on the current page URL
+const currentPath = Astro.url.pathname;
+let initialActiveTab = TABS[0].name; // Default
+for (const tab of TABS) {
+  if (currentPath === tab.href || currentPath.startsWith(tab.href + "/")) {
+    initialActiveTab = tab.name;
+    break;
+  }
+}
+---
+
+<div class="tabs-wrapper" transition:persist>
+  <ul class="tabs-list" id="main-tabs-list">
+    {
+      TABS.map((tab) => (
+        <li class={tab.name === initialActiveTab ? "is-active-li" : ""}>
+          {/* Use links for actual navigation */}
+          <a
+            href={tab.href}
+            class:list={[
+              "tabs-button",
+              { "is-active": tab.name === initialActiveTab },
+            ]}
+            data-tab={tab.name}
+            aria-current={tab.name === initialActiveTab ? "page" : undefined}
+          >
+            {tab.name}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div aria-hidden="true" class="clip-path-container" id="clip-path-container">
+    <ul class="tabs-list list-overlay">
+      {
+        TABS.map((tab) => (
+          <li>
+            {/* These are not focusable, just visual */}
+            <span
+              class="tabs-button button-overlay"
+              data-tab={tab.name}
+              tabindex="-1"
+            >
+              {tab.name}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  .tabs-wrapper {
+    position: relative;
+    display: inline-block; /* Or block, depending on layout */
+    background-color: #eee; /* Background for non-active tabs */
+    border-radius: 20px; /* Match clip-path rounding */
+  }
+
+  .tabs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    position: relative; /* Needed for z-index stacking */
+    z-index: 1; /* Base list below overlay */
+  }
+
+  .tabs-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 10px 15px;
+    border: none;
+    background: none; /* Transparent background for base buttons */
+    color: #333; /* Default text color */
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 17px; /* Match clip-path rounding */
+    text-decoration: none; /* For <a> tags */
+    white-space: nowrap;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+
+  /* Style for the active link/button in the main list (optional, but good for a11y) */
+  .tabs-button.is-active {
+    /* You might add subtle hints here if needed, but the overlay handles the main visual */
+    /* color: #000; */
+    /* font-weight: bold; */
+  }
+
+  .clip-path-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Overlay above base list */
+    pointer-events: none; /* Allow clicks to pass through to the main list */
+    /* Initial clip-path will be set by JS */
+    border-radius: 17px; /* Match button radius */
+    view-transition-name: active-tab-highlight; /* Unique name */
+    contain: layout; /* Helps browser optimize */
+  }
+
+  .list-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto; /* Allow natural width based on content */
+    height: 100%;
+    z-index: 3; /* Ensure buttons are visually on top */
+    background-color: transparent; /* Container handles background */
+  }
+
+  .button-overlay {
+    background-color: white; /* Active tab background */
+    color: #111; /* Active tab text color */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Optional: nice shadow effect */
+    /* Ensure padding/sizing matches .tabs-button exactly */
+  }
+
+  /* Remove focus outline from visual-only spans */
+  .button-overlay:focus {
+    outline: none;
+  }
+</style>
+
+<script define:vars={{ initialActiveTab }}>
+  // Use the initialActiveTab passed from Astro frontmatter
+  const TABS_DATA = JSON.parse(
+    document.getElementById("tabs-data")?.textContent || "[]"
+  ); // If needed
+  let currentActiveTab = initialActiveTab; // Initialize with server-rendered value
+
+  const wrapper = document.querySelector(".tabs-wrapper");
+  const mainList = document.getElementById("main-tabs-list");
+  const clipContainer = document.getElementById("clip-path-container");
+
+  function updateClipPath(tabName) {
+    if (!clipContainer || !mainList) return;
+
+    // Find the corresponding LINK (<a> tag) in the main list
+    const activeLinkElement = mainList.querySelector(
+      `a[data-tab="${tabName}"]`
+    );
+
+    if (activeLinkElement) {
+      const { offsetLeft, offsetWidth } = activeLinkElement;
+      const containerWidth = mainList.offsetWidth; // Calculate based on the main list width
+
+      if (containerWidth > 0) {
+        // Calculate percentage relative to the main list container
+        const clipLeftPercent = (offsetLeft / containerWidth) * 100;
+        const clipRightPercent =
+          100 - ((offsetLeft + offsetWidth) / containerWidth) * 100;
+
+        // Apply inset clip-path with rounding matching button border-radius
+        // Using percentages and fixed rounding value
+        clipContainer.style.clipPath = `inset(0 ${clipRightPercent.toFixed(2)}% 0 ${clipLeftPercent.toFixed(2)}% round 17px)`;
+        currentActiveTab = tabName; // Update tracking variable
+      }
+
+      // Optionally update aria-current and active classes on main links
+      mainList.querySelectorAll("a.tabs-button").forEach((link) => {
+        const li = link.closest("li");
+        if (link.dataset.tab === tabName) {
+          link.classList.add("is-active");
+          link.setAttribute("aria-current", "page");
+          if (li) li.classList.add("is-active-li");
+        } else {
+          link.classList.remove("is-active");
+          link.removeAttribute("aria-current");
+          if (li) li.classList.remove("is-active-li");
+        }
+      });
+    } else {
+      // Handle case where tab element isn't found (e.g., hide clip path)
+      clipContainer.style.clipPath = "inset(0 100% 0 0 round 17px)"; // Or similar default
+    }
+  }
+
+  // --- Event Listener ---
+  // Use click listener on the wrapper for delegation (but only act on main list links)
+  // Note: We listen on the wrapper but check if the target is a button inside the main list
+  // This prevents issues if the click happens on padding/margins
+  if (wrapper && mainList) {
+    mainList.addEventListener("click", (event) => {
+      // Find the clicked link element within the main list
+      const clickedLink = event.target.closest("a.tabs-button");
+
+      if (clickedLink && clickedLink.dataset.tab) {
+        const tabName = clickedLink.dataset.tab;
+        // Only update visuals if it's not already active,
+        // Navigation itself is handled by the link's href
+        if (tabName !== currentActiveTab) {
+          updateClipPath(tabName);
+        }
+        // Prevent default only if JS handles navigation (not recommended here)
+        // event.preventDefault();
+      }
+    });
+  }
+
+  // --- Initial State ---
+  // Set the initial clip-path based on the server-determined active tab
+  // Use requestAnimationFrame to ensure layout is calculated
+  requestAnimationFrame(() => {
+    updateClipPath(initialActiveTab);
+  });
+
+  // Optional: Recalculate on resize if layout might change
+  let resizeTimeout;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      updateClipPath(currentActiveTab); // Update with the currently tracked active tab
+    }, 100); // Debounce resize events
+  });
+</script>

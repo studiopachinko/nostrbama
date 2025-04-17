@@ -12,11 +12,7 @@ const { level, slot, className } = Astro.props;
   level === 1 && (
     <h1
       slot={slot}
-      class={
-        className
-          ? `text-(--nb-white) md:text-7xl font-headline text-5xl sm:text-6xl lg:text-7xl xl:text-9xl mb-3 text-balance ${className}`
-          : `text-(--nb-white) md:text-7xl font-headline text-5xl sm:text-6xl lg:text-7xl xl:text-9xl mb-3 text-balance `
-      }
+      class={`text-(--nb-white) md:text-7xl font-headline text-6xl sm:text-6xl lg:text-7xl xl:text-8xl mb-3 text-balance ${className}`}
     >
       <slot />
     </h1>
@@ -26,11 +22,7 @@ const { level, slot, className } = Astro.props;
   level === 2 && (
     <h2
       slot={slot}
-      class={
-        className
-          ? `text-(--nb-white) font-headline text-4xl md:text-5xl xl:text-9xl mb-4 xl:mb-12 ${className}`
-          : `text-(--nb-white) font-headline text-4xl md:text-5xl xl:text-9xl mb-4 xl:mb-12`
-      }
+      class={`text-(--nb-white) font-headline text-5xl md:text-5xl xl:text-7xl mb-4 xl:mb-12 ${className}`}
     >
       <slot />
     </h2>
@@ -40,11 +32,7 @@ const { level, slot, className } = Astro.props;
   level === 3 && (
     <h3
       slot={slot}
-      class={
-        className
-          ? `text-(--nb-white) text-3xl md:text-4xl xl:text-5xl mb-3 font-headline ${className}`
-          : `text-(--nb-white) text-3xl md:text-4xl xl:text-5xl mb-3 font-headline`
-      }
+      class={`text-(--nb-white) text-4xl md:text-4xl xl:text-5xl mb-3 font-headline ${className}`}
     >
       <slot />
     </h3>

@@ -16,11 +16,11 @@ const { image, imageAlt, subheading, location } = Astro.props;
 ---
 
 <article
-  class="grid gap-6 md:grid-cols-[0.5fr_1fr] md:gap-16 border-t border-b border-stone-700 py-8 last:border-t-0"
+  class="grid gap-6 md:grid-cols-[0.25fr_1fr] md:gap-16 xl:gap-[20%] border-t border-b border-stone-700 py-8 last:border-t-0"
 >
   <Image src={image} alt={imageAlt} class="rounded-lg" />
   <!-- titles -->
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-8 max-w-[1200px]">
     <header class="">
       <slot name="heading" />
       <Subheading headingLevel={2}>{subheading}</Subheading>

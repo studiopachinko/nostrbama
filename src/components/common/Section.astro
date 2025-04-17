@@ -1,4 +1,7 @@
 ---
+import Heading from '@/components/typography/Heading.astro';
+import Subheading from '@/components/typography/Subheading.astro';
+
 interface Props {
   title: string;
   subheadline?: string;
@@ -10,19 +13,18 @@ const { title, subheadline, className = "", headerClassName } = Astro.props;
 ---
 
 <section
-  class={className ? `${className} outer-padding my-96` : "outer-padding"}
+  class={className ? `${className} outer-padding section-y-padding` : "outer-padding"}
 >
   <header class={headerClassName ? headerClassName : ""}>
-    <h2
-      class="text-(--nb-white) font-headline text-4xl md:text-5xl xl:text-9xl mb-6 xl:mb-12"
+    <Heading level={2}
     >
       {title}
-    </h2>
+    </Heading>
     {
       subheadline && (
-        <p class="text-stone-300 md:text-xl lg:text-2xl xl:text-5xl text-lg max-w-[60ch] leading-[1.25]">
-          {subheadline}
-        </p>
+      <Subheading headingLevel={2}>
+           {subheadline}
+      </Subheading>
       )
     }
   </header>

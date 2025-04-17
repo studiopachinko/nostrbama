@@ -1,16 +1,17 @@
 ---
 interface Props {
   url: string;
+  className?: string;
 }
 
-const { url } = Astro.props;
+const { url, className } = Astro.props;
 ---
 
 <a
   href={url}
   target="_blank"
   rel="noopener noreferrer"
-  class="size-10 min-w-10 min-h-10 max-w-10 max-h-10 rounded-lg bg-stone-700 flex items-center justify-center"
+  class={`size-10 min-w-10 min-h-10 max-w-10 max-h-10 rounded-lg bg-stone-700 flex items-center justify-center ${className}`}
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"

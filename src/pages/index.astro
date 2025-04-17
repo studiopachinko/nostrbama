@@ -17,7 +17,7 @@ import FAQSection from "@/components/home/FAQSection.astro";
   <EntertainmentSwiper />
   <Section title="Meet the Speakers!" className="mb-20 @container">
     <div
-      class="sm:p-4 grid grid-rows-[repeat(4,_auto)] gap-4 @min-[530px]:grid-cols-2 @min-[1120px]:grid-cols-4 @min-[530px]:gap-6 @min-[1024px]:gap-12"
+      class="grid grid-rows-[repeat(4,_auto)] gap-4 @min-[530px]:grid-cols-2 @min-[1120px]:grid-cols-2 @min-[1120px]:gap-12 @min-[1680px]:grid-cols-4 @min-[1680px]:gap-6 @min-[530px]:gap-6"
     >
       {SPEAKER_DATA.map((speaker) => <SpeakerCard {...speaker} />)}
     </div>
@@ -36,12 +36,13 @@ import FAQSection from "@/components/home/FAQSection.astro";
       />
     </div>
   </Section>
-  <Section title="FAQ" subheadline="Trying to answer your questions. If you've got anymore drop a message to:" className="flex flex-col items-center" headerClassName="text-center">
+  <Section
+    title="FAQ"
+
+    className="flex flex-col items-center"
+    headerClassName="text-center"
+  >
     <FAQSection />
   </Section>
   <CtaSection />
 </Layout>
-
-<!-- grid-rows-[repeat(4,_auto)] 
-@min-[530px]:gap-6 
--->

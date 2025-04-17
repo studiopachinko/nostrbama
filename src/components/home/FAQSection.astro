@@ -4,72 +4,71 @@ import AccordionItem from "@/components/accordion/AccordionItem.astro";
 import { venueLocations } from "@/components/location-table/data";
 import LocationTable from "@/components/location-table/LocationTable.astro";
 import LocationTableItem from "@/components/location-table/LocationTableItem.astro";
+import BodyText from "@/components/typography/BodyText.astro";
 ---
 
 <Accordion>
   <AccordionItem question="How much does it cost?">
-    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+    <BodyText>
       Attending the events on the 15th is <span class="font-medium text-white"
         >completely free</span
       >. The rest of the stuff sounds expensive, kinda. NGL. Sky-diving costs
       $279 per person.
-    </p>
+    </BodyText>
   </AccordionItem>
   <AccordionItem question="What's the nearest airport?">
-    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+    <BodyText>
       I don't know, I'm not from there. JFK? That's a big one isn't it?
-    </p>
+    </BodyText>
   </AccordionItem>
   <AccordionItem question="How do I register for sky-diving?">
-    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+    <BodyText>
       Registration ends June 9th so contact <a
-        href=""
+        href="https://njump.me/npub1yrkexvt88h6cgd32gdcfm55auuz6rw6c70xj478gcz6lstz5czvs9s77xh"
         class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
         >DankSwoops</a
       > ASAP on Nostr.
-    </p>
+    </BodyText>
   </AccordionItem>
   <AccordionItem question="What about accommodation?">
-    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
-      Yes, you'll probably need something like that.
-    </p>
+    <BodyText> Yes, you'll probably need something like that. </BodyText>
   </AccordionItem>
   <AccordionItem
     question="I'm a dev/musician/stripper and I want to talk/perform/strip at this event. Who do I contact?"
   >
-    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+    <BodyText>
       You should contact the event organisers: <a
-        href=""
+        href="https://njump.me/npub16secklpnqey3el04fy2drfftsz5k26zlwdsnz84wtul2luwj8fdsugjdxk"
         class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
         >Sergio</a
       >, <a
-        href=""
+        href="https://njump.me/npub1unm5skfa9x4drpq43pu2g00w6pzwvfhsa23z4j6aee7vghaygmkqwjtxhc"
         class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
         >Mallory</a
       > or <a
-        href=""
+        href="https://njump.me/npub1ualvtyga8hj6kgw9mwe72ns9pn6c8kd66qruv98eafeuawg7yt0shdwmqx"
         class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
         >Riddler</a
       > on Nostr.
-    </p>
+    </BodyText>
   </AccordionItem>
-  <AccordionItem question="Where am I doing again?">
-    <p class="text-stone-400 xl:text-3xl xl:leading-[1.25]">
+  <AccordionItem question="Where am I going again?">
+    <BodyText>
       We're going here. Please confirm exact locations (Orange Beach, Riddler's
       house) with the event organisers <a
-        href=""
+        href="https://njump.me/npub16secklpnqey3el04fy2drfftsz5k26zlwdsnz84wtul2luwj8fdsugjdxk"
         class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
         >Sergio</a
       >, <a
-        href=""
+        href="https://njump.me/npub1unm5skfa9x4drpq43pu2g00w6pzwvfhsa23z4j6aee7vghaygmkqwjtxhc"
         class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
         >Mallory</a
       > or <a
-        href=""
+        href="https://njump.me/npub1ualvtyga8hj6kgw9mwe72ns9pn6c8kd66qruv98eafeuawg7yt0shdwmqx"
         class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
         >Riddler</a
       > on Nostr.
-    </p>
+    </BodyText>
     <div class="w-full">
       <LocationTable>
         {

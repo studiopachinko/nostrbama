@@ -4,6 +4,8 @@ import { Picture } from "astro:assets";
 import ctaPattern from "@/assets/images/cta/cta-pattern.jpg";
 import nbLogoGold from "@/assets/images/cta/nb_logo--gold.png";
 import activitiesV from "@/assets/images/cta/cta_v-image.png";
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
 ---
 
 <section class="outer-padding">
@@ -28,15 +30,11 @@ import activitiesV from "@/assets/images/cta/cta_v-image.png";
         class="object-cover w-full h-full"
       />
     </div>
-    <h2
-      class="absolute top-7 text-(--nb-white) font-headline text-4xl w-[60%] text-center left-1/2 -translate-x-1/2 z-40 text-shadow-2xs"
-    >
+    <Heading level={2}>
       We hope to see you there, anon!
-    </h2>
-    <p
-      class="absolute bottom-7 text-(--nb-white) font-headline text-4xl w-[60%] text-center left-1/2 -translate-x-1/2 z-40 text-shadow-2xs"
-    >
+    </Heading>
+    <Subheading headingLevel={2}>
       July 15—17 2025, Mobile, Alabama
-    </p>
+    </Subheading>
   </div>
 </section>

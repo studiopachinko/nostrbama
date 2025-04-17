@@ -8,14 +8,14 @@ const { headingLevel } = Astro.props;
 
 {
   headingLevel === 1 && (
-    <p class="text-2xl md:text-5xl sm:text-4xl lg:text-6xl xl:text-7xl text-stone-300 leading-tight md:leading-[1.1] mb-5 text-balance">
+    <p class="text-2xl md:text-4xl sm:text-3xl lg:text-3xl xl:text-4xl text-stone-300 leading-tight md:leading-[1.1] mb-5 text-balance">
       <slot />
     </p>
   )
 }
 {
   headingLevel === 2 && (
-    <p class="text-stone-400 md:text-xl lg:text-2xl xl:text-5xl text-xl max-w-[60ch] leading-[1.25]">
+    <p class="text-stone-400 md:text-xl lg:text-2xl xl:text-3xl text-xl max-w-[60ch] leading-[1.25]">
       <slot />
     </p>
   )
