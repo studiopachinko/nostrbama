@@ -46,21 +46,21 @@ describe("useOstrichInput Hook", () => {
 
   /** MOUSE UP */
 
-  it('should set isClicking to false on mouseup', () => {
+  it("should set isClicking to false on mouseup", () => {
     const { result } = renderHook(() => useOstrichInput(), {
       wrapper: Wrapper,
     });
 
     // Dispatch mousedown first
     act(() => {
-      document.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      document.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
     });
     // Assert true AFTER mousedown
     expect(result.current.isClicking).toBe(true);
 
     // NOW dispatch mouseup
     act(() => {
-        document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+      document.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
     });
     // Assert false AFTER mouseup
     expect(result.current.isClicking).toBe(false);
@@ -72,50 +72,202 @@ describe("useOstrichInput Hook", () => {
   const mockTouch = {
     identifier: Date.now(),
     target: document, // Or specific element if needed
-    clientX: 10, clientY: 10,
-    screenX: 10, screenY: 10,
-    pageX: 10, pageY: 10,
-    radiusX: 1, radiusY: 1,
-    rotationAngle: 0, force: 0.5
-} as Touch; // Cast to Touch type
+    clientX: 10,
+    clientY: 10,
+    screenX: 10,
+    screenY: 10,
+    pageX: 10,
+    pageY: 10,
+    radiusX: 1,
+    radiusY: 1,
+    rotationAngle: 0,
+    force: 0.5,
+  } as Touch; // Cast to Touch type
 
-it('should set isClicking to true on touchstart with one touch', () => {
-  const { result } = renderHook(() => useOstrichInput(), { wrapper: Wrapper });
+  it("should set isClicking to true on touchstart with one touch", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
 
-  act(() => {
-    // Dispatch touchstart WITH a touches array
-    document.dispatchEvent(new TouchEvent('touchstart', {
-        bubbles: true,
-        touches: [mockTouch] // Provide mock touch data
-    }));
+    act(() => {
+      // Dispatch touchstart WITH a touches array
+      document.dispatchEvent(
+        new TouchEvent("touchstart", {
+          bubbles: true,
+          touches: [mockTouch], // Provide mock touch data
+        })
+      );
+    });
+
+    expect(result.current.isClicking).toBe(true);
   });
 
-  expect(result.current.isClicking).toBe(true);
-});
+  it("should set isClicking to false on touchend when last touch ends", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
 
-it('should set isClicking to false on touchend when last touch ends', () => {
-  const { result } = renderHook(() => useOstrichInput(), { wrapper: Wrapper });
+    // Simulate touch start first
+    act(() => {
+      document.dispatchEvent(
+        new TouchEvent("touchstart", {
+          bubbles: true,
+          touches: [mockTouch],
+        })
+      );
+    });
+    expect(result.current.isClicking).toBe(true); // Verify start
 
-  // Simulate touch start first
-  act(() => {
-    document.dispatchEvent(new TouchEvent('touchstart', {
-        bubbles: true,
-        touches: [mockTouch]
-    }));
+    // Simulate touchend, providing the removed touch in changedTouches
+    // and an empty touches list (assuming last touch ended)
+    act(() => {
+      document.dispatchEvent(
+        new TouchEvent("touchend", {
+          bubbles: true,
+          touches: [], // No remaining touches
+          changedTouches: [mockTouch], // The touch that was lifted
+        })
+      );
+    });
+
+    // Assert false only if your hook logic sets it based on touches/changedTouches
+    expect(result.current.isClicking).toBe(false);
   });
-   expect(result.current.isClicking).toBe(true); // Verify start
 
-  // Simulate touchend, providing the removed touch in changedTouches
-  // and an empty touches list (assuming last touch ended)
-  act(() => {
-    document.dispatchEvent(new TouchEvent('touchend', {
-        bubbles: true,
-        touches: [], // No remaining touches
-        changedTouches: [mockTouch] // The touch that was lifted
-    }));
+  /** KEY TESTS */
+  it("should set forward to true when the key W is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "KeyW",
+        })
+      );
+    });
+
+    expect(result.current.keys().forward).toBe(true);
   });
+  
+  it("should set forward to true when the ArrowUp is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
 
-  // Assert false only if your hook logic sets it based on touches/changedTouches
-  expect(result.current.isClicking).toBe(false);
-});
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "ArrowUp",
+        })
+      );
+    });
+
+    expect(result.current.keys().forward).toBe(true);
+  });
+  
+  it("should set back to true when the key S is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "KeyS",
+        })
+      );
+    });
+
+    expect(result.current.keys().back).toBe(true);
+  });
+  
+  it("should set forward to true when the ArrowDown is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "ArrowDown",
+        })
+      );
+    });
+
+    expect(result.current.keys().back).toBe(true);
+  });
+  
+  it("should set left to true when the key A is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "KeyA",
+        })
+      );
+    });
+
+    expect(result.current.keys().left).toBe(true);
+  });
+  
+  it("should set forward to true when the ArrowLeft is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "ArrowLeft",
+        })
+      );
+    });
+
+    expect(result.current.keys().left).toBe(true);
+  });
+  
+  it("should set left to true when the key D is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "KeyD",
+        })
+      );
+    });
+
+    expect(result.current.keys().right).toBe(true);
+  });
+  
+  it("should set forward to true when the ArrowRight is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "ArrowRight",
+        })
+      );
+    });
+
+    expect(result.current.keys().right).toBe(true);
+  });
 });

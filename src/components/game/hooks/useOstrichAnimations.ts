@@ -35,7 +35,7 @@ export function useOstrichAnimations({
       nextAction?.reset().setLoop(THREE.LoopRepeat, Infinity).play();
       nextAction?.crossFadeFrom(current, duration, true);
     } else if (nextAction) {
-      // No current action, just play the next one
+      // No current action, just play the next one. This is the initialisation case when Ostrich model is loaded.
       nextAction?.reset().setLoop(THREE.LoopRepeat, Infinity).play();
     } else {
       console.warn(
