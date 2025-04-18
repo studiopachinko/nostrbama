@@ -1,19 +1,33 @@
-import { StrictMode } from "react";
+import { StrictMode, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
-import { KeyboardControls } from "@react-three/drei";
+import {
+  KeyboardControls,
+  type KeyboardControlsEntry,
+} from "@react-three/drei";
 import { Leva } from "leva";
 import Experience from "@/components/game/core/Experience";
 import Controls from "@/components/game/utils/Controls";
 
-const controlsMap = [
-  { name: "forward", keys: ["ArrowUp", "KeyW"] },
-  { name: "backward", keys: ["ArrowDown", "KeyS"] },
-  { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
-  { name: "rightward", keys: ["ArrowRight", "KeyD"] },
-  { name: "run", keys: ["Shift"] },
-];
+export enum GameControls {
+  forward = "forward",
+  back = "back",
+  left = "left",
+  right = "right",
+  run = "run",
+}
 
 export default function Game() {
+  const controlsMap = useMemo<KeyboardControlsEntry<GameControls>[]>(
+    () => [
+      { name: GameControls.forward, keys: ["ArrowUp", "KeyW"] },
+      { name: GameControls.back, keys: ["ArrowDown", "KeyS"] },
+      { name: GameControls.left, keys: ["ArrowLeft", "KeyA"] },
+      { name: GameControls.right, keys: ["ArrowRight", "KeyD"] },
+      { name: GameControls.run, keys: ["Shift"] },
+    ],
+    []
+  );
+
   return (
     <StrictMode>
       <KeyboardControls map={controlsMap}>

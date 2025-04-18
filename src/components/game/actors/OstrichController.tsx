@@ -15,6 +15,7 @@ import type {
 } from "@dimforge/rapier3d-compat";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { useOstrichInput } from "@/components/game/hooks/useOstrichInput";
 
 const IDLE = 4;
 const WALK = 9;
@@ -31,8 +32,10 @@ export default function OstrichController(): React.ReactNode {
     () => new THREE.Vector3()
   );
 
+  /** ASSET LOADING */
   const ostrich = useGLTF("./game/nla_ostrich--01_1k.glb");
 
+  /** ANIMATIONS */
   const { mixer, actions, names } = useAnimations(
     ostrich.animations,
     ostrich.scene
@@ -43,12 +46,13 @@ export default function OstrichController(): React.ReactNode {
   const rigidBodyRef = useRef<RapierRigidBody>(null);
   const collider = useRef<RapierCollider>(null);
   const charController = useRef<KinematicCharacterController>(null);
-  const isClicking = useRef<boolean>(false);
+  // const isClicking = useRef<boolean>(false);
 
   const rapier = useRapier();
-  const [, getKeys] = useKeyboardControls();
+  // const [, getKeys] = useKeyboardControls();
+  const { keys, isClicking } = useOstrichInput();
 
-  // SET UP
+  // RAPIER SET UP
   useEffect(() => {
     // load animation
     fadeToAction("idle-1");
@@ -61,54 +65,7 @@ export default function OstrichController(): React.ReactNode {
     c.enableSnapToGround(1);
     charController.current = c;
 
-    // for pointer controls
-    const onPointerDown = (e: PointerEvent | TouchEvent): void => {
-      const eventType = e.type;
-      let clicking = false;
-      if (eventType === "touchstart" && e instanceof TouchEvent) {
-        if (e.touches.length === 1) {
-          clicking = true;
-        }
-        if (e.touches.length === 2) {
-          // need to handle camera zoom ie pinch
-        }
-      } else {
-        // mousedown event
-        clicking = true;
-      }
-      isClicking.current = clicking;
-    };
-
-    const onPointerUp = (e: PointerEvent | TouchEvent): void => {
-      const eventType = e.type;
-      let clicking = true;
-      if (eventType === "touchstart" && e instanceof TouchEvent) {
-        if (e.touches.length === 1) {
-          clicking = false;
-        }
-        if (e.touches.length === 2) {
-          // need to handle camera zoom ie pinch
-        }
-      } else {
-        // mousedown event
-        clicking = false;
-      }
-      isClicking.current = clicking;
-    };
-
-    document.addEventListener("mousedown", onPointerDown as EventListener);
-    document.addEventListener("mouseup", onPointerUp as EventListener);
-    document.addEventListener("touchstart", onPointerDown as EventListener);
-    document.addEventListener("touchend", onPointerUp as EventListener);
     return () => {
-      document.removeEventListener("mousedown", onPointerDown as EventListener);
-      document.removeEventListener("mouseup", onPointerUp as EventListener);
-      document.removeEventListener(
-        "touchstart",
-        onPointerDown as EventListener
-      );
-      document.removeEventListener("touchend", onPointerUp as EventListener);
-
       if (currentAction.current) {
         fadeToAction("idle-1", 0.1);
       }
@@ -141,9 +98,9 @@ export default function OstrichController(): React.ReactNode {
   };
 
   useFrame((state: RootState, delta: number) => {
-    const { forward, backward, leftward, rightward } = getKeys();
+    const { forward, back, left, right } = keys;
 
-    if (forward || backward || leftward || rightward || isClicking.current) {
+    if (forward || back || left || right || isClicking) {
       try {
         fadeToAction("run");
 
@@ -161,21 +118,21 @@ export default function OstrichController(): React.ReactNode {
         const movement = new THREE.Vector3();
 
         // Handle keyboard input
-        if (getKeys().forward) {
+        if (keys.forward) {
           movement.z -= 0.1; // Moving forward in world space
         }
-        if (getKeys().backward) {
+        if (keys.back) {
           movement.z += 0.1;
         }
-        if (getKeys().leftward) {
+        if (keys.left) {
           movement.x -= 0.1;
         }
-        if (getKeys().rightward) {
+        if (keys.right) {
           movement.x += 0.1;
         }
 
         // Handle mouse input with isometric transformation
-        if (isClicking.current) {
+        if (isClicking) {
           const pointer = state.pointer;
           const MOVEMENT_SCALE = 0.1;
 
