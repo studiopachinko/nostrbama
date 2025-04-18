@@ -4,10 +4,10 @@ import { Perf } from "r3f-perf";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useGesture } from "@use-gesture/react";
 import * as THREE from "three";
-import OstrichController from "@/components/game/OstrichController";
-import Lights from "@/components/game/Lights";
-import Logo from "@/components/game/Logo";
-import Level from "@/components/game/Level";
+import OstrichController from "@/components/game/actors/OstrichController";
+import Lights from "@/components/game/environment/Lights";
+import Logo from "@/components/game/environment/Logo";
+import Level from "@/components/game/environment/Level";
 
 const MAX = 1.9;
 const MIN = 0.7;

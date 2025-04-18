@@ -1,10 +1,19 @@
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import * as THREE from "three";
+import type { Vector3, Euler } from "@react-three/fiber";
 
-function RefCubes() {
-  const cubes = useMemo(() => {
-    const cubeData = [];
+// 1. Define the type for the cube data object
+interface CubeData {
+  // Vector3 or number[] are suitable types for these props
+  position: Vector3 | [number, number, number];
+  scale: Vector3 | [number, number, number];
+  rotation: Euler | [number, number, number]; // Euler uses [x, y, z, order?] format
+}
+
+function RefCubes(): React.ReactNode {
+  const cubes = useMemo<CubeData[]>(() => {
+    const cubeData: CubeData[] = [];
     const gridSize = 5; // Space between cubes
     const extent = 20; // How far out to place cubes
 

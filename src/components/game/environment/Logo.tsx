@@ -7,7 +7,7 @@ export default function Logo() {
 
   useEffect(() => {
     logo.scene.traverse((child) => {
-      if (child.isMesh) {
+      if (child instanceof THREE.Mesh) {
         const material = new THREE.MeshPhongMaterial({
           color: child.material.color || 0xFF8555,
         });

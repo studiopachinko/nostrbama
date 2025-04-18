@@ -1,11 +1,18 @@
 import { useAnimations, useGLTF, useKeyboardControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, type RootState } from "@react-three/fiber";
 import {
   CapsuleCollider,
+  RapierRigidBody,
   RigidBody,
   useRapier,
   vec3,
+  type RapierContext, // Import Rapier context type
+  // type RigidBody as RapierRigidBodyType, // Rename Rapier's RigidBody type
 } from "@react-three/rapier";
+import type {
+  KinematicCharacterController,
+  Collider as RapierCollider, // Type for the collider ref if accessing its API
+} from "@dimforge/rapier3d-compat";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
@@ -15,12 +22,14 @@ const RUN = 6;
 const PECK_ATTACK = 1;
 const JUMP_ATTACK = 2;
 
-export default function OstrichController() {
+export default function OstrichController(): React.ReactNode {
   // camera positioning
-  const [smoothedCameraPosition] = useState(
+  const [smoothedCameraPosition] = useState<THREE.Vector3>(
     () => new THREE.Vector3(10, 20, 10)
   );
-  const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
+  const [smoothedCameraTarget] = useState<THREE.Vector3>(
+    () => new THREE.Vector3()
+  );
 
   const ostrich = useGLTF("./game/nla_ostrich--01_1k.glb");
 
@@ -28,15 +37,16 @@ export default function OstrichController() {
     ostrich.animations,
     ostrich.scene
   );
-  const currentAction = useRef(null);
+
+  const currentAction = useRef<THREE.AnimationAction | null>(null);
+  const ostrichRef = useRef<THREE.Group>(null);
+  const rigidBodyRef = useRef<RapierRigidBody>(null);
+  const collider = useRef<RapierCollider>(null);
+  const charController = useRef<KinematicCharacterController>(null);
+  const isClicking = useRef<boolean>(false);
 
   const rapier = useRapier();
   const [, getKeys] = useKeyboardControls();
-  const ostrichRef = useRef();
-  const rigidBodyRef = useRef();
-  const collider = useRef();
-  const charController = useRef();
-  const isClicking = useRef(false);
 
   // SET UP
   useEffect(() => {
@@ -52,10 +62,10 @@ export default function OstrichController() {
     charController.current = c;
 
     // for pointer controls
-    const onPointerDown = (e) => {
+    const onPointerDown = (e: PointerEvent | TouchEvent): void => {
       const eventType = e.type;
       let clicking = false;
-      if (eventType === "touchstart") {
+      if (eventType === "touchstart" && e instanceof TouchEvent) {
         if (e.touches.length === 1) {
           clicking = true;
         }
@@ -69,10 +79,10 @@ export default function OstrichController() {
       isClicking.current = clicking;
     };
 
-    const onPointerUp = (e) => {
+    const onPointerUp = (e: PointerEvent | TouchEvent): void => {
       const eventType = e.type;
       let clicking = true;
-      if (eventType === "touchstart") {
+      if (eventType === "touchstart" && e instanceof TouchEvent) {
         if (e.touches.length === 1) {
           clicking = false;
         }
@@ -86,24 +96,32 @@ export default function OstrichController() {
       isClicking.current = clicking;
     };
 
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("mouseup", onPointerUp);
-    // document.addEventListener("wheel");e
-    // touch
-    document.addEventListener("touchstart", onPointerDown);
-    document.addEventListener("touchend", onPointerUp);
+    document.addEventListener("mousedown", onPointerDown as EventListener);
+    document.addEventListener("mouseup", onPointerUp as EventListener);
+    document.addEventListener("touchstart", onPointerDown as EventListener);
+    document.addEventListener("touchend", onPointerUp as EventListener);
     return () => {
-      document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("mouseup", onPointerUp);
-      document.removeEventListener("touchstart", onPointerDown);
-      document.removeEventListener("touchend", onPointerUp);
-      fadeToAction("idle-1", 0.1);
+      document.removeEventListener("mousedown", onPointerDown as EventListener);
+      document.removeEventListener("mouseup", onPointerUp as EventListener);
+      document.removeEventListener(
+        "touchstart",
+        onPointerDown as EventListener
+      );
+      document.removeEventListener("touchend", onPointerUp as EventListener);
+
+      if (currentAction.current) {
+        fadeToAction("idle-1", 0.1);
+      }
     };
   }, []);
 
   // Helper function to handle crossfade
-  const fadeToAction = (actionName, duration = 0.5) => {
+  const fadeToAction = (actionName: string, duration = 0.5) => {
     const nextAction = actions[actionName];
+
+    if (!nextAction) {
+      console.warn(`Animation action "${actionName}" not found`);
+    }
     const current = currentAction.current;
 
     // Don't crossfade to the action that's already playing
@@ -111,25 +129,36 @@ export default function OstrichController() {
 
     if (current) {
       // Fade from current to next
-      nextAction.reset().setLoop(THREE.LoopRepeat).play();
-      nextAction.crossFadeFrom(current, duration, true);
+      nextAction?.reset().setLoop(THREE.LoopRepeat, Infinity).play();
+      nextAction?.crossFadeFrom(current, duration, true);
     } else {
       // No current action, just play the next one
-      nextAction.reset().play();
+      // nextAction?.reset().play();
+      nextAction?.reset().setLoop(THREE.LoopRepeat, Infinity).play();
     }
 
     currentAction.current = nextAction;
   };
 
-  useFrame((state, delta) => {
+  useFrame((state: RootState, delta: number) => {
     const { forward, backward, leftward, rightward } = getKeys();
 
     if (forward || backward || leftward || rightward || isClicking.current) {
       try {
         fadeToAction("run");
 
-        const position = vec3(rigidBodyRef.current.translation());
-        const movement = vec3();
+        // Add null checks for refs accessed inside useFrame
+        if (
+          !rigidBodyRef.current ||
+          !ostrichRef.current ||
+          !charController.current ||
+          !collider.current
+        ) {
+          return; // Exit if refs aren't ready
+        }
+
+        const position = vec3(rigidBodyRef.current?.translation());
+        const movement = new THREE.Vector3();
 
         // Handle keyboard input
         if (getKeys().forward) {
@@ -157,45 +186,52 @@ export default function OstrichController() {
         }
 
         // Normalize movement vector if it's longer than 1
-        if (movement.length() > 1) {
+        if (movement.lengthSq() > 1) {
+          // Use lengthSq for performance
           movement.normalize();
-          // movement.multiplyScalar(0.1); // Apply movement speed
-          movement.y = -0.5;
+          movement.y = -0.5; // Apply gravity/downward force for snap-to-ground
+        } else if (movement.lengthSq() > 0) {
+          //  movement.y = -0.5; // Also apply when moving slower
         }
 
         // rotate the ostrich to face movement direction
-        if (movement.length() !== 0) {
+        if (movement.lengthSq() !== 0) {
           const angleToTurnTo = Math.atan2(movement.x, movement.z);
           const characterRotation = new THREE.Quaternion().setFromAxisAngle(
             new THREE.Vector3(0, 1, 0),
             angleToTurnTo
           );
-          ostrichRef.current.quaternion.slerp(characterRotation, 0.1);
+          ostrichRef.current?.quaternion.slerp(characterRotation, 0.1);
         }
 
-        charController.current.computeColliderMovement(
+        charController.current?.computeColliderMovement(
           collider.current,
           movement
         );
-        let correctedMovement = charController.current.computedMovement();
-        position.add(vec3(correctedMovement));
+
+        const correctedMovement = charController.current.computedMovement();
+
+        position.add(vec3(correctedMovement)); // Make sure vec3() output matches position type
         rigidBodyRef.current.setNextKinematicTranslation(position);
       } catch (err) {
-        console.log(err);
+        console.log("Error in movement calculation:", err);
       }
     } else {
       fadeToAction("idle-1", 0.2);
     }
 
-    const ostrichPosition = rigidBodyRef.current.translation();
-    cameraLogic(
-      state,
-      ostrichPosition,
-      smoothedCameraTarget,
-      smoothedCameraPosition,
-      delta
-    );
+    if (rigidBodyRef.current) {
+      const ostrichPosition = rigidBodyRef.current.translation();
+      cameraLogic(
+        state,
+        vec3(ostrichPosition),
+        smoothedCameraTarget,
+        smoothedCameraPosition,
+        delta
+      );
+    }
   });
+
   return (
     <RigidBody
       type="kinematicPosition"
@@ -215,11 +251,11 @@ export default function OstrichController() {
 }
 
 function cameraLogic(
-  state,
-  ostrichPosition,
-  smoothedCameraTarget,
-  smoothedCameraPosition,
-  delta
+  state: RootState,
+  ostrichPosition: THREE.Vector3,
+  smoothedCameraTarget: THREE.Vector3,
+  smoothedCameraPosition: THREE.Vector3,
+  delta: number
 ) {
   const cameraPosition = new THREE.Vector3();
   cameraPosition.copy(ostrichPosition);

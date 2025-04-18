@@ -1,7 +1,7 @@
 import { useRef } from "react";
 
 export default function Lights() {
-  const light = useRef();
+  const light = useRef(null);
 
   return (
     <>
