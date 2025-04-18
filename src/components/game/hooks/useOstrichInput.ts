@@ -2,14 +2,7 @@ import type { GameControls } from "@/components/game/core/Game";
 import { useKeyboardControls } from "@react-three/drei";
 import { useEffect, useState } from "react";
 
-type KeyboardControlsState = Record<GameControls, boolean>; // General type
-
-interface OstrichInputState {
-  keys: KeyboardControlsState;
-  isClicking: boolean;
-}
-
-export function useOstrichInput(): OstrichInputState {
+export function useOstrichInput() {
   const [, getKeys] = useKeyboardControls<GameControls>();
 
   const [isClicking, setIsClicking] = useState<boolean>(false);
@@ -67,7 +60,7 @@ export function useOstrichInput(): OstrichInputState {
   }, []);
 
   return {
-    keys: getKeys(),
+    keys: getKeys,
     isClicking: isClicking,
   };
 }

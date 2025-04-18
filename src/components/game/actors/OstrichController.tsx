@@ -1,4 +1,4 @@
-import { useAnimations, useGLTF, useKeyboardControls } from "@react-three/drei";
+import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame, type RootState } from "@react-three/fiber";
 import {
   CapsuleCollider,
@@ -16,6 +16,7 @@ import type {
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useOstrichInput } from "@/components/game/hooks/useOstrichInput";
+import { useOstrichAnimations } from "@/components/game/hooks/useOstrichAnimations";
 
 const IDLE = 4;
 const WALK = 9;
@@ -36,10 +37,10 @@ export default function OstrichController(): React.ReactNode {
   const ostrich = useGLTF("./game/nla_ostrich--01_1k.glb");
 
   /** ANIMATIONS */
-  const { mixer, actions, names } = useAnimations(
-    ostrich.animations,
-    ostrich.scene
-  );
+  const { fadeToAction } = useOstrichAnimations({
+    animations: ostrich.animations,
+    scene: ostrich.scene,
+  });
 
   const currentAction = useRef<THREE.AnimationAction | null>(null);
   const ostrichRef = useRef<THREE.Group>(null);
@@ -72,35 +73,16 @@ export default function OstrichController(): React.ReactNode {
     };
   }, []);
 
-  // Helper function to handle crossfade
-  const fadeToAction = (actionName: string, duration = 0.5) => {
-    const nextAction = actions[actionName];
-
-    if (!nextAction) {
-      console.warn(`Animation action "${actionName}" not found`);
-    }
-    const current = currentAction.current;
-
-    // Don't crossfade to the action that's already playing
-    if (current === nextAction) return;
-
-    if (current) {
-      // Fade from current to next
-      nextAction?.reset().setLoop(THREE.LoopRepeat, Infinity).play();
-      nextAction?.crossFadeFrom(current, duration, true);
-    } else {
-      // No current action, just play the next one
-      // nextAction?.reset().play();
-      nextAction?.reset().setLoop(THREE.LoopRepeat, Infinity).play();
-    }
-
-    currentAction.current = nextAction;
-  };
-
   useFrame((state: RootState, delta: number) => {
-    const { forward, back, left, right } = keys;
+    const forward = keys().forward;
+    const back = keys().back;
+    const left = keys().left;
+    const right = keys().right;
 
     if (forward || back || left || right || isClicking) {
+      if (forward) {
+        console.log("forward pressed", keys);
+      }
       try {
         fadeToAction("run");
 
@@ -118,16 +100,16 @@ export default function OstrichController(): React.ReactNode {
         const movement = new THREE.Vector3();
 
         // Handle keyboard input
-        if (keys.forward) {
+        if (keys().forward) {
           movement.z -= 0.1; // Moving forward in world space
         }
-        if (keys.back) {
+        if (keys().back) {
           movement.z += 0.1;
         }
-        if (keys.left) {
+        if (keys().left) {
           movement.x -= 0.1;
         }
-        if (keys.right) {
+        if (keys().right) {
           movement.x += 0.1;
         }
 
