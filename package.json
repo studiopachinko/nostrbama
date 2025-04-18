@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest run",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.4",
@@ -28,7 +30,13 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/three": "^0.175.0",
-    "prettier-plugin-tailwindcss": "^0.6.11"
+    "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "vitest": "^3.1.1"
   }
 }
