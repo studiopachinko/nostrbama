@@ -20,14 +20,154 @@ describe("useOstrichInput Hook", () => {
     <KeyboardControls map={testMap}>{children}</KeyboardControls>
   );
 
-  it("should initialize with isClicking as false", () => {
+  /** KEY TESTS */
+  it("should set forward to true when the key W is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "KeyW",
+        })
+      );
+    });
+
+    expect(result.current.keys().forward).toBe(true);
+  });
+
+  it("should set forward to true when the ArrowUp is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "ArrowUp",
+        })
+      );
+    });
+
+    expect(result.current.keys().forward).toBe(true);
+  });
+
+  it("should set back to true when the key S is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "KeyS",
+        })
+      );
+    });
+
+    expect(result.current.keys().back).toBe(true);
+  });
+
+  it("should set forward to true when the ArrowDown is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "ArrowDown",
+        })
+      );
+    });
+
+    expect(result.current.keys().back).toBe(true);
+  });
+
+  it("should set left to true when the key A is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "KeyA",
+        })
+      );
+    });
+
+    expect(result.current.keys().left).toBe(true);
+  });
+
+  it("should set forward to true when the ArrowLeft is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "ArrowLeft",
+        })
+      );
+    });
+
+    expect(result.current.keys().left).toBe(true);
+  });
+
+  it("should set left to true when the key D is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "KeyD",
+        })
+      );
+    });
+
+    expect(result.current.keys().right).toBe(true);
+  });
+
+  it("should set forward to true when the ArrowRight is pressed", () => {
+    const { result } = renderHook(() => useOstrichInput(), {
+      wrapper: Wrapper,
+    });
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "ArrowRight",
+        })
+      );
+    });
+
+    expect(result.current.keys().right).toBe(true);
+  });
+});
+
+/**
+ * Previous Tests
+ * 
+ it("should initialize with isClicking as false", () => {
     const { result } = renderHook(() => useOstrichInput(), {
       wrapper: Wrapper,
     });
     expect(result.current.isClicking).toBe(false);
   });
 
-  /** MOUSE DOWN */
 
   it("should set isClicking to true on mousedown", () => {
     // Test setup
@@ -44,7 +184,6 @@ describe("useOstrichInput Hook", () => {
     expect(result.current.isClicking).toBe(true);
   });
 
-  /** MOUSE UP */
 
   it("should set isClicking to false on mouseup", () => {
     const { result } = renderHook(() => useOstrichInput(), {
@@ -133,141 +272,4 @@ describe("useOstrichInput Hook", () => {
     // Assert false only if your hook logic sets it based on touches/changedTouches
     expect(result.current.isClicking).toBe(false);
   });
-
-  /** KEY TESTS */
-  it("should set forward to true when the key W is pressed", () => {
-    const { result } = renderHook(() => useOstrichInput(), {
-      wrapper: Wrapper,
-    });
-
-    act(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "KeyW",
-        })
-      );
-    });
-
-    expect(result.current.keys().forward).toBe(true);
-  });
-  
-  it("should set forward to true when the ArrowUp is pressed", () => {
-    const { result } = renderHook(() => useOstrichInput(), {
-      wrapper: Wrapper,
-    });
-
-    act(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "ArrowUp",
-        })
-      );
-    });
-
-    expect(result.current.keys().forward).toBe(true);
-  });
-  
-  it("should set back to true when the key S is pressed", () => {
-    const { result } = renderHook(() => useOstrichInput(), {
-      wrapper: Wrapper,
-    });
-
-    act(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "KeyS",
-        })
-      );
-    });
-
-    expect(result.current.keys().back).toBe(true);
-  });
-  
-  it("should set forward to true when the ArrowDown is pressed", () => {
-    const { result } = renderHook(() => useOstrichInput(), {
-      wrapper: Wrapper,
-    });
-
-    act(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "ArrowDown",
-        })
-      );
-    });
-
-    expect(result.current.keys().back).toBe(true);
-  });
-  
-  it("should set left to true when the key A is pressed", () => {
-    const { result } = renderHook(() => useOstrichInput(), {
-      wrapper: Wrapper,
-    });
-
-    act(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "KeyA",
-        })
-      );
-    });
-
-    expect(result.current.keys().left).toBe(true);
-  });
-  
-  it("should set forward to true when the ArrowLeft is pressed", () => {
-    const { result } = renderHook(() => useOstrichInput(), {
-      wrapper: Wrapper,
-    });
-
-    act(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "ArrowLeft",
-        })
-      );
-    });
-
-    expect(result.current.keys().left).toBe(true);
-  });
-  
-  it("should set left to true when the key D is pressed", () => {
-    const { result } = renderHook(() => useOstrichInput(), {
-      wrapper: Wrapper,
-    });
-
-    act(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "KeyD",
-        })
-      );
-    });
-
-    expect(result.current.keys().right).toBe(true);
-  });
-  
-  it("should set forward to true when the ArrowRight is pressed", () => {
-    const { result } = renderHook(() => useOstrichInput(), {
-      wrapper: Wrapper,
-    });
-
-    act(() => {
-      document.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "ArrowRight",
-        })
-      );
-    });
-
-    expect(result.current.keys().right).toBe(true);
-  });
-});
+ */

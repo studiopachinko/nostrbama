@@ -14,6 +14,8 @@ export enum GameControls {
   left = "left",
   right = "right",
   run = "run",
+  lightAttack = "lightAttack",
+  heavyAttack = "heavyAttack",
 }
 
 export default function Game() {

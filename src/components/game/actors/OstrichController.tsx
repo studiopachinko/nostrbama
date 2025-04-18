@@ -50,11 +50,10 @@ export default function OstrichController(): React.ReactNode {
     };
   }, [rapier, fadeToAction]); // Add fadeToAction to dependency array if linting suggests
 
-  const { keys, isClicking } = useOstrichInput();
+  const { keys } = useOstrichInput();
 
   useOstrichMovement({
     getKeys: keys,
-    isClicking,
     rigidBodyRef,
     ostrichRef,
     collider,

@@ -10,7 +10,6 @@ import type { GameControls } from "@/components/game/core/Game";
 
 interface UseOstrichMovementProps {
   getKeys: () => Record<GameControls, boolean>;
-  isClicking: boolean;
   // Allow null for the .current property of the refs
   rigidBodyRef: React.RefObject<RapierRigidBody | null>;
   ostrichRef: React.RefObject<THREE.Group | null>;
@@ -26,7 +25,6 @@ interface UseOstrichMovementProps {
 
 export function useOstrichMovement({
   getKeys,
-  isClicking,
   rigidBodyRef,
   ostrichRef,
   collider,
@@ -50,7 +48,7 @@ export function useOstrichMovement({
     }
 
     // --- Determine Movement Intent ---
-    const isMoving = forward || back || left || right || isClicking;
+    const isMoving = forward || back || left || right;
 
     if (isMoving) {
       // --- Calculate Movement Vector ---
@@ -63,14 +61,6 @@ export function useOstrichMovement({
         if (back) movement.z += 0.1;
         if (left) movement.x -= 0.1;
         if (right) movement.x += 0.1;
-
-        // Handle pointer input
-        if (isClicking) {
-          const pointer = state.pointer;
-          const MOVEMENT_SCALE = 0.1;
-          movement.x += (+pointer.y + pointer.x) * MOVEMENT_SCALE * 0.707;
-          movement.z += (-pointer.y + pointer.x) * MOVEMENT_SCALE * 0.707;
-        }
 
         // Normalize and apply downward force if moving
         if (movement.lengthSq() > 1) {
