@@ -17,6 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useOstrichInput } from "@/components/game/hooks/useOstrichInput";
 import { useOstrichAnimations } from "@/components/game/hooks/useOstrichAnimations";
+import { useFollowCamera } from "@/components/game/hooks/useFollowCamera";
 
 const IDLE = 4;
 const WALK = 9;
@@ -26,12 +27,7 @@ const JUMP_ATTACK = 2;
 
 export default function OstrichController(): React.ReactNode {
   // camera positioning
-  const [smoothedCameraPosition] = useState<THREE.Vector3>(
-    () => new THREE.Vector3(10, 20, 10)
-  );
-  const [smoothedCameraTarget] = useState<THREE.Vector3>(
-    () => new THREE.Vector3()
-  );
+  const { cameraLogic } = useFollowCamera();
 
   /** ASSET LOADING */
   const ostrich = useGLTF("./game/nla_ostrich--01_1k.glb");
@@ -129,8 +125,6 @@ export default function OstrichController(): React.ReactNode {
           // Use lengthSq for performance
           movement.normalize();
           movement.y = -0.5; // Apply gravity/downward force for snap-to-ground
-        } else if (movement.lengthSq() > 0) {
-          //  movement.y = -0.5; // Also apply when moving slower
         }
 
         // rotate the ostrich to face movement direction
@@ -156,18 +150,13 @@ export default function OstrichController(): React.ReactNode {
         console.log("Error in movement calculation:", err);
       }
     } else {
+      // Ostrich is not moving
       fadeToAction("idle-1", 0.2);
     }
 
     if (rigidBodyRef.current) {
       const ostrichPosition = rigidBodyRef.current.translation();
-      cameraLogic(
-        state,
-        vec3(ostrichPosition),
-        smoothedCameraTarget,
-        smoothedCameraPosition,
-        delta
-      );
+      cameraLogic(state, vec3(ostrichPosition), delta);
     }
   });
 
@@ -189,26 +178,26 @@ export default function OstrichController(): React.ReactNode {
   );
 }
 
-function cameraLogic(
-  state: RootState,
-  ostrichPosition: THREE.Vector3,
-  smoothedCameraTarget: THREE.Vector3,
-  smoothedCameraPosition: THREE.Vector3,
-  delta: number
-) {
-  const cameraPosition = new THREE.Vector3();
-  cameraPosition.copy(ostrichPosition);
-  cameraPosition.z += 4.25;
-  cameraPosition.y += 7;
-  cameraPosition.x -= 4;
+// function cameraLogic(
+//   state: RootState,
+//   ostrichPosition: THREE.Vector3,
+//   smoothedCameraTarget: THREE.Vector3,
+//   smoothedCameraPosition: THREE.Vector3,
+//   delta: number
+// ) {
+//   const cameraPosition = new THREE.Vector3();
+//   cameraPosition.copy(ostrichPosition);
+//   cameraPosition.z += 4.25;
+//   cameraPosition.y += 7;
+//   cameraPosition.x -= 4;
 
-  const cameraTarget = new THREE.Vector3();
-  cameraTarget.copy(ostrichPosition);
-  cameraTarget.y += 0.25;
+//   const cameraTarget = new THREE.Vector3();
+//   cameraTarget.copy(ostrichPosition);
+//   cameraTarget.y += 0.25;
 
-  smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
-  smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
+//   smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
+//   smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
 
-  state.camera.position.copy(smoothedCameraPosition);
-  state.camera.lookAt(smoothedCameraTarget);
-}
+//   state.camera.position.copy(smoothedCameraPosition);
+//   state.camera.lookAt(smoothedCameraTarget);
+// }
