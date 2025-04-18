@@ -10,14 +10,21 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.2.4",
+    "@react-three/drei": "^10.0.6",
+    "@react-three/fiber": "9",
+    "@react-three/rapier": "^2.1.0",
     "@tailwindcss/vite": "^4.1.4",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "astro": "^5.7.0",
+    "leva": "^0.10.0",
+    "r3f-perf": "^7.2.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "swiper": "^11.2.6",
-    "tailwindcss": "^4.1.4"
+    "tailwindcss": "^4.1.4",
+    "three": "^0.175.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "prettier-plugin-tailwindcss": "^0.6.11"

@@ -1,0 +1,21 @@
+---
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+import Layout from "@/layouts/Layout.astro";
+import GameComponent from "@/components/game/Game";
+---
+
+<Layout>
+  <header class="outer-padding grid lg:max-w-4/5">
+    <Heading level={1}>The Game</Heading>
+    <Subheading headingLevel={1}>
+      Can't wait? Can't attend? Get a taste of the destruction and decadence
+      sure to ensue when a group a socially maladjust Nostriches descend on the
+      polite society of Mobile Alabama with this game. Socre the high scores!
+      Climb the leadboards! Share your wins and gain Nostr recognition!
+    </Subheading>
+  </header>
+  <section class="outer-padding">
+    <GameComponent client:only="react" />
+  </section>
+</Layout>
