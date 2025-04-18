@@ -1,52 +1,71 @@
+// src/components/game/hooks/useOstrichAnimations.ts
 import { useAnimations } from "@react-three/drei";
-import type { ObjectMap } from "@react-three/fiber";
-import { useRef } from "react";
-import type { GLTF } from "three/examples/jsm/Addons.js";
+import { useEffect, useRef } from "react"; // Added useEffect, useRef potentially if needed later
+import type { AnimationAction, AnimationMixer } from "three"; // Import types
 import * as THREE from "three";
 
 interface UseOstrichAnimationsProps {
   animations: THREE.AnimationClip[];
-  scene: THREE.Group<THREE.Object3DEventMap>; // Or THREE.Group if you know it's always a Group
+  scene: THREE.Group<THREE.Object3DEventMap>;
 }
 
+// Update the return type
 interface ReturnType {
   fadeToAction: (actionName: string, duration?: number) => void;
+  actions: {
+    // Add actions
+    [key: string]: AnimationAction | null; // Be more specific if possible based on your GLTF names
+  };
+  mixer: AnimationMixer; // Add mixer
 }
 
 export function useOstrichAnimations({
   animations,
   scene,
 }: UseOstrichAnimationsProps): ReturnType {
-  const { mixer, actions, names } = useAnimations(animations, scene);
-
+  // Update return type here
+  const { mixer, actions, names } = useAnimations(animations, scene); //
   const currentAction = useRef<THREE.AnimationAction | null>(null);
 
-  // Helper function to handle crossfade
   const fadeToAction = (actionName: string, duration = 0.5) => {
     const nextAction = actions[actionName];
-
     const current = currentAction.current;
 
-    // Don't crossfade to the action that's already playing
-    if (current === nextAction) return;
-
-    if (current) {
-      // Fade from current to next
-      nextAction?.reset().setLoop(THREE.LoopRepeat, Infinity).play();
-      nextAction?.crossFadeFrom(current, duration, true);
-    } else if (nextAction) {
-      // No current action, just play the next one. This is the initialisation case when Ostrich model is loaded.
-      nextAction?.reset().setLoop(THREE.LoopRepeat, Infinity).play();
-    } else {
-      console.warn(
-        `Animation action "${actionName}" not found when trying to play.`
-      );
+    // Don't transition to the same action or if the action doesn't exist
+    if (!nextAction || nextAction.isRunning()) {
+      // Optionally log a warning if actionName is invalid but not the current one
+      if (current !== nextAction && !actions[actionName]) {
+        console.warn(
+          `Animation action "${actionName}" not found when trying to fade.`
+        );
+      }
+      return;
     }
 
-    currentAction.current = nextAction ?? null;
+    // Reset and play the next action
+    nextAction.reset();
+    // Decide on loop based on action name (attacks shouldn't loop)
+    const loopMode = actionName.includes("attack")
+      ? THREE.LoopOnce // Play attacks once
+      : THREE.LoopRepeat; // Loop others like idle/run
+    nextAction.setLoop(loopMode, Infinity); // Infinity is ignored for LoopOnce
+    // nextAction.clampWhenFinished = loopMode === THREE.LoopOnce; // Important for LoopOnce
+    nextAction.enabled = true; // Ensure action is enabled
+
+    nextAction.play();
+
+    // Crossfade from the current action if there is one
+    if (current) {
+      current.crossFadeTo(nextAction, duration, true); // Use crossFadeTo on the *current* action
+    }
+
+    currentAction.current = nextAction;
   };
 
+  // Return actions and mixer along with fadeToAction
   return {
     fadeToAction,
-  };
+    actions, // Return the actions object
+    mixer, // Return the mixer
+  }; //
 }

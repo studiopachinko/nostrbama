@@ -15,11 +15,12 @@ import { useOstrichInput } from "@/components/game/hooks/useOstrichInput";
 import { useOstrichAnimations } from "@/components/game/hooks/useOstrichAnimations";
 import { useFollowCamera } from "@/components/game/hooks/useFollowCamera";
 import { useOstrichMovement } from "@/components/game/hooks/useOstrichMovement";
+import { useOstrichCombat } from "@/components/game/hooks/useOstrichCombat";
 
 export default function OstrichController(): React.ReactNode {
   const { cameraLogic } = useFollowCamera();
   const ostrich = useGLTF("./game/nla_ostrich--01_1k.glb");
-  const { fadeToAction } = useOstrichAnimations({
+  const { fadeToAction, actions, mixer } = useOstrichAnimations({
     animations: ostrich.animations,
     scene: ostrich.scene,
   });
@@ -60,6 +61,13 @@ export default function OstrichController(): React.ReactNode {
     charController,
     fadeToAction,
     cameraLogic,
+  });
+
+  useOstrichCombat({
+    getKeys: keys,
+    fadeToAction,
+    actions,
+    mixer,
   });
 
   return (
