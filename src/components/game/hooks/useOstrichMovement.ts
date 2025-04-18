@@ -1,3 +1,4 @@
+// src/components/game/hooks/useOstrichMovement.ts
 import { useFrame, type RootState } from "@react-three/fiber";
 import { vec3, type RapierRigidBody } from "@react-three/rapier";
 import type {
@@ -5,41 +6,34 @@ import type {
   Collider as RapierCollider,
 } from "@dimforge/rapier3d-compat";
 import * as THREE from "three";
-import type { GameControls } from "@/components/game/core/Game"; // Or wherever GameControls lives
+import type { GameControls } from "@/components/game/core/Game";
 
-// Define the props the hook needs
 interface UseOstrichMovementProps {
-  // Input state (could pass the whole input state object or just needed parts)
-  // Option A: Pass the getKeys function and isClicking
   getKeys: () => Record<GameControls, boolean>;
   isClicking: boolean;
-  // Option B (if useOstrichInput returns the state object):
-  // keys: Record<GameControls, boolean>;
-  // isClicking: boolean;
-
-  // Refs for interaction
-  rigidBodyRef: React.RefObject<RapierRigidBody>;
-  ostrichRef: React.RefObject<THREE.Group>;
-  collider: React.RefObject<RapierCollider>;
-  charController: React.RefObject<KinematicCharacterController>;
-
-  // Animation control function
+  // Allow null for the .current property of the refs
+  rigidBodyRef: React.RefObject<RapierRigidBody | null>;
+  ostrichRef: React.RefObject<THREE.Group | null>;
+  collider: React.RefObject<RapierCollider | null>;
+  charController: React.RefObject<KinematicCharacterController | null>;
   fadeToAction: (actionName: string, duration?: number) => void;
+  cameraLogic: (
+    state: RootState,
+    ostrichPosition: THREE.Vector3,
+    delta: number
+  ) => void;
 }
 
 export function useOstrichMovement({
-  // Destructure props
-  getKeys, // Using Option A based on user's last hook code
+  getKeys,
   isClicking,
   rigidBodyRef,
   ostrichRef,
   collider,
   charController,
   fadeToAction,
+  cameraLogic,
 }: UseOstrichMovementProps): void {
-  // This hook likely doesn't need to return anything
-
-  // The core movement logic now lives inside this useFrame
   useFrame((state: RootState, delta: number) => {
     // Get current key state inside the frame loop
     const currentKeys = getKeys();
@@ -81,12 +75,10 @@ export function useOstrichMovement({
         // Normalize and apply downward force if moving
         if (movement.lengthSq() > 1) {
           movement.normalize();
+          movement.y = -0.5; // Stop fucking moving this, it puts the bird in the ground
         }
-        // Apply consistent downward force for snap-to-ground when intending to move
-        movement.y = -0.5;
 
         // --- Apply Rotation ---
-        // Rotate only if there's horizontal movement intention
         const horizontalMovement = movement.x !== 0 || movement.z !== 0;
         if (horizontalMovement) {
           const angleToTurnTo = Math.atan2(movement.x, movement.z);
@@ -102,7 +94,6 @@ export function useOstrichMovement({
           collider.current,
           movement // Pass the calculated movement vector
         );
-
         const correctedMovement = charController.current.computedMovement();
         position.add(vec3(correctedMovement));
         rigidBodyRef.current.setNextKinematicTranslation(position);
@@ -117,5 +108,11 @@ export function useOstrichMovement({
       // No movement input, trigger idle animation
       fadeToAction("idle-1", 0.2);
     }
+
+    // --- Update Camera ---
+    // Call cameraLogic AFTER movement calculations and physics update
+    // We already checked rigidBodyRef.current exists above
+    const ostrichPosition = rigidBodyRef.current.translation();
+    cameraLogic(state, vec3(ostrichPosition), delta); // Pass state, position, delta
   }); // End of useFrame
 }
