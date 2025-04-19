@@ -11,6 +11,9 @@ import { Resources } from "@/game/Utils/Resources";
 import { World } from "@/game/World/World";
 
 import RAPIER from "@dimforge/rapier3d";
+import { RapierDebugRenderer } from "@/game/Utils/RapierDebugRenderer";
+import { GameControls } from "@/game/Utils/GameControls";
+import type { Ostrich } from "@/game/World/Ostrich";
 
 declare global {
   interface Window {
@@ -31,7 +34,11 @@ export class Experience {
   renderer!: Renderer;
   debug!: Debug;
   world!: World;
+  ostrich!: Ostrich;
+  gameControls!: GameControls;
   physicsWorld!: RAPIER.World;
+  rapierDebugRenderer!: RapierDebugRenderer;
+  isWorldReady: boolean = false;
 
   constructor(canvas: HTMLCanvasElement | null = null) {
     // Singleton
@@ -62,9 +69,12 @@ export class Experience {
     this.physicsWorld = new RAPIER.World(gravity);
     window.RAPIER = RAPIER;
 
+    this.rapierDebugRenderer = new RapierDebugRenderer();
+
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.world = new World();
+    this.ostrich = this.world.ostrich;
 
     sceneStore.subscribe(
       (state) => state.canvasSize,
@@ -87,10 +97,18 @@ export class Experience {
   };
 
   update = () => {
-    this.physicsWorld.step();
-
+    if (this.isWorldReady) {
+      this.world.update();
+      this.physicsWorld.step();
+      this.world.syncModels();
+      this.rapierDebugRenderer.update();
+    }
     this.camera.update();
-    this.world.update();
     this.renderer.update();
   };
+
+  setIsWorldReady() {
+    this.isWorldReady = true;
+    this.gameControls = new GameControls();
+  }
 }

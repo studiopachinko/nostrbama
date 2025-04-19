@@ -32,11 +32,20 @@ export class World {
     this.floor = new Floor();
     this.ostrich = new Ostrich();
     this.environment = new Environment();
+
+    this.experience.setIsWorldReady()
   }
 
   update() {
     if (this.ostrich) {
       this.ostrich.update();
     }
+  }
+
+  syncModels() {
+    if (this.ostrich) {
+      this.ostrich.syncModelPosition(); // Updates Three.js model from rigid body
+    }
+    // Sync other physics-driven models here
   }
 }

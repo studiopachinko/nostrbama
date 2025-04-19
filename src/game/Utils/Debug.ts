@@ -5,10 +5,11 @@ export class Debug {
   ui!: GUI;
 
   constructor() {
-    this.active = window.location.hash === "#debug";
+    this.active = true;
+    // this.active = window.location.hash === "#debug";
 
-    if (this.active) {
-      this.ui = new GUI();
-    }
+    // if (this.active) {
+    this.ui = new GUI();
+    // }
   }
 }

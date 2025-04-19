@@ -5,6 +5,7 @@ import { Time } from "@/game/Utils/Time";
 import GUI from "lil-gui";
 import * as THREE from "three";
 import RAPIER, { RigidBody } from "@dimforge/rapier3d"; // Import RigidBody type if needed
+import { gameControlsStore } from "@/game/stores/gameControlsStore";
 
 export class Ostrich {
   experience: Experience;
@@ -136,7 +137,7 @@ export class Ostrich {
     const rigidBodyDesc = RAPIER.RigidBodyDesc.kinematicPositionBased()
       .setTranslation(
         this.model.position.x,
-        this.model.position.y + 1.0, // Start slightly above ground
+        this.model.position.y + 2, // Start slightly above ground
         this.model.position.z
       )
       // Lock rotations if you only want translational movement controlled by the character controller
@@ -162,7 +163,7 @@ export class Ostrich {
     );
 
     // --- 3. Create the Character Controller ---
-    const offset = 0.05; // Skin width or minimum separation distance
+    const offset = 0.001; // Skin width or minimum separation distance
     this.characterController =
       this.physicsWorld.createCharacterController(offset);
 
@@ -244,13 +245,14 @@ export class Ostrich {
   }
 
   // --- Movement Input Handling (Example) ---
-  setMovementDirection(
-    forward: boolean,
-    backward: boolean,
-    left: boolean,
-    right: boolean
-  ) {
+  setMovementDirection() {
     this.moveDirection.set(0, 0, 0); // Reset direction
+
+    const { forward, backward, left, right, run } =
+      gameControlsStore.getState();
+    
+    this.speed = 5;
+    if (run) this.speed = 10;
 
     if (forward) this.moveDirection.z -= 1;
     if (backward) this.moveDirection.z += 1;
@@ -371,7 +373,7 @@ export class Ostrich {
 
       this.model.position.set(
         rigidBodyPosition.x,
-        rigidBodyPosition.y,
+        rigidBodyPosition.y - 1.3, // move ostrich feet to the ground
         rigidBodyPosition.z
       );
       this.model.quaternion.set(

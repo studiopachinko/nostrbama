@@ -77,7 +77,7 @@ export class Floor {
     // Since the Three.js floor is a CircleGeometry rotated,
     // we can approximate it with a thin cuboid collider for simplicity
     // positioned at the same height. Adjust the size (10, 0.1, 10) to match your floor size.
-    const colliderDesc = RAPIER.ColliderDesc.cuboid(5, 0.05, 5); // half-extents of the cuboid (x, y, z)
+    const colliderDesc = RAPIER.ColliderDesc.cuboid(100, 0.1, 100); // half-extents of the cuboid (x, y, z)
 
     // Create the rigid body and collider in the physics world
     this.rapierRigidBody = physicsWorld.createRigidBody(rigidBodyDesc);
