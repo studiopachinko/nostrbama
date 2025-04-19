@@ -21,6 +21,7 @@
     "lil-gui": "^0.20.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "stats.js": "^0.17.0",
     "swiper": "^11.2.6",
     "tailwindcss": "^4.1.4",
     "three": "^0.175.0",

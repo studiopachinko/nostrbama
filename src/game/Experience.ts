@@ -14,6 +14,7 @@ import RAPIER from "@dimforge/rapier3d";
 import { RapierDebugRenderer } from "@/game/Utils/RapierDebugRenderer";
 import { GameControls } from "@/game/Utils/GameControls";
 import type { Ostrich } from "@/game/World/Ostrich";
+import Stats from "three/examples/jsm/libs/stats.module.js";
 
 declare global {
   interface Window {
@@ -39,6 +40,7 @@ export class Experience {
   physicsWorld!: RAPIER.World;
   rapierDebugRenderer!: RapierDebugRenderer;
   isWorldReady: boolean = false;
+  stats!: Stats;
 
   constructor(canvas: HTMLCanvasElement | null = null) {
     // Singleton
@@ -56,7 +58,8 @@ export class Experience {
       this.canvas = canvas;
       this.sizes = new Sizes(canvas);
     }
-
+    this.stats = new Stats();
+    document.body.appendChild(this.stats.dom);
     this.debug = new Debug();
     this.time = new Time();
     this.scene = new THREE.Scene();
@@ -105,6 +108,8 @@ export class Experience {
     }
     this.camera.update();
     this.renderer.update();
+
+    this.stats.update();
   };
 
   setIsWorldReady() {
