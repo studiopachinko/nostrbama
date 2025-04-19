@@ -10,9 +10,12 @@ import { Time } from "@/game/Utils/Time";
 import { Resources } from "@/game/Utils/Resources";
 import { World } from "@/game/World/World";
 
+import RAPIER from "@dimforge/rapier3d";
+
 declare global {
   interface Window {
     experience: Experience;
+    RAPIER: typeof RAPIER;
   }
 }
 
@@ -28,6 +31,7 @@ export class Experience {
   renderer!: Renderer;
   debug!: Debug;
   world!: World;
+  physicsWorld!: RAPIER.World;
 
   constructor(canvas: HTMLCanvasElement | null = null) {
     // Singleton
@@ -52,6 +56,12 @@ export class Experience {
     this.scene.background = new THREE.Color("#211d20");
     // @ts-ignore
     this.resources = new Resources(sources);
+
+    // init Rapier physics world
+    const gravity = new RAPIER.Vector3(0.0, -9.81, 0.0);
+    this.physicsWorld = new RAPIER.World(gravity);
+    window.RAPIER = RAPIER;
+
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.world = new World();
@@ -77,6 +87,8 @@ export class Experience {
   };
 
   update = () => {
+    this.physicsWorld.step();
+
     this.camera.update();
     this.world.update();
     this.renderer.update();

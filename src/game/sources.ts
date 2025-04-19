@@ -26,4 +26,9 @@ export default [
     type: "gltfModel",
     path: "/game-assets/bruno/models/Fox/glTF/Fox.gltf",
   },
+  {
+    name: "ostrichModel",
+    type: "gltfModel",
+    path: "/game-assets/nla_ostrich.glb",
+  },
 ];

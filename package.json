@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.2.4",
+    "@dimforge/rapier3d": "^0.15.1",
     "@react-three/rapier": "^2.1.0",
     "@tailwindcss/vite": "^4.1.4",
     "@types/react": "^19.1.2",
@@ -31,6 +32,8 @@
     "@types/three": "^0.175.0",
     "husky": "^9.1.7",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "vite-plugin-top-level-await": "^1.5.0",
+    "vite-plugin-wasm": "^3.4.1",
     "vitest": "^3.1.1"
   }
 }

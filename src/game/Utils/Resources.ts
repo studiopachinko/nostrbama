@@ -1,9 +1,9 @@
 import { sceneStore } from "@/game/stores/sceneStore";
 import * as THREE from "three";
-import { GLTFLoader } from "three-stdlib";
+import { GLTFLoader, DRACOLoader } from "three-stdlib";
 
 interface Source {
-  type: "gltfModel" | "texture" | "cubeTexture";
+  type: "gltfModel" | "texture" | "cubeTexture" | "glbModel";
   path: string;
   name: string;
 }
@@ -28,7 +28,13 @@ export class Resources {
 
   setLoaders() {
     this.loaders = {};
+
     this.loaders.gltfLoader = new GLTFLoader();
+
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("/game-assets/bruno/draco/");
+    this.loaders.gltfLoader.setDRACOLoader(dracoLoader);
+
     this.loaders.textureLoader = new THREE.TextureLoader();
     this.loaders.cubeTextureLoader = new THREE.CubeTextureLoader();
   }
