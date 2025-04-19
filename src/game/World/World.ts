@@ -13,17 +13,25 @@ export class World {
   floor!: Floor;
   fox!: Fox;
   environment!: Environment;
+  sub: any;
 
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
 
-    if (sceneStore.getState().resourcesLoaded) {
-      this.floor = new Floor();
-      this.fox = new Fox();
-      this.environment = new Environment();
-    }
+    sceneStore.subscribe(
+      (state) => state.resourcesLoaded,
+      (resourcesLoaded) => {
+        this.load();
+      }
+    );
+  }
+
+  load() {
+    this.floor = new Floor();
+    this.fox = new Fox();
+    this.environment = new Environment();
   }
 
   update() {

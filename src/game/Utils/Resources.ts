@@ -37,17 +37,55 @@ export class Resources {
     // Load each source
     for (const source of this.sources) {
       if (source.type === "gltfModel") {
-        this.loaders.gltfLoader.load(source.path, (file: any) => {
-          this.sourceLoaded(source, file);
-        });
+        this.loaders.gltfLoader.load(
+          source.path,
+          (file: any) => {
+            this.sourceLoaded(source, file);
+          },
+          undefined, // Progress callback (optional)
+          (error: any) => {
+            // Error callback
+            console.error(
+              "An error occurred while loading glTF model:",
+              source.path,
+              error
+            );
+            // You might want to handle this error more gracefully in a production app
+            // For debugging, logging is sufficient to see if it's failing
+          }
+        );
       } else if (source.type === "texture") {
-        this.loaders.textureLoader.load(source.path, (file: any) => {
-          this.sourceLoaded(source, file);
-        });
+        this.loaders.textureLoader.load(
+          source.path,
+          (file: any) => {
+            this.sourceLoaded(source, file);
+          },
+          undefined, // Progress callback (optional)
+          (error: any) => {
+            // Error callback
+            console.error(
+              "An error occurred while loading texture:",
+              source.path,
+              error
+            );
+          }
+        );
       } else if (source.type === "cubeTexture") {
-        this.loaders.cubeTextureLoader.load(source.path, (file: any) => {
-          this.sourceLoaded(source, file);
-        });
+        this.loaders.cubeTextureLoader.load(
+          source.path,
+          (file: any) => {
+            this.sourceLoaded(source, file);
+          },
+          undefined, // Progress callback (optional)
+          (error: any) => {
+            // Error callback
+            console.error(
+              "An error occurred while loading cube texture:",
+              source.path,
+              error
+            );
+          }
+        );
       }
     }
   }
@@ -58,6 +96,7 @@ export class Resources {
     this.loaded++;
 
     if (this.loaded === this.toLoad) {
+      console.log("resources loaded");
       sceneStore.getState().setResourcesLoaded();
     }
   }
