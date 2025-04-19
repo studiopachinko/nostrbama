@@ -2,11 +2,10 @@
 import Heading from "@/components/typography/Heading.astro";
 import Subheading from "@/components/typography/Subheading.astro";
 import Layout from "@/layouts/Layout.astro";
-import GameComponent from "@/components/game/core/Game";
 ---
 
 <Layout>
-  <header class="outer-padding grid lg:max-w-4/5">
+  <!-- <header class="outer-padding grid lg:max-w-4/5">
     <Heading level={1}>The Game</Heading>
     <Subheading headingLevel={1}>
       Can't wait? Can't attend? Get a taste of the destruction and decadence
@@ -15,7 +14,23 @@ import GameComponent from "@/components/game/core/Game";
       Climb the leadboards! Share your wins and gain Nostr recognition!
     </Subheading>
   </header>
-  <section class="outer-padding">
-    <GameComponent client:only="react" />
-  </section>
+  <section class="outer-padding"> -->
+  <canvas id="webgl"></canvas>
 </Layout>
+
+<script src="@/game/script"></script>
+
+<style>
+  html,
+  body {
+    overflow: hidden;
+  }
+
+  #webgl {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    outline: none;
+  }
+</style>
