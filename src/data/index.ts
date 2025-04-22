@@ -54,7 +54,7 @@ export const ENTERTAINMENT_DATA: Entertainment[] = [
     title: "Nostr Talks",
     date: "The Haberdasher. Tuesday 14th July.",
     description:
-      "It might be a tall order to justify four days of fun in Alabama to your workplace/significant other without some veneer of education or technical discussion so we've had to include some talks. We've ordered them to keep it short and sweet.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus. Sed fermentum felis nec diam hendrerit blandit. Maecenas accumsan eros nec lorem lacinia varius.",
     image: talkImage,
   },
   {
@@ -69,28 +69,28 @@ export const ENTERTAINMENT_DATA: Entertainment[] = [
     title: "Skydive The Gulf With DankSwoops",
     date: "Orange Beach, AL. Afternoon Thursday 17th in the sky.",
     description:
-      "Do people actually believe Dank can do sky-diving? You Americans are more trusting than us Europoors. I’d sooner strap myself to a fridge and fuck myse lf out of a plane than to whatever creature calling itself DankSwoops any day. But you do you, whatever.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus.",
     image: skydiveImage,
   },
   {
     title: "Dining and bar-hopping",
     date: "1104 Dauphin St. Wednesday July 16th.",
     description:
-      "Let loose on the streets of Mobile, Alabama. Get taken to all the best spots by bonafide locals. Leave shame, diggity and cares at the door and drink alcohol. Maybe something more. Sounds like it could get nasty very quickly. Good luck to all.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis.",
     image: partyImage,
   },
   {
     title: "Beach Day!",
     date: "Orange Beach, AL. Morning Thursday, July 17th.",
     description:
-      "Come to Orange Beach, AL in the morning to soak up the sun with fellow Nostr-users. Listen: sand, sea, sun, being out doors in general. All of that shit sucks but the pros are seeing your Nostr pals in their swim suits/budgie smugglers and filling the annual Vit D quota before we retreat back to our respective computer dungeons for the rest of the year. ",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus. ",
     image: beachImage,
   },
   {
     title: "Virtual Reality!",
     date: "Orange Beach, AL. Morning Thursday, July 17th.",
     description:
-      "Because God knows this one isn't up to much lately. Let's escape this oppressive 'reality' and find liberation, adventure and the true desires of our hearts in the VR Cafe. (Don't worry, it's right next door to a wine bar for true escape in the event the VR world doesn't work out).",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum.",
     image: vrImage,
   },
   // Duplicates from here on
@@ -99,7 +99,7 @@ export const ENTERTAINMENT_DATA: Entertainment[] = [
     title: "Nostr Talks",
     date: "The Haberdasher. Tuesday 14th July.",
     description:
-      "It might be a tall order to justify four days of fun in Alabama to your workplace/significant other without some veneer of education or technical discussion so we've had to include some talks. We've ordered them to keep it short and sweet.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus. Sed fermentum felis nec diam hendrerit blandit. Maecenas accumsan eros nec lorem lacinia varius.",
     image: talkImage,
   },
   {
@@ -114,28 +114,28 @@ export const ENTERTAINMENT_DATA: Entertainment[] = [
     title: "Skydive The Gulf With DankSwoops",
     date: "Orange Beach, AL. Afternoon Thursday 17th in the sky.",
     description:
-      "Do people actually believe Dank can do sky-diving? You Americans are more trusting than us Europoors. I’d sooner strap myself to a fridge and fuck myse lf out of a plane than to whatever creature calling itself DankSwoops any day. But you do you, whatever.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus.",
     image: skydiveImage,
   },
   {
     title: "Dining and bar-hopping",
     date: "1104 Dauphin St. Wednesday July 16th.",
     description:
-      "Let loose on the streets of Mobile, Alabama. Get taken to all the best spots by bonafide locals. Leave shame, diggity and cares at the door and drink alcohol. Maybe something more. Sounds like it could get nasty very quickly. Good luck to all.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis.",
     image: partyImage,
   },
   {
     title: "Beach Day!",
     date: "Orange Beach, AL. Morning Thursday, July 17th.",
     description:
-      "Come to Orange Beach, AL in the morning to soak up the sun with fellow Nostr-users. Listen: sand, sea, sun, being out doors in general. All of that shit sucks but the pros are seeing your Nostr pals in their swim suits/budgie smugglers and filling the annual Vit D quota before we retreat back to our respective computer dungeons for the rest of the year. ",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus. ",
     image: beachImage,
   },
   {
     title: "Virtual Reality!",
     date: "Orange Beach, AL. Morning Thursday, July 17th.",
     description:
-      "Because God knows this one isn't up to much lately. Let's escape this oppressive 'reality' and find liberation, adventure and the true desires of our hearts in the VR Cafe. (Don't worry, it's right next door to a wine bar for true escape in the event the VR world doesn't work out).",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum.",
     image: vrImage,
   },
 ];
