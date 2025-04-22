@@ -1,0 +1,3602 @@
+Directory structure:
+└── src/
+    ├── assets/
+    │   └── images/
+    │       ├── cta/
+    │       ├── entertainment/
+    │       ├── icons/
+    │       ├── speaker-profile-pics/
+    │       └── sponsors/
+    │           ├── music/
+    │           ├── skydiving/
+    │           ├── team/
+    │           ├── venue/
+    │           └── website/
+    ├── components/
+    │   ├── accordion/
+    │   │   ├── Accordion.astro
+    │   │   └── AccordionItem.astro
+    │   ├── common/
+    │   │   ├── CtaSection.astro
+    │   │   ├── EntertainmentCard.astro
+    │   │   ├── LinkIconButton.astro
+    │   │   └── Section.astro
+    │   ├── home/
+    │   │   ├── EntertainmentSwiper.astro
+    │   │   ├── FAQSection.astro
+    │   │   ├── HomeHeader.astro
+    │   │   └── SpeakerCard.astro
+    │   ├── location-table/
+    │   │   ├── LocationTable.astro
+    │   │   ├── LocationTableItem.astro
+    │   │   ├── data/
+    │   │   │   └── index.ts
+    │   │   └── types/
+    │   │       └── index.ts
+    │   ├── schedule/
+    │   │   └── ScheduleItem.astro
+    │   ├── site-nav/
+    │   │   ├── SiteNav.astro
+    │   │   └── Tabs.astro
+    │   ├── sponsors/
+    │   │   ├── SponsorItem.astro
+    │   │   ├── SponsorSection.astro
+    │   │   ├── data/
+    │   │   │   └── index.ts
+    │   │   └── types/
+    │   │       └── index.ts
+    │   └── typography/
+    │       ├── BodyText.astro
+    │       ├── Heading.astro
+    │       └── Subheading.astro
+    ├── data/
+    │   └── index.ts
+    ├── game/
+    │   ├── Camera.ts
+    │   ├── Experience.ts
+    │   ├── Renderer.ts
+    │   ├── script.ts
+    │   ├── sources.ts
+    │   ├── Utils/
+    │   │   ├── Debug.ts
+    │   │   ├── GameControls.ts
+    │   │   ├── RapierDebugRenderer.ts
+    │   │   ├── Resources.ts
+    │   │   ├── Sizes.ts
+    │   │   └── Time.ts
+    │   ├── World/
+    │   │   ├── Environment.ts
+    │   │   ├── Floor.ts
+    │   │   ├── Ostrich.ts
+    │   │   └── World.ts
+    │   └── stores/
+    │       ├── gameControlsStore.ts
+    │       ├── sceneStore.ts
+    │       └── types/
+    │           └── index.ts
+    ├── layouts/
+    │   └── Layout.astro
+    ├── pages/
+    │   ├── game.astro
+    │   ├── index.astro
+    │   ├── schedule.astro
+    │   └── sponsors.astro
+    ├── styles/
+    │   └── global.css
+    ├── test/
+    │   └── setup.ts
+    └── types/
+        └── index.ts
+
+
+
+
+
+
+
+
+
+
+================================================
+File: components/accordion/Accordion.astro
+================================================
+<div class="w-full max-w-2xl xl:max-w-4xl">
+  <div class="bg-stone-800 shadow-md rounded-lg overflow-hidden">
+    <slot />
+  </div>
+</div>
+
+<script>
+  document.addEventListener("astro:page-load", (): void => {
+    // Get all accordion headers
+    const accordionHeaders: NodeListOf<HTMLElement> =
+      document.querySelectorAll(".accordion-header");
+
+    // Add click event listener to each header
+    accordionHeaders.forEach((header: HTMLElement): void => {
+      header.addEventListener("click", (): void => {
+        // Toggle the active class on the header
+        header.classList.toggle("active");
+
+        // Get the icon within this header
+        const icon: HTMLElement | null =
+          header.querySelector(".accordion-icon");
+
+        // Toggle the rotation of the icon
+        if (icon) {
+          if (header.classList.contains("active")) {
+            icon.classList.add("rotate-180");
+          } else {
+            icon.classList.remove("rotate-180");
+          }
+        }
+
+        // Get the content panel that follows this header
+        const content: HTMLElement | null =
+          header.nextElementSibling as HTMLElement | null;
+
+        // Toggle the visibility of the content
+        if (content) {
+          if (content.style.maxHeight) {
+            content.style.maxHeight = "";
+            content.classList.add("hidden");
+          } else {
+            content.classList.remove("hidden");
+            content.style.maxHeight = `${content.scrollHeight}px`;
+          }
+        }
+      });
+    });
+  });
+</script>
+
+
+
+================================================
+File: components/accordion/AccordionItem.astro
+================================================
+---
+interface Props {
+  question: string;
+  open?: boolean;
+}
+
+const { question, open } = Astro.props;
+---
+
+<div class="border-b border-stone-700 last:border-b-0">
+  <button
+    class="accordion-header w-full px-6 py-4 xl:text-3xl text-left font-medium text-stone-300 flex justify-between items-center hover:bg-stone-700 transition-colors"
+  >
+    <span class="w-[90%]">{question}</span>
+    <svg
+      class="accordion-icon w-5 h-5 transform transition-transform duration-200"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </button>
+  <div class={`accordion-content px-6 py-4 ${open ? "" : "hidden"}`}>
+    <slot />
+  </div>
+</div>
+
+
+
+================================================
+File: components/common/CtaSection.astro
+================================================
+---
+import { Picture } from "astro:assets";
+
+import ctaPattern from "@/assets/images/cta/cta-pattern.jpg";
+import nbLogoGold from "@/assets/images/cta/nb_logo--gold.png";
+import activitiesV from "@/assets/images/cta/cta_v-image.png";
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+---
+
+<section class="outer-padding">
+  <div class="relative h-[600px] rounded md:rounded-lg lg:rounded-xl xl:rounded-2xl overflow-hidden">
+    <Picture
+      src={nbLogoGold}
+      formats={["avif", "webp", "jpg"]}
+      alt="absolute top-1/2 -translate-y-1/2 z-10"
+      class="absolute top-1/2 -translate-y-1/2 z-20 w-[90%] left-1/2 -translate-x-1/2"
+    />
+    <Picture
+      src={activitiesV}
+      formats={["avif", "webp", "jpg"]}
+      alt="absolute top-1/2 -translate-y-1/2 z-20"
+      class="absolute top-1/2 -translate-y-1/2 w-[95%] left-1/2 -translate-x-1/2 z-10"
+    />
+    <div class="absolute inset-0">
+      <Picture
+        src={ctaPattern}
+        formats={["avif", "webp", "jpg"]}
+        alt="absolute inset-0"
+        class="object-cover w-full h-full"
+      />
+    </div>
+    <Heading level={2}>
+      We hope to see you there, anon!
+    </Heading>
+    <Subheading headingLevel={2}>
+      July 15—17 2025, Mobile, Alabama
+    </Subheading>
+  </div>
+</section>
+
+
+
+================================================
+File: components/common/EntertainmentCard.astro
+================================================
+---
+import LinkIconButton from "@/components/common/LinkIconButton.astro";
+import BodyText from "@/components/typography/BodyText.astro";
+import Heading from "@/components/typography/Heading.astro";
+import type { Entertainment } from "@/types";
+import { Picture } from "astro:assets";
+
+interface Props extends Entertainment {}
+
+const { image, title, url, date, description } = Astro.props;
+---
+
+<article>
+  <Picture
+    alt=""
+    formats={["avif", "webp"]}
+    src={image}
+    class="mb-4 rounded-xl"
+  />
+  <div class="flex flex-col gap-3 mb-4">
+    <Heading level={3}>
+      {title}
+    </Heading>
+    <p class="text-(--nb-white) text-sm md:text-base font-mono">{date}</p>
+  </div>
+  <div class="flex flex-col mb-4">
+    <BodyText>
+      {description}
+    </BodyText>
+    {url && <LinkIconButton url={url} className="mt-6" />}
+  </div>
+</article>
+
+
+
+================================================
+File: components/common/LinkIconButton.astro
+================================================
+---
+interface Props {
+  url: string;
+  className?: string;
+}
+
+const { url, className } = Astro.props;
+---
+
+<a
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class={`size-10 min-w-10 min-h-10 max-w-10 max-h-10 rounded-lg bg-stone-700 flex items-center justify-center ${className}`}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    stroke="currentColor"
+    class="size-6 stroke-(--nb-white)"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
+    ></path>
+  </svg>
+</a>
+
+
+
+================================================
+File: components/common/Section.astro
+================================================
+---
+import Heading from '@/components/typography/Heading.astro';
+import Subheading from '@/components/typography/Subheading.astro';
+
+interface Props {
+  title: string;
+  subheadline?: string;
+  className?: string;
+  headerClassName?: string;
+}
+
+const { title, subheadline, className = "", headerClassName } = Astro.props;
+---
+
+<section
+  class={className ? `${className} outer-padding section-y-padding` : "outer-padding"}
+>
+  <header class={headerClassName ? headerClassName : ""}>
+    <Heading level={2}
+    >
+      {title}
+    </Heading>
+    {
+      subheadline && (
+      <Subheading headingLevel={2}>
+           {subheadline}
+      </Subheading>
+      )
+    }
+  </header>
+  <slot />
+</section>
+
+
+
+================================================
+File: components/home/EntertainmentSwiper.astro
+================================================
+---
+import EntertainmentCard from "@/components/common/EntertainmentCard.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+import { ENTERTAINMENT_DATA } from "@/data";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+---
+
+<div class="swiper entertainment-swiper w-full section-y-padding">
+  <div
+    class="outer-padding flex flex-col sm:flex-row gap-4 sm:gap-8 md:gap-12 items-end justify-between mb-4 md:mb-8 lg:mb-12 xl:mb-16"
+  >
+    <div>
+      <Heading level={2}> The Line Up </Heading>
+      <Subheading headingLevel={2}>
+        Nostbama 2025 is going to be jam-packed with opportunities to meet and
+        have fun with all those disembodied avatars. Not just plebs but devs
+        too. And when we say bonding we mean 'Literally strap yourself to a
+        fellow Nostriche and jump out of a plane with him' bonding.
+      </Subheading>
+    </div>
+    <div class="hidden sm:flex justify-start lg:justify-end gap-2">
+      <button
+        class="bg-(--nb-white) cursor-pointer hover:bg-white transition-all active:[&_svg]:-translate-x-1 hover:[&_svg]:-translate-x-0.5 swiper-left h-10 lg:h-12 px-4 lg:px-6 xl:h-16 xl:px-10 rounded-full inline-flex items-center justify-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 40 40"
+          class="size-8 lg:size-10 xl:size-12 transition-transform"
+        >
+          <!-- SVG path content unchanged -->
+          <g fill="#000001" clip-path="url(#a)">
+            <path
+              d="M22.862 29.525h1.9v3.813h5.712v1.9H17.137v-1.9h5.725v-3.813ZM34.29 31.425V12.388h-1.9v-1.913h1.9v-1.9h5.712v26.663h-5.713v-1.9h-3.812v-1.913h3.812Zm3.812 0v-3.8h-1.913v3.8h1.913Z"
+            ></path>
+            <path
+              d="M15.238 33.338v-1.913h1.9v1.913h-1.9ZM22.86 27.625v1.9h-7.624v1.9h-1.9v-3.8h9.525ZM22.863 27.625v-3.813h1.9v3.813h-1.9ZM24.762 20v-5.712h1.9V20h-1.9Z"
+            ></path>
+            <path
+              d="M17.136 16.188v-1.9h1.912V18.1h-5.712v3.813h5.712V18.1h1.9V20h3.813v1.913h-1.9v1.9h-9.525v3.812h-1.913V18.1H1.898v-1.912h15.238Z"
+            ></path>
+            <path d="M0 16.188v-3.8h1.9v3.8H0ZM22.863 14.288v-1.9h1.9v1.9h-1.9Z"
+            ></path>
+            <path
+              d="M17.136 14.288h-1.9v-1.9H1.898v-1.913h13.338v-1.9h1.9v5.713ZM30.477 10.475v-1.9h1.912v1.9h-1.912ZM26.664 8.575v-1.9h3.813v1.9h-3.813ZM17.137 8.575v-1.9h1.912v1.9h-1.912ZM19.05 6.675V4.763h7.613v1.912h-7.612Z"
+            ></path>
+          </g>
+          <defs>
+            <clipPath id="a">
+              <path fill="#fff" d="M0 0v40h40V0z"></path>
+            </clipPath>
+          </defs>
+        </svg>
+      </button>
+      <button
+        class="bg-(--nb-white) cursor-pointer hover:bg-white transition-all active:[&_svg]:translate-x-1 hover:[&_svg]:translate-x-0.5 swiper-right h-10 lg:h-12 px-4 lg:px-6 xl:h-16 xl:px-10 rounded-full inline-flex items-center justify-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 40 40"
+          class="size-8 lg:size-10 xl:size-12 transition-transform"
+        >
+          <!-- SVG path content unchanged -->
+          <g fill="#000001" clip-path="url(#a)">
+            <path
+              d="M17.138 29.525h-1.9v3.813H9.526v1.9h13.337v-1.9h-5.725v-3.813ZM5.71 31.425V12.388h1.9v-1.913h-1.9v-1.9H-.001v26.663h5.713v-1.9h3.812v-1.913H5.711Zm-3.812 0v-3.8h1.913v3.8H1.898Z"
+            ></path>
+            <path
+              d="M24.762 33.338v-1.913h-1.9v1.913h1.9ZM17.14 27.625v1.9h7.624v1.9h1.9v-3.8H17.14ZM17.137 27.625v-3.813h-1.9v3.813h1.9ZM15.238 20v-5.712h-1.9V20h1.9Z"
+            ></path>
+            <path
+              d="M22.864 16.188v-1.9h-1.912V18.1h5.712v3.813h-5.712V18.1h-1.9V20h-3.813v1.913h1.9v1.9h9.525v3.812h1.913V18.1h9.525v-1.912H22.864Z"
+            ></path>
+            <path
+              d="M40 16.188v-3.8h-1.9v3.8H40ZM17.137 14.288v-1.9h-1.9v1.9h1.9Z"
+            ></path>
+            <path
+              d="M22.864 14.288h1.9v-1.9h13.338v-1.913H24.764v-1.9h-1.9v5.713ZM9.523 10.475v-1.9H7.611v1.9h1.912ZM13.336 8.575v-1.9H9.523v1.9h3.813ZM22.863 8.575v-1.9h-1.912v1.9h1.912ZM20.95 6.675V4.763h-7.613v1.912h7.612Z"
+            ></path>
+          </g>
+          <defs>
+            <clipPath id="a">
+              <path fill="#fff" d="M40 0v40H0V0z"></path>
+            </clipPath>
+          </defs>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    {
+      ENTERTAINMENT_DATA.map((data) => (
+        <div class="swiper-slide">
+          <EntertainmentCard {...data} />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="swiper-scrollbar"></div>
+</div>
+
+<script>
+  // Import Swiper and modules
+  import Swiper from "swiper";
+  import { Navigation, Pagination, Scrollbar } from "swiper/modules"; // Added Scrollbar here
+
+  // --- 1. Variable to hold the Swiper instance ---
+  // Needs to be outside the function scope to persist reference
+  let entertainmentSwiperInstance: Swiper | null = null;
+
+  // --- 2. Function to setup (or re-setup) Swiper ---
+  function setupEntertainmentSwiper() {
+    // Find the container element for this specific Swiper
+    const swiperContainer: HTMLDivElement | null = document.querySelector(
+      ".entertainment-swiper"
+    );
+
+    // Only proceed if the container element exists on the current page
+    if (swiperContainer) {
+      // --- 3. Destroy previous instance if it exists ---
+      // This prevents conflicts and memory leaks when navigating
+      if (entertainmentSwiperInstance) {
+        console.log("Destroying previous Entertainment Swiper instance.");
+        entertainmentSwiperInstance.destroy(true, true); // destroy(deleteInstance, cleanupStyles)
+        entertainmentSwiperInstance = null;
+      }
+
+      // --- 4. Initialize the new Swiper instance ---
+      console.log("Initializing Entertainment Swiper.");
+      const remValue = parseFloat(
+        getComputedStyle(document.documentElement).fontSize
+      );
+
+      entertainmentSwiperInstance = new Swiper(swiperContainer, {
+        modules: [Navigation, Pagination, Scrollbar], // Ensure Scrollbar module is included if using el
+        // Optional parameters
+        spaceBetween: 0,
+        loop: true,
+        centeredSlides: false, // loop=true often works best with centeredSlides=false or specific slide counts
+        slidesPerView: "auto", // More flexible than fixed numbers across breakpoints if using CSS width/max-width
+        // Using 'auto' slidesPerView might simplify breakpoints if slides have max-width via CSS
+        // width: null, // Usually not needed when using slidesPerView:'auto' or breakpoints
+
+        breakpoints: {
+          // It might be simpler to control slide width via CSS and use slidesPerView: 'auto'
+          // But keeping your original breakpoints for now:
+          320: {
+            slidesPerView: 1.15,
+            spaceBetween: remValue * 1.5,
+            slidesOffsetBefore: remValue,
+          },
+          640: {
+            slidesPerView: 1.25,
+            spaceBetween: remValue,
+            slidesOffsetBefore: remValue,
+          },
+          768: {
+            slidesPerView: 1.5,
+            spaceBetween: remValue * 1.5,
+            slidesOffsetBefore: remValue * 1.5,
+          },
+          1024: {
+            slidesPerView: 2.2,
+            spaceBetween: remValue * 2,
+            slidesOffsetBefore: remValue * 2,
+          },
+          1280: {
+            slidesPerView: 2.2,
+            spaceBetween: remValue * 2.5,
+            slidesOffsetBefore: remValue * 2.5,
+          },
+          1536: {
+            slidesPerView: 2.4,
+            spaceBetween: remValue * 3,
+            slidesOffsetBefore: remValue * 3,
+          },
+        },
+
+        // If we need pagination (ensure the element exists in your HTML)
+        pagination: {
+          el: ".swiper-pagination", // Make sure <div class="swiper-pagination"></div> exists
+          clickable: true, // Often desired for pagination
+        },
+
+        // Navigation arrows (ensure the elements exist in your HTML)
+        navigation: {
+          // NOTE: Your classes seem reversed (left button assigned to nextEl), check if intentional
+          nextEl: ".swiper-right",
+          prevEl: ".swiper-left",
+        },
+
+        // And if we need scrollbar (ensure the element exists in your HTML)
+        scrollbar: {
+          el: ".swiper-scrollbar", // Make sure <div class="swiper-scrollbar"></div> exists
+          hide: false, // Or true, depending on preference
+          draggable: true,
+        },
+      });
+    } else {
+      // If the container isn't on the page, make sure any old instance is destroyed
+      // (e.g., navigating from a page with this swiper to one without)
+
+      // WHY IS THIS CHECK HERE?
+      // Because 'entertainmentSwiperInstance' still holds the Swiper object
+      // created when the *previous* page (Page A) was loaded,
+      // even though we are now on Page B where the container doesn't exist.
+      if (entertainmentSwiperInstance) {
+        console.log(
+          "Entertainment Swiper container not found, destroying instance."
+        );
+        entertainmentSwiperInstance.destroy(true, true);
+        entertainmentSwiperInstance = null;
+      }
+    }
+  }
+
+  // --- 5. Listen for Astro's page load event ---
+  // This runs on initial load AND after every client-side navigation
+  document.addEventListener("astro:page-load", setupEntertainmentSwiper);
+
+  // Optional: Cleanup before swapping if needed (usually destroy on load is enough)
+  // document.addEventListener('astro:before-swap', () => {
+  //   if (entertainmentSwiperInstance) {
+  //     entertainmentSwiperInstance.destroy(true, true);
+  //     entertainmentSwiperInstance = null;
+  //   }
+  // });
+</script>
+
+<style>
+  .swiper-slide {
+    max-width: 640px;
+  }
+</style>
+
+
+
+================================================
+File: components/home/FAQSection.astro
+================================================
+---
+import Accordion from "@/components/accordion/Accordion.astro";
+import AccordionItem from "@/components/accordion/AccordionItem.astro";
+import { venueLocations } from "@/components/location-table/data";
+import LocationTable from "@/components/location-table/LocationTable.astro";
+import LocationTableItem from "@/components/location-table/LocationTableItem.astro";
+import BodyText from "@/components/typography/BodyText.astro";
+---
+
+<Accordion>
+  <AccordionItem question="How much does it cost?">
+    <BodyText>
+      Attending the events on the 15th is <span class="font-medium text-white"
+        >completely free</span
+      >. The rest of the stuff sounds expensive, kinda. NGL. Sky-diving costs
+      $279 per person.
+    </BodyText>
+  </AccordionItem>
+  <AccordionItem question="What's the nearest airport?">
+    <BodyText>
+      I don't know, I'm not from there. JFK? That's a big one isn't it?
+    </BodyText>
+  </AccordionItem>
+  <AccordionItem question="How do I register for sky-diving?">
+    <BodyText>
+      Registration ends June 9th so contact <a
+        href="https://njump.me/npub1yrkexvt88h6cgd32gdcfm55auuz6rw6c70xj478gcz6lstz5czvs9s77xh"
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >DankSwoops</a
+      > ASAP on Nostr.
+    </BodyText>
+  </AccordionItem>
+  <AccordionItem question="What about accommodation?">
+    <BodyText> Yes, you'll probably need something like that. </BodyText>
+  </AccordionItem>
+  <AccordionItem
+    question="I'm a dev/musician/stripper and I want to talk/perform/strip at this event. Who do I contact?"
+  >
+    <BodyText>
+      You should contact the event organisers: <a
+        href="https://njump.me/npub16secklpnqey3el04fy2drfftsz5k26zlwdsnz84wtul2luwj8fdsugjdxk"
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Sergio</a
+      >, <a
+        href="https://njump.me/npub1unm5skfa9x4drpq43pu2g00w6pzwvfhsa23z4j6aee7vghaygmkqwjtxhc"
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Mallory</a
+      > or <a
+        href="https://njump.me/npub1ualvtyga8hj6kgw9mwe72ns9pn6c8kd66qruv98eafeuawg7yt0shdwmqx"
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Riddler</a
+      > on Nostr.
+    </BodyText>
+  </AccordionItem>
+  <AccordionItem question="Where am I going again?">
+    <BodyText>
+      We're going here. Please confirm exact locations (Orange Beach, Riddler's
+      house) with the event organisers <a
+        href="https://njump.me/npub16secklpnqey3el04fy2drfftsz5k26zlwdsnz84wtul2luwj8fdsugjdxk"
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Sergio</a
+      >, <a
+        href="https://njump.me/npub1unm5skfa9x4drpq43pu2g00w6pzwvfhsa23z4j6aee7vghaygmkqwjtxhc"
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Mallory</a
+      > or <a
+        href="https://njump.me/npub1ualvtyga8hj6kgw9mwe72ns9pn6c8kd66qruv98eafeuawg7yt0shdwmqx"
+        class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+        >Riddler</a
+      > on Nostr.
+    </BodyText>
+    <div class="w-full">
+      <LocationTable>
+        {
+          venueLocations.map((loc) => (
+            <LocationTableItem
+              venueName={loc.venueName}
+              address={loc.address}
+              mapLink={loc.mapLink}
+              venueWebsite={loc.venueWebsite}
+            />
+          ))
+        }
+      </LocationTable>
+    </div>
+  </AccordionItem></Accordion
+>
+
+
+
+================================================
+File: components/home/HomeHeader.astro
+================================================
+---
+import { Picture } from "astro:assets";
+import homeHero from "@/assets/images/home-hero.jpeg";
+import nbLogo from "@/assets/images/nb_logo--3d.png";
+import homeCollage from "@/assets/images/home-collage.png";
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+---
+
+<header class="outer-padding mt-2 lg:mt-8 xl:mt-12">
+  <div
+    class="relative w-full min-h-[400px] h-[50vh] md:min-h-[550px] md:h-[70vh] lg:min-h-[660px] lg:h-[70vh] xl:min-h-[800px] xl:h-[70vh] rounded md:rounded-lg lg:rounded-xl xl:rounded-2xl overflow-hidden mb-3 xl:mb-12"
+  >
+    <div class="absolute inset-0">
+      <Picture
+        src={homeHero}
+        alt="Collage of psychedelic imagery of ostriches and shapes"
+        formats={["avif", "webp"]}
+        widths={[640, 768, 1024, 1280, 1536, 1920, 2560]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="object-cover w-full h-full"
+      />
+    </div>
+    <Picture
+      src={nbLogo}
+      alt="Nostrbama Logo"
+      formats={["avif", "webp"]}
+      widths={[200, 400, 600, 800, 1200, 1600]}
+      sizes="(max-width: 768px) 80vw, 67vw"
+      loading="lazy"
+      decoding="async"
+      class="z-10 absolute max-w-2/3 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-4/5"
+    />
+  </div>
+  <div>
+    <Heading level={1}>
+      Welcome to Nostrbama 2025, the BEST Nostr Conference in the Gulf States!
+    </Heading>
+    <Subheading headingLevel={1}>
+      Join us for 3 days and nights of fun events, from Live Music to Skydiving.
+      <span class="text-(--nb-white)">July 15-17 2025, Mobile, Alabama</span> right
+      in the heart of the Gulf Coast. Check out our <a
+        class="text-orange-400 underline"
+        href="/schedule">Schedule</a
+      > and <a class="text-orange-400 underline" href="/sponsors">Sponsors</a> sections
+      for more info, and we hope to see you there!
+    </Subheading>
+  </div>
+</header>
+
+<!--   <p
+        class="text-3xl md:text-5xl sm:text-4xl lg:text-6xl xl:text-5xl text-stone-300 leading-tight md:leading-[1.1] mb-5 text-balance"
+      >
+        Join us for 3 days and nights of fun events, from Live Music to
+        Skydiving.
+        <span class="text-(--nb-white)">July 15-17 2025, Mobile, Alabama</span> right
+        in the heart of the Gulf Coast. Check out our <a
+          class="text-orange-400 underline" href="/schedule">Schedule</a
+        > and <a class="text-orange-400 underline" href="/sponsors">Sponsors</a> sections for more info,
+        and we hope to see you there!
+      </p>   <div class="grid  items-center xl:gap-12">
+   <Picture
+      src={homeCollage}
+      formats={["avif", "webp"]}
+      alt="Four-image collage: 1) An oversized ostrich walks past the USS Alabama battleship. 2) A wide-eyed ostrich with its beak open faces the camera against a vivid sky. 3) An ostrich bends over, peering into the window of a yellow taxi. 4) A confused ostrich stands on a street in front of a historic red-brick building with balconies."
+      class="rounded-md lg:rounded-2xl"
+    /> 
+  </div> -->
+
+
+
+================================================
+File: components/home/SpeakerCard.astro
+================================================
+---
+import LinkIconButton from "@/components/common/LinkIconButton.astro";
+import BodyText from "@/components/typography/BodyText.astro";
+import Heading from "@/components/typography/Heading.astro";
+import type { Speaker } from "@/types";
+import { Picture } from "astro:assets";
+import { lazy } from "astro:schema";
+
+interface Props extends Speaker {}
+
+const { speakerName, title, njumpUrl, bio, profilePic } = Astro.props;
+
+// Widths targeting sharp images up to 2x density across layouts
+const imageWidths = [320, 560, 640, 820, 960, 1120, 1640];
+
+// Sizes describing the image's layout width at different viewports
+const imageSizes = "(max-width: 640px) 90vw, (max-width: 1790px) 820px, 560px";
+---
+
+<article class="mb-10">
+  <!-- row 1 -->
+  <Picture
+    alt={`Profile picture of ${speakerName}`}
+    formats={["avif", "webp"]}
+    src={profilePic}
+    class="rounded-xl w-full aspect-square object-cover mb-4"
+    widths={imageWidths}
+    sizes={imageSizes}
+    loading="lazy"
+    decoding="async"
+  />
+  <!-- row-2 -->
+  <div class="flex justify-between items-center gap-2">
+    <Heading level={3} className="lg:mb-0">{speakerName}</Heading>
+    <LinkIconButton url={njumpUrl} />
+  </div>
+  <!-- row-3 -->
+  <p class="text-(--nb-white) lg:text-lg font-mono">{title}</p>
+  <!-- row-4 -->
+  <BodyText>
+    {bio}
+  </BodyText>
+</article>
+
+<style>
+  article {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 4;
+  }
+</style>
+
+
+
+================================================
+File: components/location-table/LocationTable.astro
+================================================
+<table class="w-full border-collapse">
+  <colgroup>
+    <col style="width: 35%" />
+    <col style="width: 65%" />
+  </colgroup>
+  <tbody class="text-stone-400 text-sm">
+    <slot />
+  </tbody>
+</table>
+
+
+
+================================================
+File: components/location-table/LocationTableItem.astro
+================================================
+---
+import type { Location } from "@/components/location-table/types";
+import BodyText from "@/components/typography/BodyText.astro";
+
+interface Props extends Location {}
+
+const { venueName, mapLink, address, venueWebsite } = Astro.props;
+---
+
+<tr class="border-b border-stone-700">
+  <td class="py-4 align-top"
+    ><BodyText className="text-stone-300">{venueName}</BodyText></td
+  >
+  <td class="py-4 flex flex-col gap-3">
+    <BodyText>{address}</BodyText>
+    <BodyText>
+      <a
+        href={mapLink}
+        target="_blank"
+        rel="noreferrer noopener"
+        class="underline">Map link</a
+      >
+    </BodyText>
+    {
+      venueWebsite && (
+        <BodyText>
+          <a
+            href={venueWebsite}
+            target="_blank"
+            rel="noreferrer noopener"
+            class="underline"
+          >
+            {venueWebsite}
+          </a>
+        </BodyText>
+      )
+    }
+  </td>
+</tr>
+
+
+
+================================================
+File: components/location-table/data/index.ts
+================================================
+import type { Location } from "@/components/location-table/types";
+
+export const venueLocations: Location[] = [
+  {
+    venueName: "The Haberdasher",
+    address: "The Hatch at The Haberdasher, 113 Dauphin St.",
+    mapLink: "https://www.openstreetmap.org/?#map=19/30.691881/-88.041717",
+    venueWebsite: "https://www.thehabmobile.com/",
+  },
+  {
+    venueName: "Red or White Wine",
+    address: "1104 Dauphin St, Mobile, AL 36604",
+    mapLink: "https://maps.app.goo.gl/CnxvoGDJsRgFWPGB7",
+    venueWebsite: "https://www.thehabmobile.com/",
+  },
+  {
+    venueName: "Orange Beach",
+    address: "Alabama",
+    mapLink: "https://maps.app.goo.gl/WNMTc3c4o42TbZ628",
+  },
+];
+
+
+
+================================================
+File: components/location-table/types/index.ts
+================================================
+export type Location = {
+  venueName: string;
+  address: string;
+  mapLink: string;
+  venueWebsite?: string;
+};
+
+
+
+================================================
+File: components/schedule/ScheduleItem.astro
+================================================
+---
+import { Image } from "astro:assets";
+
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  image: ImageMetadata;
+  imageAlt: string;
+  subheading: string;
+  location: string;
+}
+
+const { image, imageAlt, subheading, location } = Astro.props;
+---
+
+<article
+  class="grid gap-6 md:grid-cols-[0.25fr_1fr] md:gap-16 xl:gap-[20%] border-t border-b border-stone-700 py-8 last:border-t-0"
+>
+  <Image src={image} alt={imageAlt} class="rounded-lg" />
+  <!-- titles -->
+  <div class="flex flex-col gap-8 max-w-[1200px]">
+    <header class="">
+      <slot name="heading" />
+      <Subheading headingLevel={2}>{subheading}</Subheading>
+    </header>
+    <!-- details -->
+    <div
+      class="border-t font-mono py-4 flex flex-col md:flex-row gap-6 md:gap-16 text-sm border-b border-stone-700"
+    >
+      <div class="w-full">
+        <p class="mb-2">Time</p>
+        <slot name="time" />
+      </div>
+      <div class="w-full">
+        <p class="mb-2">Location</p>
+        <p class="text-(--nb-white) text-base">
+          {location}
+        </p>
+      </div>
+    </div>
+    <!-- blurb -->
+    <slot name="bodyText" />
+  </div>
+</article>
+
+
+
+================================================
+File: components/site-nav/SiteNav.astro
+================================================
+---
+import Tabs from "@/components/site-nav/Tabs.astro";
+---
+
+<nav
+  class="absolute rounded-full bottom-5 sm:top-5 inline-flex flex-col items-center w-full lg:left-1/2 lg:-translate-x-1/2 z-50 text-white"
+>
+  <Tabs />
+</nav>
+
+
+
+================================================
+File: components/site-nav/Tabs.astro
+================================================
+---
+// No props needed for this basic version, but you could pass initialTab etc.
+// Define TABS data here or import it. For simplicity, defining here:
+const TABS = [
+  {
+    name: "Home",
+    // Simplified icon placeholder for brevity - use your actual SVG strings or Astro components
+    href: "/", // Add href for actual navigation
+  },
+  {
+    name: "Schedule",
+    href: "/schedule",
+  },
+  {
+    name: "Sponsors",
+    href: "/sponsors",
+  },
+  {
+    name: "Game",
+    href: "/game",
+  },
+];
+
+// Determine the active tab based on the current page URL
+const currentPath = Astro.url.pathname;
+let initialActiveTab = TABS[0].name; // Default
+for (const tab of TABS) {
+  if (currentPath === tab.href || currentPath.startsWith(tab.href + "/")) {
+    initialActiveTab = tab.name;
+    break;
+  }
+}
+---
+
+<div class="tabs-wrapper" transition:persist="">
+  <ul class="tabs-list" id="main-tabs-list">
+    {
+      TABS.map((tab) => (
+        <li class={tab.name === initialActiveTab ? "is-active-li" : ""}>
+          {/* Use links for actual navigation */}
+          <a
+            href={tab.href}
+            class:list={[
+              "tabs-button",
+              { "is-active": tab.name === initialActiveTab },
+            ]}
+            data-tab={tab.name}
+            aria-current={tab.name === initialActiveTab ? "page" : undefined}
+          >
+            {tab.name}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div aria-hidden="true" class="clip-path-container" id="clip-path-container">
+    <ul class="tabs-list list-overlay">
+      {
+        TABS.map((tab) => (
+          <li>
+            {/* These are not focusable, just visual */}
+            <span
+              class="tabs-button button-overlay"
+              data-tab={tab.name}
+              tabindex="-1"
+            >
+              {tab.name}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  .tabs-wrapper {
+    position: relative;
+    display: inline-block; /* Or block, depending on layout */
+    background-color: #eee; /* Background for non-active tabs */
+    border-radius: 20px; /* Match clip-path rounding */
+  }
+
+  .tabs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    position: relative; /* Needed for z-index stacking */
+    z-index: 1; /* Base list below overlay */
+  }
+
+  .tabs-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 10px 15px;
+    border: none;
+    background: none; /* Transparent background for base buttons */
+    color: #333; /* Default text color */
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 17px; /* Match clip-path rounding */
+    text-decoration: none; /* For <a> tags */
+    white-space: nowrap;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+
+  /* Style for the active link/button in the main list (optional, but good for a11y) */
+  .tabs-button.is-active {
+    /* You might add subtle hints here if needed, but the overlay handles the main visual */
+    /* color: #000; */
+    /* font-weight: bold; */
+  }
+
+  .clip-path-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Overlay above base list */
+    pointer-events: none; /* Allow clicks to pass through to the main list */
+    /* Initial clip-path will be set by JS */
+    border-radius: 17px; /* Match button radius */
+    view-transition-name: active-tab-highlight; /* Unique name */
+    contain: layout; /* Helps browser optimize */
+  }
+
+  .list-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto; /* Allow natural width based on content */
+    height: 100%;
+    z-index: 3; /* Ensure buttons are visually on top */
+    background-color: transparent; /* Container handles background */
+  }
+
+  .button-overlay {
+    background-color: white; /* Active tab background */
+    color: #111; /* Active tab text color */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Optional: nice shadow effect */
+    /* Ensure padding/sizing matches .tabs-button exactly */
+  }
+
+  /* Remove focus outline from visual-only spans */
+  .button-overlay:focus {
+    outline: none;
+  }
+</style>
+
+<script define:vars={{ initialActiveTab }}>
+  // Use the initialActiveTab passed from Astro frontmatter
+  const TABS_DATA = JSON.parse(
+    document.getElementById("tabs-data")?.textContent || "[]"
+  ); // If needed
+  let currentActiveTab = initialActiveTab; // Initialize with server-rendered value
+
+  const wrapper = document.querySelector(".tabs-wrapper");
+  const mainList = document.getElementById("main-tabs-list");
+  const clipContainer = document.getElementById("clip-path-container");
+
+  function updateClipPath(tabName) {
+    if (!clipContainer || !mainList) return;
+
+    // Find the corresponding LINK (<a> tag) in the main list
+    const activeLinkElement = mainList.querySelector(
+      `a[data-tab="${tabName}"]`
+    );
+
+    if (activeLinkElement) {
+      const { offsetLeft, offsetWidth } = activeLinkElement;
+      const containerWidth = mainList.offsetWidth; // Calculate based on the main list width
+
+      if (containerWidth > 0) {
+        // Calculate percentage relative to the main list container
+        const clipLeftPercent = (offsetLeft / containerWidth) * 100;
+        const clipRightPercent =
+          100 - ((offsetLeft + offsetWidth) / containerWidth) * 100;
+
+        // Apply inset clip-path with rounding matching button border-radius
+        // Using percentages and fixed rounding value
+        clipContainer.style.clipPath = `inset(0 ${clipRightPercent.toFixed(2)}% 0 ${clipLeftPercent.toFixed(2)}% round 17px)`;
+        currentActiveTab = tabName; // Update tracking variable
+      }
+
+      // Optionally update aria-current and active classes on main links
+      mainList.querySelectorAll("a.tabs-button").forEach((link) => {
+        const li = link.closest("li");
+        if (link.dataset.tab === tabName) {
+          link.classList.add("is-active");
+          link.setAttribute("aria-current", "page");
+          if (li) li.classList.add("is-active-li");
+        } else {
+          link.classList.remove("is-active");
+          link.removeAttribute("aria-current");
+          if (li) li.classList.remove("is-active-li");
+        }
+      });
+    } else {
+      // Handle case where tab element isn't found (e.g., hide clip path)
+      clipContainer.style.clipPath = "inset(0 100% 0 0 round 17px)"; // Or similar default
+    }
+  }
+
+  // --- Event Listener ---
+  // Use click listener on the wrapper for delegation (but only act on main list links)
+  // Note: We listen on the wrapper but check if the target is a button inside the main list
+  // This prevents issues if the click happens on padding/margins
+  if (wrapper && mainList) {
+    mainList.addEventListener("click", (event) => {
+      // Find the clicked link element within the main list
+      const clickedLink = event.target.closest("a.tabs-button");
+
+      if (clickedLink && clickedLink.dataset.tab) {
+        const tabName = clickedLink.dataset.tab;
+        // Only update visuals if it's not already active,
+        // Navigation itself is handled by the link's href
+        if (tabName !== currentActiveTab) {
+          updateClipPath(tabName);
+        }
+        // Prevent default only if JS handles navigation (not recommended here)
+        // event.preventDefault();
+      }
+    });
+  }
+
+  // --- Initial State ---
+  // Set the initial clip-path based on the server-determined active tab
+  // Use requestAnimationFrame to ensure layout is calculated
+  requestAnimationFrame(() => {
+    updateClipPath(initialActiveTab);
+  });
+
+  // Optional: Recalculate on resize if layout might change
+  let resizeTimeout;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      updateClipPath(currentActiveTab); // Update with the currently tracked active tab
+    }, 100); // Debounce resize events
+  });
+</script>
+
+
+
+================================================
+File: components/sponsors/SponsorItem.astro
+================================================
+---
+import { Picture } from "astro:assets";
+import type { Sponsor } from "@/components/sponsors/types";
+import Heading from "@/components/typography/Heading.astro";
+import LinkIconButton from "@/components/common/LinkIconButton.astro";
+interface Props extends Sponsor {}
+
+const { image, name, url } = Astro.props;
+---
+
+<article class="grid gap-2">
+  <Picture src={image} class="rounded-lg" alt="" formats={["avif", "webp"]} />
+  <Heading level={3} className="font-sans font-medium text-xl">{name}</Heading>
+  <LinkIconButton url={url} />
+</article>
+
+
+
+
+================================================
+File: components/sponsors/SponsorSection.astro
+================================================
+---
+import SponsorItem from "@/components/sponsors/SponsorItem.astro";
+import type { Sponsor } from "@/components/sponsors/types";
+
+interface Props {
+  sponsorData: Sponsor[];
+}
+
+const { sponsorData } = Astro.props;
+---
+
+<section class="grid border-b border-stone-700 last:border-b-0 gap-12 py-12">
+  <slot />
+  <div class="grid grid-cols-2 gap-4">
+    {
+      sponsorData.map((sponsor) => (
+        <SponsorItem
+          image={sponsor.image}
+          name={sponsor.name}
+          url={sponsor.url}
+        />
+      ))
+    }
+  </div>
+</section>
+
+
+
+================================================
+File: components/sponsors/data/index.ts
+================================================
+import type { Sponsor } from "@/components/sponsors/types";
+
+/** Image Imports */
+// Teams
+import sergioImage from "@/assets/images/sponsors/team/sergio.png";
+import malloryImage from "@/assets/images/sponsors/team/mallory.png";
+import riddlerImage from "@/assets/images/sponsors/team/riddler.png";
+// Musical Guest
+import brooksImage from "@/assets/images/sponsors/music/brooks-hubbert.png";
+// Speakers
+import derekRossProfilePic from "@/assets/images/speaker-profile-pics/derekRoss.png";
+import manimeProfilePic from "@/assets/images/speaker-profile-pics/manime.png";
+import vicProfilePic from "@/assets/images/speaker-profile-pics/vic.png";
+import ericfjAceaSpadesProfilePic from "@/assets/images/speaker-profile-pics/ericfj-aceaspades.png";
+// Event Venues
+import whiskeyImage from "@/assets/images/sponsors/venue/whiskey.png";
+import wineImage from "@/assets/images/sponsors/venue/wine.png";
+// Skydiving
+import dankImage from "@/assets/images/sponsors/skydiving/dank.png";
+// Website
+import kajoozieImage from "@/assets/images/sponsors/website/kajoozie.png";
+import sbImage from "@/assets/images/sponsors/website/pachinko.png";
+
+export const nostrbamaTeam: Sponsor[] = [
+  {
+    image: sergioImage,
+    name: "Sergio",
+    url: "https://njump.me/npub16secklpnqey3el04fy2drfftsz5k26zlwdsnz84wtul2luwj8fdsugjdxk",
+  },
+  {
+    image: malloryImage,
+    name: "Mallory",
+    url: "https://njump.me/npub1unm5skfa9x4drpq43pu2g00w6pzwvfhsa23z4j6aee7vghaygmkqwjtxhc",
+  },
+  {
+    image: riddlerImage,
+    name: "Riddler",
+    url: "https://njump.me/npub1ualvtyga8hj6kgw9mwe72ns9pn6c8kd66qruv98eafeuawg7yt0shdwmqx",
+  },
+];
+
+export const musicalGuests: Sponsor[] = [
+  {
+    image: brooksImage,
+    name: "Brooks Hubbert",
+    url: "https://soundslikebrooks.bandcamp.com/",
+  },
+];
+
+export const speakers: Sponsor[] = [
+  {
+    image: derekRossProfilePic,
+    name: "Derek Ross",
+    url: "https://njump.me/npub18ams6ewn5aj2n3wt2qawzglx9mr4nzksxhvrdc4gzrecw7n5tvjqctp424",
+  },
+  {
+    image: manimeProfilePic,
+    name: "ManiMe",
+    url: "https://njump.me/npub1manlnflyzyjhgh970t8mmngrdytcp3jrmaa66u846ggg7t20cgqqvyn9tn",
+  },
+  {
+    image: vicProfilePic,
+    name: "Vic",
+    url: "https://njump.me/npub1yx6pjypd4r7qh2gysjhvjd9l2km6hnm4amdnjyjw3467fy05rf0qfp7kza",
+  },
+  {
+    image: ericfjAceaSpadesProfilePic,
+    name: "Eric FJ & AceASpades",
+    url: "https://njump.me/npub10xvczstpwsljy7gqd2cselvrh5e6mlerep09m8gff87avru0ryqsg2g437",
+  },
+];
+
+export const venues: Sponsor[] = [
+  {
+    image: whiskeyImage,
+    name: "The HaberDasher",
+    url: "https://www.thehabmobile.com/",
+  },
+  {
+    image: wineImage,
+    name: "Red Or White Wine",
+    url: "https://www.redorwhitewine.com/mobile-location",
+  },
+];
+
+export const skydiving: Sponsor[] = [
+  {
+    image: dankImage,
+    name: "DankSwoops",
+    url: "https://njump.me/npub1yrkexvt88h6cgd32gdcfm55auuz6rw6c70xj478gcz6lstz5czvs9s77xh",
+  },
+];
+
+export const website: Sponsor[] = [
+  {
+    image: kajoozieImage,
+    name: "Kajoozie Maflingo",
+    url: "https://njump.me/npub1xswmtflr4yclfyy4mq4y4nynnnu2vu5nk8jp0875khq9gnz0cthsc0p4xw",
+  },
+  {
+    image: sbImage,
+    name: "sb",
+    url: "https://njump.me/npub1xhryyle4vywha3xc6slrgeqchanx66y4ewh3xhzegw8z0edqtj6sgsyljv",
+  },
+];
+
+
+
+================================================
+File: components/sponsors/types/index.ts
+================================================
+import type { ImageMetadata } from "astro";
+
+export type Sponsor = {
+  image: ImageMetadata;
+  name: string;
+  url: string;
+};
+
+
+
+================================================
+File: components/typography/BodyText.astro
+================================================
+---
+interface Props {
+  className?: string;
+  slot?: string; // TODO: What does this do?
+}
+
+const { className, slot } = Astro.props;
+---
+
+<p class={`text-stone-400 text-lg xl:text-2xl ${className}`} slot={slot}>
+  <slot />
+</p>
+
+
+
+================================================
+File: components/typography/Heading.astro
+================================================
+---
+interface Props {
+  level: 1 | 2 | 3;
+  slot?: string;
+  className?: string;
+}
+
+const { level, slot, className } = Astro.props;
+---
+
+{
+  level === 1 && (
+    <h1
+      slot={slot}
+      class={`text-(--nb-white) md:text-7xl font-headline text-6xl sm:text-6xl lg:text-7xl xl:text-8xl mb-3 text-balance ${className}`}
+    >
+      <slot />
+    </h1>
+  )
+}
+{
+  level === 2 && (
+    <h2
+      slot={slot}
+      class={`text-(--nb-white) font-headline text-5xl md:text-5xl xl:text-7xl mb-4 xl:mb-12 ${className}`}
+    >
+      <slot />
+    </h2>
+  )
+}
+{
+  level === 3 && (
+    <h3
+      slot={slot}
+      class={`text-(--nb-white) text-4xl md:text-4xl xl:text-5xl mb-3 font-headline ${className}`}
+    >
+      <slot />
+    </h3>
+  )
+}
+
+
+
+================================================
+File: components/typography/Subheading.astro
+================================================
+---
+interface Props {
+  headingLevel: 1 | 2 | 3;
+}
+
+const { headingLevel } = Astro.props;
+---
+
+{
+  headingLevel === 1 && (
+    <p class="text-2xl md:text-4xl sm:text-3xl lg:text-3xl xl:text-4xl text-stone-300 leading-tight md:leading-[1.1] mb-5 text-balance">
+      <slot />
+    </p>
+  )
+}
+{
+  headingLevel === 2 && (
+    <p class="text-stone-400 md:text-xl lg:text-2xl xl:text-3xl text-xl max-w-[60ch] leading-[1.25]">
+      <slot />
+    </p>
+  )
+}
+{
+  headingLevel === 3 && (
+    <p class="text-stone-400 text-lg md:text-xl lg:text-2xl xl:text-5xl  max-w-[60ch] leading-[1.25]">
+      <slot />
+    </p>
+  )
+}
+
+
+
+================================================
+File: data/index.ts
+================================================
+import type { Entertainment, FAQ, Speaker } from "@/types";
+// Speaker Images
+import derekRossProfilePic from "@/assets/images/speaker-profile-pics/derekRoss.png";
+import manimeProfilePic from "@/assets/images/speaker-profile-pics/manime.png";
+import vicProfilePic from "@/assets/images/speaker-profile-pics/vic.png";
+import ericfjAceaSpadesProfilePic from "@/assets/images/speaker-profile-pics/ericfj-aceaspades.png";
+// Entertainment Images
+// import brooksImage from "@/assets/images/entertainment/brooks-hubbert.png";
+import skydiveImage from "@/assets/images/entertainment/skydive-ostrich.png";
+import partyImage from "@/assets/images/entertainment/party.png";
+import bandImage from "@/assets/images/entertainment/band.png";
+import beachImage from "@/assets/images/entertainment/beach.png";
+import talkImage from "@/assets/images/entertainment/talk.png";
+import vrImage from "@/assets/images/entertainment/vr.jpg";
+
+export const SPEAKER_DATA: Speaker[] = [
+  {
+    speakerName: "Derek Ross",
+    title: "Nostr OG",
+    njumpUrl:
+      "https://njump.me/npub18ams6ewn5aj2n3wt2qawzglx9mr4nzksxhvrdc4gzrecw7n5tvjqctp424",
+    bio: "A true Nostr OG, and a man who has purple-pilled more than the rest of us combined. He will be giving a captivating talk about the history of Nostr and how it's going to change social media forever.",
+    profilePic: derekRossProfilePic,
+  },
+  {
+    speakerName: "Vic",
+    title: "Audio Spaces Developer",
+    njumpUrl:
+      "https://njump.me/npub1yx6pjypd4r7qh2gysjhvjd9l2km6hnm4amdnjyjw3467fy05rf0qfp7kza",
+    bio: "A place for artists, devs, and traders to connect and shoot the breeze, Vic is working on the open-source, Nostr and Lightning-enabled audio spaces app.",
+    profilePic: vicProfilePic,
+  },
+  {
+    speakerName: "ManiMe",
+    title: "Relay Technology Developer",
+    njumpUrl:
+      "https://njump.me/npub1manlnflyzyjhgh970t8mmngrdytcp3jrmaa66u846ggg7t20cgqqvyn9tn",
+    bio: "Working on building the back end of Nostr, Mani has been tirelessly creating new relay technologies to expand the web of trust.",
+    profilePic: manimeProfilePic,
+  },
+  {
+    speakerName: "EricFJ & AceaSpades",
+    title: "Merchant Protocol Developers",
+    njumpUrl:
+      "https://njump.me/npub10xvczstpwsljy7gqd2cselvrh5e6mlerep09m8gff87avru0ryqsg2g437",
+    bio: "They are writing the common spec of how merchants and customers connect on Nostr and use Sats to buy and sell goods from anywhere.",
+    profilePic: ericfjAceaSpadesProfilePic,
+  },
+];
+
+// duplicate items for Swiper JS Loop option to work properly
+export const ENTERTAINMENT_DATA: Entertainment[] = [
+  {
+    title: "Nostr Talks",
+    date: "The Haberdasher. Tuesday 14th July.",
+    description:
+      "It might be a tall order to justify four days of fun in Alabama to your workplace/significant other without some veneer of education or technical discussion so we've had to include some talks. We've ordered them to keep it short and sweet.",
+    image: talkImage,
+  },
+  {
+    title: "Live Music With Brooks Hubber",
+    date: "The Haberdasher. Tuesday 14th July.",
+    description:
+      "Brooks Hubbert III is a musician, singer and songwriter from Pensacola, Florida. At a time when so many acts insist their sound cannot be categorized, Hubbert manages to effortlessly span genres including psychedelic rock, reggae, blues, country, and bluegrass in the creation of music that is both technically impressive and easily accessible",
+    url: "https://soundslikebrooks.bandcamp.com/",
+    image: bandImage,
+  },
+  {
+    title: "Skydive The Gulf With DankSwoops",
+    date: "Orange Beach, AL. Afternoon Thursday 17th in the sky.",
+    description:
+      "Do people actually believe Dank can do sky-diving? You Americans are more trusting than us Europoors. I’d sooner strap myself to a fridge and fuck myse lf out of a plane than to whatever creature calling itself DankSwoops any day. But you do you, whatever.",
+    image: skydiveImage,
+  },
+  {
+    title: "Dining and bar-hopping",
+    date: "1104 Dauphin St. Wednesday July 16th.",
+    description:
+      "Let loose on the streets of Mobile, Alabama. Get taken to all the best spots by bonafide locals. Leave shame, diggity and cares at the door and drink alcohol. Maybe something more. Sounds like it could get nasty very quickly. Good luck to all.",
+    image: partyImage,
+  },
+  {
+    title: "Beach Day!",
+    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    description:
+      "Come to Orange Beach, AL in the morning to soak up the sun with fellow Nostr-users. Listen: sand, sea, sun, being out doors in general. All of that shit sucks but the pros are seeing your Nostr pals in their swim suits/budgie smugglers and filling the annual Vit D quota before we retreat back to our respective computer dungeons for the rest of the year. ",
+    image: beachImage,
+  },
+  {
+    title: "Virtual Reality!",
+    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    description:
+      "Because God knows this one isn't up to much lately. Let's escape this oppressive 'reality' and find liberation, adventure and the true desires of our hearts in the VR Cafe. (Don't worry, it's right next door to a wine bar for true escape in the event the VR world doesn't work out).",
+    image: vrImage,
+  },
+  // Duplicates from here on
+
+  {
+    title: "Nostr Talks",
+    date: "The Haberdasher. Tuesday 14th July.",
+    description:
+      "It might be a tall order to justify four days of fun in Alabama to your workplace/significant other without some veneer of education or technical discussion so we've had to include some talks. We've ordered them to keep it short and sweet.",
+    image: talkImage,
+  },
+  {
+    title: "Live Music With Brooks Hubber",
+    date: "The Haberdasher. Tuesday 14th July.",
+    description:
+      "Brooks Hubbert III is a musician, singer and songwriter from Pensacola, Florida. At a time when so many acts insist their sound cannot be categorized, Hubbert manages to effortlessly span genres including psychedelic rock, reggae, blues, country, and bluegrass in the creation of music that is both technically impressive and easily accessible",
+    url: "https://soundslikebrooks.bandcamp.com/",
+    image: bandImage,
+  },
+  {
+    title: "Skydive The Gulf With DankSwoops",
+    date: "Orange Beach, AL. Afternoon Thursday 17th in the sky.",
+    description:
+      "Do people actually believe Dank can do sky-diving? You Americans are more trusting than us Europoors. I’d sooner strap myself to a fridge and fuck myse lf out of a plane than to whatever creature calling itself DankSwoops any day. But you do you, whatever.",
+    image: skydiveImage,
+  },
+  {
+    title: "Dining and bar-hopping",
+    date: "1104 Dauphin St. Wednesday July 16th.",
+    description:
+      "Let loose on the streets of Mobile, Alabama. Get taken to all the best spots by bonafide locals. Leave shame, diggity and cares at the door and drink alcohol. Maybe something more. Sounds like it could get nasty very quickly. Good luck to all.",
+    image: partyImage,
+  },
+  {
+    title: "Beach Day!",
+    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    description:
+      "Come to Orange Beach, AL in the morning to soak up the sun with fellow Nostr-users. Listen: sand, sea, sun, being out doors in general. All of that shit sucks but the pros are seeing your Nostr pals in their swim suits/budgie smugglers and filling the annual Vit D quota before we retreat back to our respective computer dungeons for the rest of the year. ",
+    image: beachImage,
+  },
+  {
+    title: "Virtual Reality!",
+    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    description:
+      "Because God knows this one isn't up to much lately. Let's escape this oppressive 'reality' and find liberation, adventure and the true desires of our hearts in the VR Cafe. (Don't worry, it's right next door to a wine bar for true escape in the event the VR world doesn't work out).",
+    image: vrImage,
+  },
+];
+
+export const FAQS: FAQ[] = [
+  {
+    question: "How do I book a ticket?",
+  },
+];
+
+
+
+================================================
+File: game/Camera.ts
+================================================
+import * as THREE from "three";
+import { Experience } from "@/game/Experience";
+import type { Sizes } from "@/game/Utils/Sizes";
+import { Time } from "@/game/Utils/Time";
+
+export class Camera {
+  experience: Experience;
+  sizes: Sizes;
+  scene: THREE.Scene;
+  instance!: THREE.PerspectiveCamera;
+  time: Time;
+
+  // --- Isometric Camera Properties ---
+  fixedOffset = new THREE.Vector3(10, 12, 10); // Tweak these for angle and distance!
+
+  // Smoothing factor for X/Z movement
+  lerpFactor = 0.08;
+
+  constructor() {
+    this.experience = new Experience();
+    this.sizes = this.experience.sizes;
+    this.scene = this.experience.scene;
+    this.time = this.experience.time;
+
+    this.setInstance();
+  }
+
+  private setInstance = () => {
+    this.instance = new THREE.PerspectiveCamera(
+      25, // Adjust FOV if needed for isometric feel
+      this.sizes.width / this.sizes.height,
+      0.1,
+      200
+    );
+
+    // Set initial position based on offset (relative to world origin 0,0,0 for now)
+    this.instance.position.copy(this.fixedOffset);
+
+    // This sets the isometric angle ONCE. We will NOT call lookAt again.
+    this.instance.lookAt(new THREE.Vector3(0, 0, 0)); // Look at world origin
+
+    this.scene.add(this.instance);
+  };
+
+  resize = () => {
+    this.instance.aspect = this.sizes.width / this.sizes.height;
+    this.instance.updateProjectionMatrix();
+  };
+
+  update = () => {
+    const ostrich = this.experience.world?.ostrich;
+    if (!ostrich || !ostrich.characterRigidBody) {
+      return; // Target not ready
+    }
+
+    // Get target's X and Z position (Y is ignored for camera positioning)
+    const bodyTranslation = ostrich.characterRigidBody.translation();
+
+    // Calculate the desired camera position
+    const desiredCameraPosition = new THREE.Vector3(
+      bodyTranslation.x + this.fixedOffset.x, // Target X + Fixed X Offset
+      this.fixedOffset.y, // Fixed Y Position (Camera Height)
+      bodyTranslation.z + this.fixedOffset.z // Target Z + Fixed Z Offset
+    );
+
+    // --- Interpolate Camera Position (X and Z only) ---
+    const effectiveLerpFactor =
+      1.0 - Math.exp(-this.lerpFactor * this.time.delta * 0.06);
+
+    // Lerp X and Z, keep Y constant
+    this.instance.position.x = THREE.MathUtils.lerp(
+      this.instance.position.x,
+      desiredCameraPosition.x,
+      effectiveLerpFactor
+    );
+    this.instance.position.z = THREE.MathUtils.lerp(
+      this.instance.position.z,
+      desiredCameraPosition.z,
+      effectiveLerpFactor
+    );
+    // Ensure Y stays fixed (in case of minor lerp inaccuracies if we lerped the whole vector)
+    this.instance.position.y = this.fixedOffset.y;
+  };
+}
+
+
+
+================================================
+File: game/Experience.ts
+================================================
+import * as THREE from "three";
+import { Sizes } from "@/game/Utils/Sizes";
+import { Camera } from "@/game/Camera";
+import Renderer from "@/game/Renderer";
+import { sceneStore } from "@/game/stores/sceneStore";
+import type { SceneState } from "@/game/stores/types";
+import { Debug } from "@/game/Utils/Debug";
+import sources from "@/game/sources";
+import { Time } from "@/game/Utils/Time";
+import { Resources } from "@/game/Utils/Resources";
+import { World } from "@/game/World/World";
+
+import RAPIER from "@dimforge/rapier3d";
+import { RapierDebugRenderer } from "@/game/Utils/RapierDebugRenderer";
+import { GameControls } from "@/game/Utils/GameControls";
+import type { Ostrich } from "@/game/World/Ostrich";
+import Stats from "three/examples/jsm/libs/stats.module.js";
+
+declare global {
+  interface Window {
+    experience: Experience;
+    RAPIER: typeof RAPIER;
+  }
+}
+
+let instance: Experience | null = null;
+
+export class Experience {
+  canvas!: HTMLCanvasElement;
+  sizes!: Sizes;
+  time!: Time;
+  scene!: THREE.Scene;
+  resources!: Resources;
+  camera!: Camera;
+  renderer!: Renderer;
+  debug!: Debug;
+  world!: World;
+  ostrich!: Ostrich;
+  gameControls!: GameControls;
+  physicsWorld!: RAPIER.World;
+  rapierDebugRenderer!: RapierDebugRenderer;
+  isWorldReady: boolean = false;
+  stats!: Stats;
+
+  constructor(canvas: HTMLCanvasElement | null = null) {
+    // Singleton
+    if (instance) {
+      return instance;
+    }
+
+    instance = this;
+
+    // Global access
+    window.experience = this;
+
+    // Options
+    if (canvas) {
+      this.canvas = canvas;
+      this.sizes = new Sizes(canvas);
+    }
+    this.stats = new Stats();
+    document.body.appendChild(this.stats.dom);
+    this.debug = new Debug();
+    this.time = new Time();
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color("#211d20");
+    // @ts-ignore
+    this.resources = new Resources(sources);
+
+    // init Rapier physics world
+    const gravity = new RAPIER.Vector3(0.0, -9.81, 0.0);
+    this.physicsWorld = new RAPIER.World(gravity);
+    window.RAPIER = RAPIER;
+
+    this.rapierDebugRenderer = new RapierDebugRenderer();
+
+    this.camera = new Camera();
+    this.renderer = new Renderer();
+    this.world = new World();
+    this.ostrich = this.world.ostrich;
+
+    sceneStore.subscribe(
+      (state) => state.canvasSize,
+      (canvasSize) => {
+        this.resize();
+      }
+    );
+
+    sceneStore.subscribe(
+      (state) => state.tick,
+      (tick) => {
+        this.update();
+      }
+    );
+  }
+
+  resize = () => {
+    this.camera.resize();
+    this.renderer.resize();
+  };
+
+  update = () => {
+    if (this.isWorldReady) {
+      this.world.update();
+      this.physicsWorld.step();
+      this.world.syncModels();
+      this.rapierDebugRenderer.update();
+    }
+    this.camera.update();
+    this.renderer.update();
+
+    this.stats.update();
+  };
+
+  setIsWorldReady() {
+    this.isWorldReady = true;
+    this.gameControls = new GameControls();
+  }
+}
+
+
+
+================================================
+File: game/Renderer.ts
+================================================
+import * as THREE from "three";
+import { Experience } from "@/game/Experience";
+import type { Sizes } from "@/game/Utils/Sizes";
+import type { Camera } from "@/game/Camera";
+
+export default class Renderer {
+  experience: Experience;
+  canvas: HTMLCanvasElement;
+  sizes: Sizes;
+  scene: THREE.Scene;
+  camera: Camera;
+  instance!: THREE.WebGLRenderer;
+
+  constructor() {
+    this.experience = new Experience(); // will be getting the single instance with canvas...?
+    this.canvas = this.experience.canvas;
+    this.sizes = this.experience.sizes;
+    this.scene = this.experience.scene;
+    this.camera = this.experience.camera;
+
+    this.setInstance();
+  }
+
+  private setInstance = () => {
+    this.instance = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: true,
+    });
+    this.instance.toneMapping = THREE.CineonToneMapping;
+    this.instance.toneMappingExposure = 1.75;
+    this.instance.shadowMap.enabled = true;
+    this.instance.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.instance.setClearColor("#211d20");
+    this.instance.setSize(this.sizes.width, this.sizes.height);
+    this.instance.setPixelRatio(this.sizes.pixelRatio);
+  };
+
+  resize = () => {
+    console.log("we resizing in the renderer");
+    this.instance.setSize(this.sizes.width, this.sizes.height);
+    this.instance.setPixelRatio(this.sizes.pixelRatio);
+  };
+
+  update = () => {
+    this.instance.render(this.scene, this.camera.instance);
+  };
+}
+
+
+
+================================================
+File: game/script.ts
+================================================
+import { Experience } from "@/game/Experience";
+
+const canvas = document.getElementById("webgl") as HTMLCanvasElement;
+if (!canvas) throw new Error("Canvas element not found");
+const experience = new Experience(canvas);
+
+
+
+================================================
+File: game/sources.ts
+================================================
+export default [
+  {
+    name: "environmentMapTexture",
+    type: "cubeTexture",
+    path: [
+      "/game-assets/bruno/textures/environmentMap/px.jpg",
+      "/game-assets/bruno/textures/environmentMap/nx.jpg",
+      "/game-assets/bruno/textures/environmentMap/py.jpg",
+      "/game-assets/bruno/textures/environmentMap/ny.jpg",
+      "/game-assets/bruno/textures/environmentMap/pz.jpg",
+      "/game-assets/bruno/textures/environmentMap/nz.jpg",
+    ],
+  },
+  {
+    name: "grassColorTexture",
+    type: "texture",
+    path: "/game-assets/bruno/textures/dirt/color.jpg",
+  },
+  {
+    name: "grassNormalTexture",
+    type: "texture",
+    path: "/game-assets/bruno/textures/dirt/normal.jpg",
+  },
+  {
+    name: "foxModel",
+    type: "gltfModel",
+    path: "/game-assets/bruno/models/Fox/glTF/Fox.gltf",
+  },
+  {
+    name: "ostrichModel",
+    type: "gltfModel",
+    path: "/game-assets/nla_ostrich.glb",
+  },
+];
+
+
+
+================================================
+File: game/Utils/Debug.ts
+================================================
+import GUI from "lil-gui";
+
+export class Debug {
+  active: boolean;
+  ui!: GUI;
+
+  constructor() {
+    this.active = true;
+    // this.active = window.location.hash === "#debug";
+
+    // if (this.active) {
+    this.ui = new GUI();
+    // }
+  }
+}
+
+
+
+================================================
+File: game/Utils/GameControls.ts
+================================================
+import { Experience } from "@/game/Experience";
+import {
+  gameControlsStore,
+  type GameControlsState,
+} from "@/game/stores/gameControlsStore";
+import type { Ostrich } from "@/game/World/Ostrich";
+
+export class GameControls {
+  experience: Experience;
+  ostrich: Ostrich;
+
+  constructor() {
+    // instantiate Ostrich
+    this.experience = new Experience();
+
+    const world = this.experience.world;
+
+    this.ostrich = world.ostrich;
+    // set up event listeners for keydown events
+    this.setKeyboardEventListeners();
+    // onKeyDown -> store state in Zustand
+    // sub to state
+    gameControlsStore.subscribe((state, prevState) => {
+      if (state !== prevState) {
+        console.log("gameControlsState updated");
+        this.setMovement();
+      }
+    });
+  }
+
+  private setKeyboardEventListeners() {
+    const keyMap: {
+      [code: string]: keyof Omit<
+        GameControlsState,
+        "setKeyState" | "toggleRun"
+      >;
+    } = {
+      KeyW: "forward",
+      KeyS: "backward",
+      KeyA: "left",
+      KeyD: "right",
+      ArrowUp: "forward",
+      ArrowDown: "backward",
+      ArrowLeft: "left",
+      ArrowRight: "right",
+    };
+
+    window.addEventListener("keydown", (event: KeyboardEvent) => {
+      const action = keyMap[event.code];
+
+      if (action) {
+        gameControlsStore.getState().setKeyState(action, true);
+      }
+
+      if (event.code === "ShiftLeft") {
+        if (!event.repeat) {
+          gameControlsStore.getState().toggleRun();
+        }
+      }
+    });
+
+    window.addEventListener("keyup", (event: KeyboardEvent) => {
+      const action = keyMap[event.code];
+
+      if (action) {
+        gameControlsStore.getState().setKeyState(action, false);
+      }
+
+      if (event.code === "ShiftLeft") {
+        gameControlsStore.getState().toggleRun();
+      }
+    });
+  }
+
+  private setMovement() {
+    this.ostrich.setMovementDirection();
+  }
+}
+
+
+
+================================================
+File: game/Utils/RapierDebugRenderer.ts
+================================================
+import { Experience } from "@/game/Experience";
+import type RAPIER from "@dimforge/rapier3d";
+import * as THREE from "three";
+export class RapierDebugRenderer {
+  experience: Experience;
+  scene: THREE.Scene;
+  mesh: THREE.LineSegments;
+  world: RAPIER.World;
+  enabled: boolean = true;
+
+  constructor() {
+    this.experience = new Experience();
+    this.world = this.experience.physicsWorld;
+    this.scene = this.experience.scene
+    this.mesh = new THREE.LineSegments(
+      new THREE.BufferGeometry(),
+      new THREE.LineBasicMaterial({ color: 0xffffff, vertexColors: true })
+    );
+    this.mesh.frustumCulled = false;
+    this.scene.add(this.mesh);
+  }
+
+  update() {
+    if (this.enabled) {
+      const { vertices, colors } = this.world.debugRender();
+      this.mesh.geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(vertices, 3)
+      );
+      this.mesh.geometry.setAttribute(
+        "color",
+        new THREE.BufferAttribute(colors, 4)
+      );
+      this.mesh.visible = true;
+    } else {
+      this.mesh.visible = false;
+    }
+  }
+}
+
+
+
+================================================
+File: game/Utils/Resources.ts
+================================================
+import { sceneStore } from "@/game/stores/sceneStore";
+import * as THREE from "three";
+import { GLTFLoader, DRACOLoader } from "three-stdlib";
+
+interface Source {
+  type: "gltfModel" | "texture" | "cubeTexture" | "glbModel";
+  path: string;
+  name: string;
+}
+
+export class Resources {
+  sources: Source[];
+  items: { [key: string]: any };
+  loaders!: { [key: string]: any };
+  toLoad: number;
+  loaded: number;
+
+  constructor(sources: Source[]) {
+    this.sources = sources;
+
+    this.items = {};
+    this.toLoad = this.sources.length;
+    this.loaded = 0;
+
+    this.setLoaders();
+    this.startLoading();
+  }
+
+  setLoaders() {
+    this.loaders = {};
+
+    this.loaders.gltfLoader = new GLTFLoader();
+
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("/game-assets/bruno/draco/");
+    this.loaders.gltfLoader.setDRACOLoader(dracoLoader);
+
+    this.loaders.textureLoader = new THREE.TextureLoader();
+    this.loaders.cubeTextureLoader = new THREE.CubeTextureLoader();
+  }
+
+  startLoading() {
+    // Load each source
+    for (const source of this.sources) {
+      if (source.type === "gltfModel") {
+        this.loaders.gltfLoader.load(
+          source.path,
+          (file: any) => {
+            this.sourceLoaded(source, file);
+          },
+          undefined, // Progress callback (optional)
+          (error: any) => {
+            // Error callback
+            console.error(
+              "An error occurred while loading glTF model:",
+              source.path,
+              error
+            );
+            // You might want to handle this error more gracefully in a production app
+            // For debugging, logging is sufficient to see if it's failing
+          }
+        );
+      } else if (source.type === "texture") {
+        this.loaders.textureLoader.load(
+          source.path,
+          (file: any) => {
+            this.sourceLoaded(source, file);
+          },
+          undefined, // Progress callback (optional)
+          (error: any) => {
+            // Error callback
+            console.error(
+              "An error occurred while loading texture:",
+              source.path,
+              error
+            );
+          }
+        );
+      } else if (source.type === "cubeTexture") {
+        this.loaders.cubeTextureLoader.load(
+          source.path,
+          (file: any) => {
+            this.sourceLoaded(source, file);
+          },
+          undefined, // Progress callback (optional)
+          (error: any) => {
+            // Error callback
+            console.error(
+              "An error occurred while loading cube texture:",
+              source.path,
+              error
+            );
+          }
+        );
+      }
+    }
+  }
+
+  sourceLoaded(source: Source, file: any) {
+    this.items[source.name] = file;
+
+    this.loaded++;
+
+    if (this.loaded === this.toLoad) {
+      console.log("resources loaded");
+      sceneStore.getState().setResourcesLoaded();
+    }
+  }
+}
+
+
+
+================================================
+File: game/Utils/Sizes.ts
+================================================
+import { sceneStore } from "@/game/stores/sceneStore";
+
+export class Sizes implements Sizes {
+  canvas: HTMLCanvasElement;
+  width: number;
+  height: number;
+  pixelRatio: number;
+
+  constructor(canvas: HTMLCanvasElement) {
+    // Setup
+    this.canvas = canvas;
+    this.width = canvas.clientWidth;
+    this.height = canvas.clientHeight;
+    this.pixelRatio = Math.min(window.devicePixelRatio, 2);
+
+    // Initial store setup
+    sceneStore
+      .getState()
+      .setCanvasSize({ width: this.width, height: this.height });
+
+    window.addEventListener("resize", this.onResize);
+  }
+
+  private onResize = () => {
+    console.log("onResize fires!");
+    this.width = this.canvas.clientWidth;
+    this.height = this.canvas.clientHeight;
+
+    // update on resize
+    sceneStore
+      .getState()
+      .setCanvasSize({ width: this.width, height: this.height });
+  };
+}
+
+
+
+================================================
+File: game/Utils/Time.ts
+================================================
+import { sceneStore } from "@/game/stores/sceneStore";
+
+export class Time {
+  start: number;
+  current: number;
+  elapsed: number;
+  delta: number;
+
+  constructor() {
+    this.start = Date.now();
+    this.current = this.start;
+    this.elapsed = 0;
+    this.delta = 16;
+
+    window.requestAnimationFrame(() => {
+      this.tick();
+    });
+  }
+
+  tick() {
+    const currentTime = Date.now();
+    this.delta = currentTime - this.current;
+    this.current = currentTime;
+    this.elapsed = this.current - this.start;
+
+    // update zustand to trigger... something... prob in exp
+    sceneStore.getState().setTick();
+
+    window.requestAnimationFrame(() => {
+      this.tick();
+    });
+  }
+}
+
+
+
+================================================
+File: game/World/Environment.ts
+================================================
+import * as THREE from "three";
+import { Experience } from "@/game/Experience";
+import type { Resources } from "@/game/Utils/Resources";
+import type { Debug } from "@/game/Utils/Debug";
+import GUI from "lil-gui";
+
+export class Environment {
+  experience: Experience;
+  scene: THREE.Scene;
+  resources: Resources;
+  debug: Debug;
+  debugFolder?: GUI;
+  sunLight!: THREE.DirectionalLight;
+  environmentMap!: {
+    intensity: number;
+    texture: THREE.Texture;
+    updateMaterials: () => void;
+  };
+
+  constructor() {
+    this.experience = new Experience();
+    this.scene = this.experience.scene;
+    this.resources = this.experience.resources;
+    this.debug = this.experience.debug;
+
+    if (this.debug.active) {
+      this.debugFolder = this.debug.ui.addFolder("environment");
+    }
+
+    this.setSunLight();
+    this.setEnvironmentMap();
+  }
+
+  setSunLight = () => {
+    this.sunLight = new THREE.DirectionalLight("#ffffff", 4);
+    this.sunLight.castShadow = true;
+    this.sunLight.shadow.camera.far = 15;
+    this.sunLight.shadow.mapSize.set(1024, 1024);
+    this.sunLight.shadow.normalBias = 0.05;
+    this.sunLight.position.set(3.4, 2, -1.24);
+    this.scene.add(this.sunLight);
+
+    // Debug
+    if (this.debug.active) {
+      this.debugFolder
+        ?.add(this.sunLight, "intensity")
+        .name("sunLightIntensity")
+        .min(0)
+        .max(10)
+        .step(0.001);
+
+      this.debugFolder
+        ?.add(this.sunLight.position, "x")
+        .name("sunlightX")
+        .min(-5)
+        .max(5)
+        .step(0.001);
+
+      this.debugFolder
+        ?.add(this.sunLight.position, "y")
+        .name("sunlightY")
+        .min(-5)
+        .max(5)
+        .step(0.001);
+
+      this.debugFolder
+        ?.add(this.sunLight.position, "z")
+        .name("sunlightZ")
+        .min(-5)
+        .max(5)
+        .step(0.001);
+    }
+  };
+
+  setEnvironmentMap = () => {
+    // @ts-ignore
+    this.environmentMap = {};
+    this.environmentMap.intensity = 0.4;
+    this.environmentMap.texture = this.resources.items.environmentMapTexture;
+    this.environmentMap.texture.colorSpace = THREE.SRGBColorSpace;
+
+    this.scene.environment = this.environmentMap.texture;
+
+    this.environmentMap.updateMaterials = () => {
+      this.scene.traverse((child) => {
+        if (
+          child instanceof THREE.Mesh &&
+          child.material instanceof THREE.MeshStandardMaterial
+        ) {
+          child.material.envMap = this.environmentMap.texture;
+          child.material.envMapIntensity = this.environmentMap.intensity;
+          child.material.needsUpdate = true;
+        }
+      });
+    };
+    this.environmentMap.updateMaterials();
+
+    if (this.debug.active) {
+      // @ts-ignore
+      this.debugFolder
+        .add(this.environmentMap, "intensity")
+        .name("envMapIntensity")
+        .min(0)
+        .max(4)
+        .step(0.001)
+        .onChange(this.environmentMap.updateMaterials);
+    }
+  };
+}
+
+
+
+================================================
+File: game/World/Floor.ts
+================================================
+import * as THREE from "three";
+import { Experience } from "@/game/Experience";
+import type { Resources } from "@/game/Utils/Resources";
+import RAPIER from "@dimforge/rapier3d"; // Import Rapier
+
+export class Floor {
+  experience: Experience;
+  scene: THREE.Scene;
+  resources: Resources;
+  geometry!: THREE.PlaneGeometry;
+  textures!: {
+    color: any;
+    normal: any;
+  };
+  material!: THREE.MeshStandardMaterial;
+  mesh!: THREE.Mesh;
+  rapierRigidBody!: RAPIER.RigidBody; // Add Rapier rigid body property
+
+  constructor() {
+    this.experience = new Experience();
+    this.scene = this.experience.scene;
+    this.resources = this.experience.resources;
+
+    this.setGeometry();
+    this.setTextures();
+    this.setMaterial();
+    this.setMesh();
+    this.setPhysics();
+  }
+
+  setGeometry() {
+    this.geometry = new THREE.PlaneGeometry(200, 200);
+  }
+
+  setTextures() {
+    // @ts-ignore
+    this.textures = {};
+
+    this.textures.color = this.resources.items.grassColorTexture;
+    this.textures.color.colorSpace = THREE.SRGBColorSpace;
+    this.textures.color.repeat.set(1000, 1000);
+    this.textures.color.wrapS = THREE.RepeatWrapping;
+    this.textures.color.wrapT = THREE.RepeatWrapping;
+
+    this.textures.normal = this.resources.items.grassNormalTexture;
+    this.textures.color.repeat.set(0.001, 0.001);
+    this.textures.normal.wrapS = THREE.RepeatWrapping;
+    this.textures.normal.wrapT = THREE.RepeatWrapping;
+  }
+
+  setMaterial() {
+    this.material = new THREE.MeshStandardMaterial({
+      map: this.textures.color,
+      normalMap: this.textures.normal,
+    });
+  }
+
+  setMesh() {
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.rotation.x = -Math.PI * 0.5;
+    this.mesh.receiveShadow = true;
+    this.scene.add(this.mesh);
+  }
+
+  setPhysics() {
+    // Get the physics world from the experience instance
+    const physicsWorld = this.experience.physicsWorld;
+
+    // Create a rigid body descriptor for a static body
+    const rigidBodyDesc = RAPIER.RigidBodyDesc.fixed().setTranslation(
+      this.mesh.position.x,
+      this.mesh.position.y,
+      this.mesh.position.z
+    ); // Position physics body to match mesh
+
+    // Create a collider descriptor.
+    // Since the Three.js floor is a CircleGeometry rotated,
+    // we can approximate it with a thin cuboid collider for simplicity
+    // positioned at the same height. Adjust the size (10, 0.1, 10) to match your floor size.
+    const colliderDesc = RAPIER.ColliderDesc.cuboid(100, 0.1, 100); // half-extents of the cuboid (x, y, z)
+
+    // Create the rigid body and collider in the physics world
+    this.rapierRigidBody = physicsWorld.createRigidBody(rigidBodyDesc);
+    physicsWorld.createCollider(colliderDesc, this.rapierRigidBody);
+  }
+}
+
+
+
+================================================
+File: game/World/Ostrich.ts
+================================================
+import { Experience } from "@/game/Experience";
+import type { Debug } from "@/game/Utils/Debug";
+import { Resources } from "@/game/Utils/Resources";
+import { Time } from "@/game/Utils/Time";
+import GUI from "lil-gui";
+import * as THREE from "three";
+import RAPIER, { RigidBody } from "@dimforge/rapier3d"; // Import RigidBody type if needed
+import { gameControlsStore } from "@/game/stores/gameControlsStore";
+
+export class Ostrich {
+  experience: Experience;
+  scene: THREE.Scene;
+  resources: Resources;
+  time: Time;
+  debug: Debug;
+  debugFolder?: GUI;
+  model!: THREE.Group;
+  animation!: {
+    mixer: THREE.AnimationMixer;
+    actions: { [key: string]: THREE.AnimationAction };
+    current?: THREE.AnimationAction;
+    play: (name: string) => void;
+  };
+  resource!: {
+    scene: THREE.Group;
+    animations: THREE.AnimationClip[];
+  };
+
+  // --- Physics Properties ---
+  physicsWorld!: RAPIER.World; // Reference to the main physics world
+  characterController!: RAPIER.KinematicCharacterController;
+  characterRigidBody!: RAPIER.RigidBody; // Handle to the kinematic rigid body
+  characterCollider!: RAPIER.Collider; // Handle to the character's collider
+
+  // --- Movement State (Example) ---
+  moveDirection = new THREE.Vector3(); // Desired movement direction
+  speed = 5.0; // Movement speed
+  rotationSpeed = 3.0; // Rotation speed
+  targetRotation = new THREE.Quaternion(); // Target orientation
+
+  constructor() {
+    this.experience = new Experience();
+    this.scene = this.experience.scene;
+    this.resources = this.experience.resources;
+    this.time = this.experience.time;
+    this.debug = this.experience.debug;
+    this.physicsWorld = this.experience.physicsWorld; // Get physics world
+
+    // Debug
+    if (this.debug.active) {
+      this.debugFolder = this.debug.ui.addFolder("Ostrich");
+    }
+
+    // Resource
+    this.resource = this.resources.items.ostrichModel;
+
+    this.setModel();
+    this.setAnimation();
+    this.setPhysics(); // Initialize physics components
+    this.setupDebug(); // Setup debug controls *after* physics
+  }
+
+  setModel() {
+    this.model = this.resource.scene;
+    this.model.position.set(0, 0, 0); // Start at floor level for physics setup
+    // this.model.scale.set(0.02, 0.02, 0.02); // Adjust scale if needed *before* physics
+    this.scene.add(this.model);
+
+    this.model.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.castShadow = true;
+        child.receiveShadow = true; // Often characters should also receive shadows
+      }
+    });
+  }
+
+  setAnimation() {
+    // ... your existing animation setup ...
+    // Make sure animation names match keys used in play()
+    this.animation = {
+      mixer: new THREE.AnimationMixer(this.model),
+      actions: {},
+      play: (name: string) => {},
+    };
+
+    // Ensure the animation names match exactly what you use in play()
+    this.animation.actions["idle-1"] = this.animation.mixer.clipAction(
+      this.resource.animations[0]
+    );
+    this.animation.actions.walk = this.animation.mixer.clipAction(
+      this.resource.animations[1]
+    );
+    this.animation.actions.run = this.animation.mixer.clipAction(
+      this.resource.animations[2]
+    );
+
+    // Find the default idle animation reliably
+    const idleAction = this.resource.animations.find((clip) =>
+      clip.name.toLowerCase().includes("idle")
+    );
+    if (idleAction) {
+      this.animation.actions.idle = this.animation.mixer.clipAction(idleAction);
+      this.animation.actions.current = this.animation.actions.idle;
+    } else {
+      // Fallback if no idle found (using the first one)
+      console.warn(
+        "Could not find idle animation named 'idle'. Using first animation."
+      );
+      const firstKey = Object.keys(this.animation.actions)[0];
+      this.animation.actions.current = this.animation.actions[firstKey];
+    }
+    this.animation.actions.current?.play(); // Play if an action was found
+
+    this.animation.play = (name: string) => {
+      const newAction =
+        this.animation.actions[name as keyof typeof this.animation.actions];
+      const oldAction = this.animation.actions.current;
+
+      if (!newAction || newAction === oldAction) {
+        // console.warn(`Animation "${name}" not found or already playing.`);
+        return;
+      }
+
+      newAction.reset();
+      newAction.play();
+      // Make crossFade duration configurable or adjust as needed
+      if (oldAction) {
+        newAction.crossFadeFrom(oldAction, 0.3); // Adjust fade duration (in seconds)
+      }
+
+      this.animation.actions.current = newAction;
+    };
+  }
+
+  setPhysics() {
+    // --- 1. Create the Rigid Body ---
+    const rigidBodyDesc = RAPIER.RigidBodyDesc.kinematicPositionBased()
+      .setTranslation(
+        this.model.position.x,
+        this.model.position.y + 2, // Start slightly above ground
+        this.model.position.z
+      )
+      // Lock rotations if you only want translational movement controlled by the character controller
+      // Or handle rotation separately based on input
+      .lockRotations(); // Optional: Prevents physics from rotating the character unexpectedly
+
+    this.characterRigidBody = this.physicsWorld.createRigidBody(rigidBodyDesc);
+
+    // --- 2. Create the Collider ---
+    // Adjust size (halfHeight, radius) to fit your Ostrich model
+    const colliderDesc = RAPIER.ColliderDesc.capsule(0.8, 0.4); // Example: 1.6 units tall, 0.8 units wide
+    // Optional: Set density, friction, restitution if needed, though less critical for kinematic
+    // .setDensity(1.0)
+    // .setFriction(0.7)
+    // .setRestitution(0.3)
+    // Important: Assign physics groups for filtering collisions if needed
+    // .setCollisionGroups(YOUR_CHARACTER_GROUP)
+    // .setSolverGroups(YOUR_CHARACTER_GROUP)
+    // Attach the collider to the rigid body
+    this.characterCollider = this.physicsWorld.createCollider(
+      colliderDesc,
+      this.characterRigidBody // Pass the parent rigid body handle here
+    );
+
+    // --- 3. Create the Character Controller ---
+    const offset = 0.001; // Skin width or minimum separation distance
+    this.characterController =
+      this.physicsWorld.createCharacterController(offset);
+
+    // --- Configure Controller Properties (Optional but Recommended) ---
+    this.characterController.enableAutostep(
+      0.3, // Max step height
+      0.1, // Minimum width where steps are detected
+      true // Include dynamic bodies when checking for steps
+    );
+    this.characterController.enableSnapToGround(0.5); // Max distance to snap down to ground
+    this.characterController.setApplyImpulsesToDynamicBodies(true); // Push dynamic objects
+    this.characterController.setMaxSlopeClimbAngle(
+      THREE.MathUtils.degToRad(45)
+    ); // Allow climbing slopes up to 45 degrees
+    // this.characterController.setMinSlopeSlideAngle(THREE.MathUtils.degToRad(50)); // Start sliding down slopes steeper than 50 degrees
+
+    console.log("Rapier KinematicCharacterController initialized.");
+    console.log("Rigid Body Handle:", this.characterRigidBody.handle);
+    console.log("Collider Handle:", this.characterCollider.handle);
+  }
+
+  setupDebug() {
+    if (this.debug.active && this.debugFolder && this.characterController) {
+      this.debugFolder.add(this, "speed", 0, 10).name("Move Speed");
+      this.debugFolder.add(this, "rotationSpeed", 0, 10).name("Rotation Speed");
+
+      const controllerParams = {
+        offset: this.characterController.offset(),
+        // Note: Reading autostep params isn't directly exposed in the API after setting
+        // You'd need to store the values you set if you want to display them
+        snapToGroundDist: this.characterController.snapToGroundDistance() ?? 0, // Handle null case
+        maxSlopeClimb: THREE.MathUtils.radToDeg(
+          this.characterController.maxSlopeClimbAngle()
+        ),
+        // minSlopeSlide: THREE.MathUtils.radToDeg(this.characterController.minSlopeSlideAngle()), // If you set it
+        applyImpulses: this.characterController.applyImpulsesToDynamicBodies(),
+      };
+      this.debugFolder
+        .add(controllerParams, "offset", 0, 1)
+        .name("Ctrl Offset")
+        .onChange((value: number) => {
+          // Note: Rapier Controller offset cannot be changed after creation.
+          console.warn(
+            "CharacterController offset cannot be changed after creation."
+          );
+        });
+      this.debugFolder
+        .add(controllerParams, "snapToGroundDist", 0, 2)
+        .name("Snap Distance")
+        .onChange((value: number | null) => {
+          this.characterController.enableSnapToGround(value ?? 0); // Re-enable with new value or 0 to disable
+        });
+      this.debugFolder
+        .add(controllerParams, "maxSlopeClimb", 0, 90)
+        .name("Max Slope °")
+        .onChange((value: number) => {
+          this.characterController.setMaxSlopeClimbAngle(
+            THREE.MathUtils.degToRad(value)
+          );
+        });
+      this.debugFolder
+        .add(controllerParams, "applyImpulses")
+        .name("Apply Impulses")
+        .onChange((value: boolean) => {
+          this.characterController.setApplyImpulsesToDynamicBodies(value);
+        });
+
+      // Add animation debug controls
+      this.debugFolder
+        .add({ playIdle: () => this.animation.play("idle-1") }, "playIdle")
+        .name("Play Idle");
+      this.debugFolder
+        .add({ playWalk: () => this.animation.play("walk") }, "playWalk")
+        .name("Play Walk");
+      this.debugFolder
+        .add({ playRun: () => this.animation.play("run") }, "playRun")
+        .name("Play Run");
+    }
+  }
+
+  // --- Movement Input Handling (Example) ---
+  setMovementDirection() {
+    this.moveDirection.set(0, 0, 0); // Reset direction
+
+    const { forward, backward, left, right, run } =
+      gameControlsStore.getState();
+    
+    this.speed = 5;
+    if (run) this.speed = 10;
+
+    if (forward) this.moveDirection.z -= 1;
+    if (backward) this.moveDirection.z += 1;
+    if (left) this.moveDirection.x -= 1;
+    if (right) this.moveDirection.x += 1;
+
+    // Normalize if moving diagonally
+    if (this.moveDirection.lengthSq() > 0) {
+      this.moveDirection.normalize();
+    }
+
+    // --- Animation Control based on movement ---
+    if (this.moveDirection.lengthSq() > 0) {
+      // Choose walk or run based on speed or a modifier key (Shift)
+      // For now, let's assume always walking when moving
+      this.animation?.play("walk"); // Or 'run'
+    } else {
+      this.animation?.play("idle-1"); // Or your specific idle animation name
+    }
+  }
+
+  update() {
+    const dt = this.time.delta * 0.001; // Delta time in seconds
+
+    // --- Calculate Desired Movement ---
+    if (
+      this.characterController &&
+      this.characterRigidBody &&
+      this.characterCollider
+    ) {
+      // 1. Apply gravity (optional, but common)
+      // You might want to check if grounded first using characterController.computedGrounded()
+      // For simplicity, apply gravity continuously or manage a vertical velocity state
+      const gravity = -9.81; // Or your world's gravity
+      // Simple gravity application: Add downward displacement to the desired movement
+      // A more robust approach involves tracking vertical velocity.
+      const desiredDisplacement = this.moveDirection.clone();
+
+      // --- Rotation Handling ---
+      if (this.moveDirection.lengthSq() > 0) {
+        // Calculate the target rotation based on movement direction
+        const angle = Math.atan2(this.moveDirection.x, this.moveDirection.z);
+        this.targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+
+        // Smoothly interpolate the current rotation towards the target
+        const currentRotation = this.characterRigidBody.rotation();
+        const threeCurrentRotation = new THREE.Quaternion(
+          currentRotation.x,
+          currentRotation.y,
+          currentRotation.z,
+          currentRotation.w
+        );
+        threeCurrentRotation.slerp(
+          this.targetRotation,
+          this.rotationSpeed * dt
+        );
+
+        // Apply the new rotation to the kinematic body for the *next* frame
+        this.characterRigidBody.setNextKinematicRotation(threeCurrentRotation);
+      }
+
+      // Apply movement speed and delta time *to the direction vector*
+      desiredDisplacement.multiplyScalar(this.speed * dt);
+
+      // Add gravity effect (simple version)
+      // desiredDisplacement.y += gravity * dt * dt * 0.5; // d = 1/2 * g * t^2 - very basic
+      desiredDisplacement.y += gravity * dt; // More common: treat as velocity change over dt
+
+      // 2. Compute Allowed Movement
+      // This is the core function: it checks collisions based on the collider's current
+      // position and the desired displacement vector.
+      this.characterController.computeColliderMovement(
+        this.characterCollider, // The collider to move
+        desiredDisplacement // The desired displacement vector {x, y, z}
+        // Optional filter arguments: groups, callback
+      );
+
+      // 3. Get the Corrected Movement
+      // This contains the actual displacement allowed by the physics engine.
+      const correctedMovement = this.characterController.computedMovement();
+      // correctedMovement is a {x, y, z} vector
+
+      // 4. Apply the Corrected Movement to the Kinematic Body
+      const currentPosition = this.characterRigidBody.translation();
+      const nextPosition = {
+        x: currentPosition.x + correctedMovement.x,
+        y: currentPosition.y + correctedMovement.y,
+        z: currentPosition.z + correctedMovement.z,
+      };
+
+      this.characterRigidBody.setNextKinematicTranslation(nextPosition);
+
+      // --- Ground Check (Example Usage) ---
+      const isGrounded = this.characterController.computedGrounded();
+      // You can use 'isGrounded' for logic like:
+      // - Allowing jumps only when grounded
+      // - Playing landing animations
+      // - Applying different friction when grounded vs airborne
+      // if (isGrounded) { console.log("Character is grounded"); }
+
+      // --- Update Three.js Model ---
+      // This should ideally happen *after* the physics world step (`world.step()`)
+      // in your main game loop (e.g., in Experience.ts update).
+      // Here, we prepare the data, but the actual sync happens later.
+      // For now, we'll put the sync here for simplicity, assuming update() is called before world.step()
+      // but syncModelPosition() is called AFTER world.step().
+    }
+
+    // --- Update Animation Mixer ---
+    this.animation?.mixer.update(dt);
+  }
+
+  // Call this function *after* `physicsWorld.step()` in your main loop
+  syncModelPosition() {
+    if (this.characterRigidBody && this.model) {
+      const rigidBodyPosition = this.characterRigidBody.translation();
+      const rigidBodyRotation = this.characterRigidBody.rotation();
+
+      this.model.position.set(
+        rigidBodyPosition.x,
+        rigidBodyPosition.y - 1.3, // move ostrich feet to the ground
+        rigidBodyPosition.z
+      );
+      this.model.quaternion.set(
+        rigidBodyRotation.x,
+        rigidBodyRotation.y,
+        rigidBodyRotation.z,
+        rigidBodyRotation.w
+      );
+    }
+  }
+}
+
+
+
+================================================
+File: game/World/World.ts
+================================================
+import * as THREE from "three";
+import { Experience } from "@/game/Experience";
+import type { Resources } from "@/game/Utils/Resources";
+import { sceneStore } from "@/game/stores/sceneStore";
+import { Floor } from "@/game/World/Floor";
+import { Environment } from "@/game/World/Environment";
+import { Ostrich } from "@/game/World/Ostrich";
+
+export class World {
+  experience: Experience;
+  scene: THREE.Scene;
+  resources: Resources;
+  floor!: Floor;
+  ostrich!: Ostrich;
+  environment!: Environment;
+  sub: any;
+
+  constructor() {
+    this.experience = new Experience();
+    this.scene = this.experience.scene;
+    this.resources = this.experience.resources;
+
+    sceneStore.subscribe(
+      (state) => state.resourcesLoaded,
+      (resourcesLoaded) => {
+        this.load();
+      }
+    );
+  }
+
+  load() {
+    this.floor = new Floor();
+    this.ostrich = new Ostrich();
+    this.environment = new Environment();
+
+    this.experience.setIsWorldReady()
+  }
+
+  update() {
+    if (this.ostrich) {
+      this.ostrich.update();
+    }
+  }
+
+  syncModels() {
+    if (this.ostrich) {
+      this.ostrich.syncModelPosition(); // Updates Three.js model from rigid body
+    }
+    // Sync other physics-driven models here
+  }
+}
+
+
+
+================================================
+File: game/stores/gameControlsStore.ts
+================================================
+import { createStore } from "zustand/vanilla";
+import { subscribeWithSelector } from "zustand/middleware";
+
+export interface GameControlsState {
+  forward: boolean;
+  backward: boolean;
+  left: boolean;
+  right: boolean;
+  run: boolean;
+  setKeyState: (
+    key: keyof Omit<GameControlsState, "setKeyState" | "toggleRun">,
+    value: boolean
+  ) => void;
+  toggleRun: () => void;
+}
+
+export const gameControlsStore = createStore<GameControlsState>((set) => ({
+  forward: false,
+  backward: false,
+  left: false,
+  right: false,
+  run: false,
+  setKeyState: (key, value) => set({ [key]: value }),
+  toggleRun: () => {
+    set((prevState) => {
+      return { run: !prevState.run };
+    });
+  },
+}));
+
+
+
+================================================
+File: game/stores/sceneStore.ts
+================================================
+import { createStore } from "zustand/vanilla";
+import { subscribeWithSelector } from "zustand/middleware";
+
+export interface SceneState {
+  canvasSize: {
+    width: number;
+    height: number;
+  };
+  tick: number;
+  resourcesLoaded: boolean;
+  setCanvasSize: (canvasSize: { width: number; height: number }) => void;
+  setTick: () => void;
+  setResourcesLoaded: () => void;
+}
+
+export const sceneStore = createStore<SceneState>()(
+  subscribeWithSelector((set) => ({
+    canvasSize: { width: 0, height: 0 },
+    tick: 0,
+    resourcesLoaded: false,
+    setCanvasSize: (canvasSize) => set({ canvasSize }),
+    setTick: () => set((state) => ({ tick: state.tick + 1 })),
+    setResourcesLoaded: () => set({ resourcesLoaded: true }),
+  }))
+);
+
+
+
+================================================
+File: game/stores/types/index.ts
+================================================
+export interface SceneState {
+  canvasSize: { width: number; height: number } | null;
+  tick: number;
+}
+
+
+
+================================================
+File: layouts/Layout.astro
+================================================
+---
+import ClientRouter from "astro/components/ClientRouter.astro";
+import SiteNav from "@/components/site-nav/SiteNav.astro";
+import "@/styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Nostrbama 2025</title>
+    <ClientRouter />
+  </head>
+  <body class="dark:bg-stone-900 text-stone-400 antialiased">
+    <SiteNav />
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sup {
+    vertical-align: super;
+    font-size: 0.6em;
+    top: -0.15em;
+    line-height: 0;
+    position: relative;
+  }
+
+  .outer-padding {
+    padding: 0 1rem 0 1rem;
+
+    & @media (min-width: 640px) {
+      padding: 0 1rem 0 1rem;
+    }
+    @media (min-width: 768px) {
+      padding: 0 1.5rem 0 1.5rem;
+    }
+    @media (min-width: 1024px) {
+      padding: 0 2rem 0 2rem;
+    }
+    @media (min-width: 1280px) {
+      padding: 0 2.5rem 0 2.5rem;
+    }
+    @media (min-width: 1536px) {
+      padding: 0 3rem 0 3rem;
+    }
+  }
+</style>
+
+
+
+================================================
+File: pages/game.astro
+================================================
+---
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+  <!-- <header class="outer-padding grid lg:max-w-4/5">
+    <Heading level={1}>The Game</Heading>
+    <Subheading headingLevel={1}>
+      Can't wait? Can't attend? Get a taste of the destruction and decadence
+      sure to ensue when a group a socially maladjust Nostriches descend on the
+      polite society of Mobile Alabama with this game. Socre the high scores!
+      Climb the leadboards! Share your wins and gain Nostr recognition!
+    </Subheading>
+  </header>
+  <section class="outer-padding"> -->
+  <canvas id="webgl"></canvas>
+</Layout>
+
+<script src="@/game/script"></script>
+
+<style>
+  html,
+  body {
+    overflow: hidden;
+  }
+
+  #webgl {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    outline: none;
+  }
+</style>
+
+
+
+================================================
+File: pages/index.astro
+================================================
+---
+import { Picture } from "astro:assets";
+import HomeHeader from "@/components/home/HomeHeader.astro";
+import Layout from "../layouts/Layout.astro";
+import Section from "@/components/common/Section.astro";
+import { SPEAKER_DATA } from "@/data/index";
+import SpeakerCard from "@/components/home/SpeakerCard.astro";
+import EntertainmentSwiper from "@/components/home/EntertainmentSwiper.astro";
+import CtaSection from "@/components/common/CtaSection.astro";
+
+import gameImage from "@/assets/images/game.png";
+import FAQSection from "@/components/home/FAQSection.astro";
+---
+
+<Layout>
+  <HomeHeader />
+  <EntertainmentSwiper />
+  <Section title="Meet the Speakers!" className="mb-20 @container">
+    <div
+      class="grid grid-rows-[repeat(4,_auto)] gap-4 @min-[530px]:grid-cols-2 @min-[1120px]:grid-cols-2 @min-[1120px]:gap-12 @min-[1680px]:grid-cols-4 @min-[1680px]:gap-6 @min-[530px]:gap-6"
+    >
+      {SPEAKER_DATA.map((speaker) => <SpeakerCard {...speaker} />)}
+    </div>
+  </Section>
+  <Section
+    title="Nostrbama Simulator"
+    subheadline="Can't wait for the event? Or maybe you can't attend? Well drop your anxiety and play this game. It simulates the experience of destroying Mobile, Alabama for personal reputational gain."
+    className="flex gap-24"
+  >
+    <div class="rounded-lg overflow-hidden">
+      <Picture
+        src={gameImage}
+        alt=""
+        formats={["avif", "webp"]}
+        class="object-cover w-full h-full"
+      />
+    </div>
+  </Section>
+  <Section
+    title="FAQ"
+
+    className="flex flex-col items-center"
+    headerClassName="text-center"
+  >
+    <FAQSection />
+  </Section>
+  <CtaSection />
+</Layout>
+
+
+
+================================================
+File: pages/schedule.astro
+================================================
+---
+import { Image } from "astro:assets";
+
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+import Layout from "../layouts/Layout.astro";
+import ScheduleItem from "@/components/schedule/ScheduleItem.astro";
+
+// Images
+import talksImage from "@/assets/images/entertainment/talk.png";
+import vrImage from "@/assets/images/entertainment/vr.jpg";
+import skyDiveImage from "@/assets/images/entertainment/skydive-ostrich.png";
+import BodyText from "@/components/typography/BodyText.astro";
+---
+
+<Layout>
+  <header class="outer-padding grid lg:max-w-4/5">
+    <Heading level={1}>Schedule</Heading>
+    <Subheading headingLevel={1}>
+      It’d be hard to sell this as a conference if there weren’t any speakers
+      and asking for time off work to go on a piss up with your internet pals
+      probably isn’t going to earn you that next promotion, so we’ve got a few
+      people who are going to talk (quickly) about Nostr.
+    </Subheading>
+  </header>
+  <section class="outer-padding">
+    <!-- DAY ONE START -->
+    <ScheduleItem
+      image={talksImage}
+      imageAlt="An ostrich in a suit gives a business presentation with a chart showing upward growth, while three other ostriches sit in the audience, one of them asleep. The background features vibrant, psychedelic orange and purple waves."
+      subheading="Kickoff party, Speakers, Music and Drinks"
+      location="The Hatch at The Haberdasher, 113 Dauphin St."
+    >
+      <!-- HEADING STARTS -->
+      <Heading level={2} slot="heading">
+        Tuesday, July 15<span class="sup">th</span>
+      </Heading>
+      <!-- HEADING ENDS -->
+
+      <div slot="time">
+        <div class="flex text-base justify-between">
+          <p class="text-(--nb-white)">Speakers:</p>
+          <p>7:00PM CST</p>
+        </div>
+        <div class="flex text-base justify-between">
+          <p class="text-(--nb-white)">Music starts:</p>
+          <p>9:00PM CST</p>
+        </div>
+      </div>
+
+      <BodyText className="" slot="bodyText">
+        Join us for the official kickoff party! We will start the night by
+        listening to a few fantastic Nostr leaders and devs, including Derek
+        Ross. Afterwards we'll get loud and rowdy with music by Brooks and
+        drinks served by Nostr's favorite bartender Sergio on his home turf!
+      </BodyText>
+    </ScheduleItem>
+    <!-- DAY ONE END -->
+
+    <!-- DAY TWO START -->
+    <ScheduleItem
+      image={vrImage}
+      imageAlt="Four ostriches wearing virtual reality headsets stand against a bright teal sky with small clouds, looking upward in different directions."
+      subheading="Downtown Mobile, VR Arcade, Dinner & Barhopping"
+      location="1104 Dauphin St."
+    >
+      <!-- HEADING STARTS -->
+      <Heading level={2} slot="heading"
+        >Wednesday, July 14<span class="sup">th</span></Heading
+      >
+      <!-- HEADING ENDS -->
+      <div slot="time">
+        <div class="flex text-base justify-between">
+          <p class="text-(--nb-white)">VR Arcade:</p>
+          <p>7:00PM CST</p>
+        </div>
+        <div class="flex text-base justify-between">
+          <p class="text-(--nb-white)">Dinner starts:</p>
+          <p>9:00PM CST</p>
+        </div>
+      </div>
+
+      <BodyText className="" slot="bodyText">
+        After we've all recovered from the party, meet at the VR Arcade next to
+        Red or White Wine, a well-known wine bar and restaurant where we will
+        eat dinner at 6pm, before bar hopping Downtown Mobile.
+      </BodyText>
+    </ScheduleItem>
+    <!-- DAY TWO END -->
+
+    <!-- DAY THREE START -->
+    <ScheduleItem
+      image={skyDiveImage}
+      imageAlt="A surreal scene of ostriches parachuting from a vintage propeller airplane, with one ostrich prominently in the foreground looking toward the viewer against a bright blue sky."
+      subheading="Beach Day and Skydiving"
+      location="Orange Beach, AL."
+    >
+      <!-- HEADING STARTS -->
+      <Heading level={2} slot="heading"
+        >Thursday, July 15<span class="sup">th</span></Heading
+      >
+      <!-- HEADING ENDS -->
+
+      <!-- TIME STARTS -->
+      <p class="text-(--nb-white) text-base" slot="time">
+        Morning and afternoon
+      </p>
+      <!-- TIME ENDS -->
+
+      <!-- BODY TEXT STARTS -->
+      <BodyText className="" slot="bodyText">
+        <span class="block mb-2"
+          ><span class="text-white">Morning:</span> Relax on the beach, swim and
+          soak up the sun.</span
+        >
+        <span class="block"
+          ><span class="text-white">Evening:</span> Daredevil Nostriches will have
+          the option of a tandem skydive with a professional instructor through Sky
+          Dive the Gulf (<a
+            href=""
+            class="text-orange-400 hover:text-orange-600 hover:underline transition-colors"
+            >DankSwoops</a
+          > is coordinating; Message him if you'd like to jump!).</span
+        >
+      </BodyText>
+      <!-- BODY TEXT ENDS -->
+    </ScheduleItem>
+    <!-- DAY THREE END -->
+
+    <!-- DAY FOUR START -->
+    <ScheduleItem
+      image={skyDiveImage}
+      imageAlt="A surreal scene of ostriches parachuting from a vintage propeller airplane, with one ostrich prominently in the foreground looking toward the viewer against a bright blue sky."
+      subheading="Farewell Brunch and Departure"
+      location="Riddler's House"
+    >
+      <!-- HEADING STARTS -->
+      <Heading level={2} slot="heading"
+        >Friday, July 18<span class="sup">th</span></Heading
+      >
+      <!-- HEADING ENDS -->
+
+      <!-- TIME STARTS -->
+      <p class="text-(--nb-white) text-base" slot="time">Late Morning</p>
+      <!-- TIME ENDS -->
+
+      <BodyText className="" slot="bodyText">
+        Enjoy a farewell breakfast before heading out. Cooked by our gracious
+        host Riddler!
+      </BodyText>
+    </ScheduleItem>
+    <!-- DAY FOUR END -->
+  </section>
+</Layout>
+
+<style>
+
+</style>
+
+
+
+================================================
+File: pages/sponsors.astro
+================================================
+---
+import { Picture } from "astro:assets";
+
+import Layout from "@/layouts/Layout.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Subheading from "@/components/typography/Subheading.astro";
+import SponsorItem from "@/components/sponsors/SponsorItem.astro";
+
+import { nostrbamaTeam, skydiving, venues, website } from "@/components/sponsors/data";
+import { musicalGuests } from "@/components/sponsors/data";
+import { speakers } from "@/components/sponsors/data";
+import SponsorSection from "@/components/sponsors/SponsorSection.astro";
+---
+
+<Layout>
+  <header class="outer-padding grid">
+    <Heading level={1}>Sponsors</Heading>
+    <Subheading headingLevel={1}>
+      These awesome people and organizations made Nostrbama 2025 possible.
+    </Subheading>
+  </header>
+  <div class="outer-padding">
+    <!-- NOSTRBAMA TEAM -->
+    <SponsorSection sponsorData={nostrbamaTeam}>
+      <header>
+        <Heading level={2}>The Nostrbama Team </Heading>
+        <Subheading headingLevel={2}>
+          Nostrbama was created by our dedicated team of Nostr enthusiasts
+        </Subheading>
+      </header>
+    </SponsorSection>
+    <!-- MUSICAL GUESTS -->
+    <SponsorSection sponsorData={musicalGuests}>
+      <header>
+        <Heading level={2}>Musical Guests</Heading>
+      </header>
+    </SponsorSection>
+    <!-- SPEAKERS -->
+    <SponsorSection sponsorData={speakers}>
+      <header>
+        <Heading level={2}>Speakers</Heading>
+      </header>
+    </SponsorSection>
+    <!-- EVENT VENUES -->
+    <SponsorSection sponsorData={venues}>
+      <header>
+        <Heading level={2}>Venues</Heading>
+      </header>
+    </SponsorSection>
+    <!-- SKYDIVING -->
+    <SponsorSection sponsorData={skydiving}>
+      <header>
+        <Heading level={2}>Skydiving</Heading>
+        <div class="mb-12">
+          <p class="font-medium text-lg text-(--nb-white) mb-4">
+            Sky Dive The Gulf
+          </p>
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <p class="text-(--nb-white)">Date:</p>
+              <p>Thursday July 17<span class="sup">th</span></p>
+            </div>
+            <div class="flex items-center justify-between">
+              <p class="text-(--nb-white)">Cost:</p>
+              <p>$279 per person</p>
+            </div>
+            <div class="flex items-center justify-between">
+              <p class="text-(--nb-white)">Registration Deadline:</p>
+              <p>Monday June 9<span class="sup">th</span></p>
+            </div>
+          </div>
+        </div>
+      </header>
+    </SponsorSection>
+    <!-- WEBSITE -->
+    <SponsorSection sponsorData={website}>
+      <header>
+        <Heading level={2}>Website</Heading>
+      </header>
+    </SponsorSection>
+  </div>
+</Layout>
+
+<!-- 
+<article class="grid gap-2">
+          <Picture
+            src={sergioImage}
+            class="rounded-lg"
+            alt=""
+            formats={["avif", "webp"]}
+          />
+          <Heading level={3} className="font-sans font-medium text-xl"
+            >Sergio</Heading
+          >
+          <LinkIconButton url="" />
+        </article>
+        <article class="grid gap-2">
+          <Picture
+            src={sergioImage}
+            class="rounded-lg"
+            alt=""
+            formats={["avif", "webp"]}
+          />
+          <Heading level={3} className="font-sans font-medium text-xl"
+            >Sergio</Heading
+          >
+          <LinkIconButton url="" />
+        </article>
+        <article class="grid gap-2">
+          <Picture
+            src={sergioImage}
+            class="rounded-lg"
+            alt=""
+            formats={["avif", "webp"]}
+          />
+          <Heading level={3} className="font-sans font-medium text-xl"
+            >Sergio</Heading
+          >
+          <LinkIconButton url="" />
+        </article> -->
+
+
+
+================================================
+File: styles/global.css
+================================================
+@import "tailwindcss";
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("/fonts/SuisseIntl-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("/fonts/SuisseIntl-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntlCond";
+  src: url("/fonts/SuisseIntlCond-Semibold-WebS.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntlMono";
+  src: url("/fonts/SuisseIntlMono-Regular-WebS.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "SuisseIntl", "sans-serif";
+  --font-headline: "SuisseIntlCond", "sans-serif";
+  --font-mono: "SuisseIntlMono", "monospace";
+  /* colors */
+  --nb-white: #ede8de;
+}
+
+.section-y-padding {
+  @apply my-32 xl:my-56;
+}
+
+
+
+================================================
+File: test/setup.ts
+================================================
+import '@testing-library/jest-dom/vitest';
+
+
+
+================================================
+File: types/index.ts
+================================================
+export type Speaker = {
+  speakerName: string;
+  title: string;
+  njumpUrl: string;
+  bio: string;
+  profilePic: ImageMetadata;
+}
+
+export type Entertainment = {
+  image: ImageMetadata;
+  title: string;
+  url?: string;
+  date: string;
+  description: string;
+}
+
+export type FAQ = {
+  question: string;
+}
+
+
