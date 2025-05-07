@@ -1,5 +1,4 @@
 ---
-import { Picture } from "astro:assets";
 import HomeHeader from "@/components/home/HomeHeader.astro";
 import Layout from "../layouts/Layout.astro";
 import Section from "@/components/common/Section.astro";
@@ -7,8 +6,6 @@ import { SPEAKER_DATA } from "@/data/index";
 import SpeakerCard from "@/components/home/SpeakerCard.astro";
 import EntertainmentSwiper from "@/components/home/EntertainmentSwiper.astro";
 import CtaSection from "@/components/common/CtaSection.astro";
-
-import gameImage from "@/assets/images/game.png";
 import FAQSection from "@/components/home/FAQSection.astro";
 ---
 
@@ -17,28 +14,13 @@ import FAQSection from "@/components/home/FAQSection.astro";
   <EntertainmentSwiper />
   <Section title="Meet the Speakers!" className="mb-20 @container">
     <div
-      class="grid grid-rows-[repeat(4,_auto)] gap-4 @min-[530px]:grid-cols-2 @min-[1120px]:grid-cols-2 @min-[1120px]:gap-12 @min-[1680px]:grid-cols-4 @min-[1680px]:gap-6 @min-[530px]:gap-6"
+      class="grid pro gap-4 @min-[530px]:grid-cols-2 @min-[1120px]:grid-cols-2 @min-[1120px]:gap-12 @min-[1680px]:grid-cols-4 @min-[1680px]:gap-6 @min-[530px]:gap-6"
     >
       {SPEAKER_DATA.map((speaker) => <SpeakerCard {...speaker} />)}
     </div>
   </Section>
-  <!-- <Section
-    title="Nostrbama Simulator"
-    subheadline="Can't wait for the event? Or maybe you can't attend? Well drop your anxiety and play this game. It simulates the experience of destroying Mobile, Alabama for personal reputational gain."
-    className="flex gap-24"
-  >
-    <div class="rounded-lg overflow-hidden">
-      <Picture
-        src={gameImage}
-        alt=""
-        formats={["avif", "webp"]}
-        class="object-cover w-full h-full"
-      />
-    </div>
-  </Section> -->
   <Section
     title="FAQ"
-
     className="flex flex-col items-center"
     headerClassName="text-center"
   >
