@@ -1,9 +1,10 @@
 ---
 interface Props {
   headingLevel: 1 | 2 | 3;
+  className?: string;
 }
 
-const { headingLevel } = Astro.props;
+const { headingLevel, className } = Astro.props;
 ---
 
 {
@@ -15,7 +16,12 @@ const { headingLevel } = Astro.props;
 }
 {
   headingLevel === 2 && (
-    <p class="text-stone-400 md:text-xl lg:text-2xl xl:text-3xl text-xl max-w-[60ch] leading-[1.25]">
+    <p
+      class:list={[
+        "text-stone-400 md:text-xl lg:text-2xl xl:text-3xl text-xl max-w-[60ch] leading-[1.25]",
+        className ? className : "",
+      ]}
+    >
       <slot />
     </p>
   )

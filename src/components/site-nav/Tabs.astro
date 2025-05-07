@@ -26,27 +26,25 @@ for (const tab of TABS) {
 }
 ---
 
-<div class="fixed">
-  <ul class="flex bg-stone-800 rounded-full h-14 p-2">
-    {
-      TABS.map((tab) => (
-        <li
-          class:list={[
-            "px-4 py-3 inline-flex items-center text-stone-400",
-            {
-              "text-stone-900 bg-white rounded-full":
-                tab.name === initialActiveTab,
-            },
-          ]}
+<ul class="flex border border-stone-600 bg-stone-800 rounded-full h-14 p-2">
+  {
+    TABS.map((tab) => (
+      <li
+        class:list={[
+          "px-4 py-3 inline-flex items-center text-stone-400",
+          {
+            "text-stone-900 bg-white rounded-full":
+              tab.name === initialActiveTab,
+          },
+        ]}
+      >
+        <a
+          href={tab.href}
+          aria-current={tab.name === initialActiveTab ? "page" : undefined}
         >
-          <a
-            href={tab.href}
-            aria-current={tab.name === initialActiveTab ? "page" : undefined}
-          >
-            {tab.name}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
-</div>
+          {tab.name}
+        </a>
+      </li>
+    ))
+  }
+</ul>

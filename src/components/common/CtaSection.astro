@@ -8,13 +8,28 @@ import Heading from "@/components/typography/Heading.astro";
 import Subheading from "@/components/typography/Subheading.astro";
 ---
 
-<section class="outer-padding">
-  <div class="relative h-[600px] rounded md:rounded-lg lg:rounded-xl xl:rounded-2xl overflow-hidden">
+<section class="outer-padding mb-10 flex items-center flex-col">
+  <Heading level={2} className="text-center"> We hope to see you there, anon! </Heading>
+  <Subheading className="text-white text-center max-w-full" headingLevel={2}> July 15—17 2025, Mobile, Alabama </Subheading>
+  <Picture
+      src={nbLogoGold}
+      formats={["avif", "webp", "jpg"]}
+      alt="Nostbama Logo"
+      class="mx-auto max-w-[90%] mt-10 mb-40 text-center"
+    />
+</section>
+
+<!-- <section class="outer-padding mb-10">
+  <Heading level={2} className="text-center"> We hope to see you there, anon! </Heading>
+  <Subheading className="text-white text-center max-w-full" headingLevel={2}> July 15—17 2025, Mobile, Alabama </Subheading>
+  <div
+    class="relative h-[60vh] lg:h-[80vh] rounded md:rounded-lg lg:rounded-xl xl:rounded-2xl overflow-hidden mt-10 mb-10"
+  >
     <Picture
       src={nbLogoGold}
       formats={["avif", "webp", "jpg"]}
       alt="absolute top-1/2 -translate-y-1/2 z-10"
-      class="absolute top-1/2 -translate-y-1/2 z-20 w-[90%] left-1/2 -translate-x-1/2"
+      class="absolute top-1/2 -translate-y-1/2 z-20 w-[90%] lg:w-[50%] left-1/2 -translate-x-1/2"
     />
     <Picture
       src={activitiesV}
@@ -30,11 +45,5 @@ import Subheading from "@/components/typography/Subheading.astro";
         class="object-cover w-full h-full"
       />
     </div>
-    <Heading level={2}>
-      We hope to see you there, anon!
-    </Heading>
-    <Subheading headingLevel={2}>
-      July 15—17 2025, Mobile, Alabama
-    </Subheading>
   </div>
-</section>
+</section> -->
