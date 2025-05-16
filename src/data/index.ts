@@ -93,18 +93,18 @@ export const ENTERTAINMENT_DATA: Entertainment[] = [
       "After we've all recovered from the party, we meet at Sith’s AI VR lab to experience firsthand the process of creating digital avatars of real people using AI.  Play a VR game with characters made from real nostriches!",
     image: vrImage,
   },
-  // Duplicates from here on - WHY IS THIS?!?
+  // Duplicates from here on - WHY IS THIS?!?  - nevermind i get it now
 
-  {
+{
     title: "Nostr Talks",
-    date: "The Haberdasher. Tuesday 14th July.",
+    date: "The Haberdasher. Tuesday, 15th July, 7pm.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus. Sed fermentum felis nec diam hendrerit blandit. Maecenas accumsan eros nec lorem lacinia varius.",
+      "Starting things off we will hear some great tech talks, including a History of Nostr by Derek Ross, Vic will discuss CornyChatt, Aceaspades and EricFJ will talk about ConduitBTC, and ManiMe will discuss web-of-trust with Grapevine.",
     image: talkImage,
   },
   {
     title: "Live Music With Brooks Hubber",
-    date: "The Haberdasher. Tuesday 14th July.",
+    date: "The Haberdasher. Tuesday, 15th July, 10pm.",
     description:
       "Brooks Hubbert III is a musician, singer and songwriter from Pensacola, Florida. At a time when so many acts insist their sound cannot be categorized, Hubbert manages to effortlessly span genres including psychedelic rock, reggae, blues, country, and bluegrass in the creation of music that is both technically impressive and easily accessible",
     url: "https://soundslikebrooks.bandcamp.com/",
@@ -112,30 +112,30 @@ export const ENTERTAINMENT_DATA: Entertainment[] = [
   },
   {
     title: "Skydive The Gulf With DankSwoops",
-    date: "Orange Beach, AL. Afternoon Thursday 17th in the sky.",
+    date: "Orange Beach, AL. Thursday 17th, All Day.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus.",
+      "Daredevil Nostriches will have the option of a tandem skydive with a professional instructor through Sky Dive the Gulf (DankSwoops is coordinating; Message him if you'd like to jump!)",
     image: skydiveImage,
   },
   {
     title: "Dining and bar-hopping",
-    date: "1104 Dauphin St. Wednesday July 16th.",
+    date: "Starting at Red or White 1104 Dauphin St. Wednesday, July 16th, 7pm.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis.",
+      "After the arcade, we will enjoy a dinner at Red or White, before bar hopping through downtown Mobile until the early morning hours.  ",
     image: partyImage,
   },
   {
     title: "Beach Day!",
-    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    date: "Orange Beach, AL. Thursday 17th July, All Day",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum. Quisque eget tortor mollis, lobortis lorem ac, fermentum urna. Aenean magna urna, faucibus sit amet congue at, consequat a lacus. ",
+      "Soak up the sun and catch some waves with other Nostriches at beautiful Orange Beach, hang out at the historic Flora-Bama bar, and watch the skydivers fall!",
     image: beachImage,
   },
   {
     title: "Virtual Reality!",
-    date: "Orange Beach, AL. Morning Thursday, July 17th.",
+    date: "AI VR Experience.  Downtown Mobile, AL.  Wednesday, 16th July, 2pm.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies nunc elementum ornare lobortis. Integer feugiat suscipit ante, in dignissim mauris consequat eu. Fusce pulvinar dui at mauris consectetur dictum.",
+      "After we've all recovered from the party, we meet at Sith’s AI VR lab to experience firsthand the process of creating digital avatars of real people using AI.  Play a VR game with characters made from real nostriches!",
     image: vrImage,
   },
 ];
