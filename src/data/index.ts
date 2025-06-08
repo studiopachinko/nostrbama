@@ -35,7 +35,7 @@ export const SPEAKER_DATA: Speaker[] = [
     title: "Relay Technology Developer",
     njumpUrl:
       "https://njump.me/npub1manlnflyzyjhgh970t8mmngrdytcp3jrmaa66u846ggg7t20cgqqvyn9tn",
-    bio: "Working on building Web-of-Trust protocols that enhance the user experience across relays, Mani has been building Grapevine.me and Nostrmeet.me.",
+    bio: "Mani has worked on relays and web of trust, but today he will be talking about Nostr as the social layer that connects all other apps.",
     profilePic: manimeProfilePic,
   },
   {
@@ -52,92 +52,95 @@ export const SPEAKER_DATA: Speaker[] = [
 export const ENTERTAINMENT_DATA: Entertainment[] = [
   {
     title: "Nostr Talks",
-    date: "The Haberdasher. Tuesday, 15th July, 7pm.",
+    date: "The Haberdasher. Tuesday, 15th July, 4pm-6pm.",
     description:
-      "Starting things off we will hear some great tech talks, including a History of Nostr by Derek Ross, Vic will discuss CornyChatt, Aceaspades and EricFJ will talk about ConduitBTC, and ManiMe will discuss web-of-trust with Grapevine.",
+      "Starting things off we will hear some great tech talks, including a History of Nostr by Derek Ross, Vic will discuss CornyChat, AceaSpades and EricFJ will talk about ConduitBTC, and ManiMe will discuss Nostr for Social Apps.",
     image: talkImage,
   },
   {
     title: "Live Music With Brooks Hubber",
-    date: "The Haberdasher. Tuesday, 15th July, 10pm.",
+    date: "The Haberdasher. Tuesday, 15th July, 7pm-10pm.",
     description:
       "Brooks Hubbert III is a musician, singer and songwriter from Pensacola, Florida. At a time when so many acts insist their sound cannot be categorized, Hubbert manages to effortlessly span genres including psychedelic rock, reggae, blues, country, and bluegrass in the creation of music that is both technically impressive and easily accessible",
     url: "https://soundslikebrooks.bandcamp.com/",
     image: bandImage,
   },
   {
-    title: "Skydive The Gulf With DankSwoops",
-    date: "Orange Beach, AL. Thursday 17th, All Day.",
-    description:
-      "Daredevil Nostriches will have the option of a tandem skydive with a professional instructor through Sky Dive the Gulf (DankSwoops is coordinating; Message him if you'd like to jump!)",
-    image: skydiveImage,
-  },
-  {
-    title: "Dining and bar-hopping",
-    date: "Starting at Red or White 1104 Dauphin St. Wednesday, July 16th, 7pm.",
-    description:
-      "After the arcade, we will enjoy a dinner at Red or White, before bar hopping through downtown Mobile until the early morning hours.  ",
-    image: partyImage,
-  },
-  {
-    title: "Beach Day!",
-    date: "Orange Beach, AL. Thursday 17th July, All Day",
-    description:
-      "Soak up the sun and catch some waves with other Nostriches at beautiful Orange Beach, hang out at the historic Flora-Bama bar, and watch the skydivers fall!",
-    image: beachImage,
-  },
-  {
     title: "Virtual Reality!",
-    date: "AI VR Experience.  Downtown Mobile, AL.  Wednesday, 16th July, 2pm.",
+    date: "AI VR Experience.  1102 Dauphin St. Mobile, AL.  Wednesday, 16th July, 2pm-6pm.",
     description:
       "After we've all recovered from the party, we meet at Sith’s AI VR lab to experience firsthand the process of creating digital avatars of real people using AI.  Play a VR game with characters made from real nostriches!",
     image: vrImage,
   },
+  {
+    title: "Dining and bar-hopping",
+    date: "Starting at Moes BBQ. 701 Spring Hill Ave. Mobile, AL. Wednesday, July 16th, 6pm.",
+    description:
+      "After the arcade, we will enjoy a dinner at Moe's BBQ before bar hopping through downtown Mobile until the early morning hours.",
+    image: partyImage,
+  },
+  {
+    title: "Beach Day!",
+    date: "Flora-Bama Bar. 17401 Perdido Key Dr. Pensacola, FL. Thursday 17th July, All Day",
+    description:
+      "Soak up the sun and catch some waves with other Nostriches at beautiful Orange Beach, hang out at the historic Flora-Bama bar, and if you're brave enough you can even jump out of an airplane!",
+    image: beachImage,
+  },
+  {
+    title: "Skydive The Gulf With DankSwoops",
+    date: "In the Skies! Thursday 17th, All Day.",
+    description:
+      "Daredevil Nostriches will have the option of a tandem skydive with a professional instructor through Sky Dive the Gulf.  Fall down to the beach as your fellow Nostriches cheer you on! (DankSwoops is coordinating; Message him if you'd like to jump!)",
+    image: skydiveImage,
+  },
+
+
   // Duplicates from here on - WHY IS THIS?!?  - nevermind i get it now
 
-{
+  {
     title: "Nostr Talks",
-    date: "The Haberdasher. Tuesday, 15th July, 7pm.",
+    date: "The Haberdasher. Tuesday, 15th July, 4pm-6pm.",
     description:
-      "Starting things off we will hear some great tech talks, including a History of Nostr by Derek Ross, Vic will discuss CornyChatt, Aceaspades and EricFJ will talk about ConduitBTC, and ManiMe will discuss web-of-trust with Grapevine.",
+      "Starting things off we will hear some great tech talks, including a History of Nostr by Derek Ross, Vic will discuss CornyChat, AceaSpades and EricFJ will talk about ConduitBTC, and ManiMe will discuss Nostr for Social Apps.",
     image: talkImage,
   },
   {
     title: "Live Music With Brooks Hubber",
-    date: "The Haberdasher. Tuesday, 15th July, 10pm.",
+    date: "The Haberdasher. Tuesday, 15th July, 7pm-10pm.",
     description:
       "Brooks Hubbert III is a musician, singer and songwriter from Pensacola, Florida. At a time when so many acts insist their sound cannot be categorized, Hubbert manages to effortlessly span genres including psychedelic rock, reggae, blues, country, and bluegrass in the creation of music that is both technically impressive and easily accessible",
     url: "https://soundslikebrooks.bandcamp.com/",
     image: bandImage,
   },
   {
-    title: "Skydive The Gulf With DankSwoops",
-    date: "Orange Beach, AL. Thursday 17th, All Day.",
-    description:
-      "Daredevil Nostriches will have the option of a tandem skydive with a professional instructor through Sky Dive the Gulf (DankSwoops is coordinating; Message him if you'd like to jump!)",
-    image: skydiveImage,
-  },
-  {
-    title: "Dining and bar-hopping",
-    date: "Starting at Red or White 1104 Dauphin St. Wednesday, July 16th, 7pm.",
-    description:
-      "After the arcade, we will enjoy a dinner at Red or White, before bar hopping through downtown Mobile until the early morning hours.  ",
-    image: partyImage,
-  },
-  {
-    title: "Beach Day!",
-    date: "Orange Beach, AL. Thursday 17th July, All Day",
-    description:
-      "Soak up the sun and catch some waves with other Nostriches at beautiful Orange Beach, hang out at the historic Flora-Bama bar, and watch the skydivers fall!",
-    image: beachImage,
-  },
-  {
     title: "Virtual Reality!",
-    date: "AI VR Experience.  Downtown Mobile, AL.  Wednesday, 16th July, 2pm.",
+    date: "AI VR Experience.  1102 Dauphin St. Mobile, AL.  Wednesday, 16th July, 2pm-6pm.",
     description:
       "After we've all recovered from the party, we meet at Sith’s AI VR lab to experience firsthand the process of creating digital avatars of real people using AI.  Play a VR game with characters made from real nostriches!",
     image: vrImage,
   },
+  {
+    title: "Dining and bar-hopping",
+    date: "Starting at Moes BBQ. 701 Spring Hill Ave. Mobile, AL. Wednesday, July 16th, 6pm.",
+    description:
+      "After the arcade, we will enjoy a dinner at Moe's BBQ before bar hopping through downtown Mobile until the early morning hours.",
+    image: partyImage,
+  },
+  {
+    title: "Beach Day!",
+    date: "Flora-Bama Bar. 17401 Perdido Key Dr. Pensacola, FL. Thursday 17th July, All Day",
+    description:
+      "Soak up the sun and catch some waves with other Nostriches at beautiful Orange Beach, hang out at the historic Flora-Bama bar, and if you're brave enough you can even jump out of an airplane!",
+    image: beachImage,
+  },
+  {
+    title: "Skydive The Gulf With DankSwoops",
+    date: "In the Skies! Thursday 17th, All Day.",
+    description:
+      "Daredevil Nostriches will have the option of a tandem skydive with a professional instructor through Sky Dive the Gulf.  Fall down to the beach as your fellow Nostriches cheer you on! (DankSwoops is coordinating; Message him if you'd like to jump!)",
+    image: skydiveImage,
+  },
+
 ];
 
 export const FAQS: FAQ[] = [

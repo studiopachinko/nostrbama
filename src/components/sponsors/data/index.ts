@@ -76,11 +76,7 @@ export const venues: Sponsor[] = [
     name: "The HaberDasher",
     url: "https://www.thehabmobile.com/",
   },
-  {
-    image: wineImage,
-    name: "Red Or White Wine",
-    url: "https://www.redorwhitewine.com/mobile-location",
-  },
+
 ];
 
 export const skydiving: Sponsor[] = [

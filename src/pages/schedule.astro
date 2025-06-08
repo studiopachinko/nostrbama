@@ -17,7 +17,8 @@ import BodyText from "@/components/typography/BodyText.astro";
   <header class="outer-padding grid lg:max-w-4/5 mt-10 sm:mt-32">
     <Heading level={1}>Schedule</Heading>
     <Subheading headingLevel={1}>
-      This ain’t a standard conference.  We’re gonna be getting around a bit!  3 days in 3 different locations, so rent a car or make friends with a Nostrich with a big back seat.  
+      This ain’t a standard conference.  We’re gonna be getting around a bit!  3 days in 3 different locations, so rent a car or make friends with a Nostrich with a big back seat.  And if you're planning on attending please
+<a class="text-orange-400 underline" href="https://formstr.app/f/naddr1qvzqqqr4mqpzp2465vmleg7wcga6vaxr2qnhcpgcfc9yp53wadl43cqcn547pepgqy2hwumn8ghj7un9d3shjtnyv9kh2uewd9hj7qqxfatkzkt2dyuzg9f2">RSVP for Nostrbama Today</a>
     </Subheading>
   </header>
   <section class="outer-padding">
@@ -37,18 +38,18 @@ import BodyText from "@/components/typography/BodyText.astro";
       <div slot="time">
         <div class="flex text-base justify-between">
           <p class="text-(--nb-white)">Speakers:</p>
-          <p>7:00PM CST</p>
+          <p>4pm-6pm CST</p>
         </div>
         <div class="flex text-base justify-between">
           <p class="text-(--nb-white)">Music starts:</p>
-          <p>10:00PM CST</p>
+          <p>7:00PM CST</p>
         </div>
       </div>
 
       <BodyText className="" slot="bodyText">
         Join us for the official kickoff party! We will start the night by
         listening to a few fantastic Nostr leaders and devs, including Derek
-        Ross. Afterwards we'll get loud and rowdy with music by Brooks and
+        Ross. After a quick dinner break we'll get loud and rowdy with music by Brooks and
         drinks served by Nostr's favorite bartender Sergio on his home turf!
       </BodyText>
     </ScheduleItem>
@@ -59,7 +60,7 @@ import BodyText from "@/components/typography/BodyText.astro";
       image={vrImage}
       imageAlt="Four ostriches wearing virtual reality headsets stand against a bright teal sky with small clouds, looking upward in different directions."
       subheading="Downtown Mobile, VR Arcade, Dinner & Barhopping"
-      location="1104 Dauphin St."
+      location="1102 Dauphin St. Mobile, AL.  701 Spring Hill Ave. Mobile, AL"
     >
       <!-- HEADING STARTS -->
       <Heading level={2} slot="heading"
@@ -69,18 +70,18 @@ import BodyText from "@/components/typography/BodyText.astro";
       <div slot="time">
         <div class="flex text-base justify-between">
           <p class="text-(--nb-white)">VR AI Experience:</p>
-          <p>2:00PM CST</p>
+          <p>2pm-6pmCST</p>
         </div>
         <div class="flex text-base justify-between">
           <p class="text-(--nb-white)">Dinner starts:</p>
-          <p>7:00PM CST</p>
+          <p>6:00PM CST</p>
         </div>
       </div>
 
       <BodyText className="" slot="bodyText">
 After we've all recovered from the party, we meet at Sith’s AI VR lab to experience firsthand the process of creating digital 
-avatars of real people using AI.  Play a VR game with characters made from real nostriches!  Then we’ll head to Red or White, 
-a local wine bar and restaurant where we will eat dinner at 7pm, before bar hopping Downtown Mobile.
+avatars of real people using AI.  Play a VR game with characters made from real nostriches!  Then we’ll head to Moe's BBQ, 
+fine local BBQ joint where we will eat dinner at 6pm, before bar hopping Downtown Mobile.
       </BodyText>
     </ScheduleItem>
     <!-- DAY TWO END -->
@@ -90,7 +91,7 @@ a local wine bar and restaurant where we will eat dinner at 7pm, before bar hopp
       image={skyDiveImage}
       imageAlt="A surreal scene of ostriches parachuting from a vintage propeller airplane, with one ostrich prominently in the foreground looking toward the viewer against a bright blue sky."
       subheading="Beach Day and Skydiving"
-      location="Orange Beach, AL."
+      location="Flora-Bama Bar.  17401 Perdido Key Dr. Pensacola, FL."
     >
       <!-- HEADING STARTS -->
       <Heading level={2} slot="heading"
@@ -122,33 +123,5 @@ a local wine bar and restaurant where we will eat dinner at 7pm, before bar hopp
       <!-- BODY TEXT ENDS -->
     </ScheduleItem>
     <!-- DAY THREE END -->
-
-    <!-- DAY FOUR START -->
-    <ScheduleItem
-      image={skyDiveImage}
-      imageAlt="A surreal scene of ostriches parachuting from a vintage propeller airplane, with one ostrich prominently in the foreground looking toward the viewer against a bright blue sky."
-      subheading="Farewell Brunch and Departure"
-      location="Riddler's House"
-    >
-      <!-- HEADING STARTS -->
-      <Heading level={2} slot="heading"
-        >Friday, July 18<span class="sup">th</span></Heading
-      >
-      <!-- HEADING ENDS -->
-
-      <!-- TIME STARTS -->
-      <p class="text-(--nb-white) text-base" slot="time">Late Morning</p>
-      <!-- TIME ENDS -->
-
-      <BodyText className="" slot="bodyText">
-        Enjoy a farewell breakfast before heading out. Cooked by our gracious
-        host Riddler!
-      </BodyText>
-    </ScheduleItem>
-    <!-- DAY FOUR END -->
-  </section>
-</Layout>
-
-<style>
 
 </style>
