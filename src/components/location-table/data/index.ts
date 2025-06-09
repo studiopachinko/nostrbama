@@ -8,14 +8,13 @@ export const venueLocations: Location[] = [
     venueWebsite: "https://www.thehabmobile.com/",
   },
   {
-    venueName: "Red or White Wine",
-    address: "1104 Dauphin St, Mobile, AL 36604",
-    mapLink: "https://maps.app.goo.gl/CnxvoGDJsRgFWPGB7",
-    venueWebsite: "https://www.thehabmobile.com/",
+    venueName: "AI VR Lab",
+    address: "1102 Dauphin St, Mobile, AL",
+    mapLink: "https://maps.app.goo.gl/bVfDR2X1FZ3rA4Ub9",
   },
   {
-    venueName: "Orange Beach",
-    address: "Alabama",
-    mapLink: "https://maps.app.goo.gl/WNMTc3c4o42TbZ628",
+    venueName: "Flora-Bama Bar",
+    address: "17401 Perdido Key Dr, Pensacola, FL",
+    mapLink: "https://maps.app.goo.gl/mwDkxNYkWZDPc6ac9",
   },
 ];
